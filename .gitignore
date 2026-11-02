@@ -1,0 +1,8 @@
+# Dependencies & temporary files
+__pycache__/
+*.pyc
+.DS_Store
+
+# Keep web-compressed wallpapers, ignore raw large downloads if any
+wallpapers/raw/
+*.tmp
