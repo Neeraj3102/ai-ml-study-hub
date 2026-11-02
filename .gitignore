@@ -1,8 +1,13 @@
 # Dependencies & temporary files
 __pycache__/
 *.pyc
+*.tmp
 .DS_Store
 
-# Keep web-compressed wallpapers, ignore raw large downloads if any
-wallpapers/raw/
-*.tmp
+# Unused large media & scratch folders
+wallpapers/
+watermark_removed/
+themes/
+spotify_manager/
+.planning/
+
