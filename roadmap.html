@@ -27,7 +27,6 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Raised Neumorphic Surface */
     .neu-card {
       background: var(--card-bg);
       border-radius: 24px;
@@ -42,14 +41,12 @@
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    /* Inset Neumorphic Surface (Sunken / Pressed) */
     .neu-inset {
       background: var(--card-bg);
       border-radius: 16px;
       box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
     }
 
-    /* Neumorphic Button */
     .neu-btn {
       background: var(--card-bg);
       border-radius: 14px;
@@ -72,7 +69,6 @@
       font-weight: 700;
     }
 
-    /* Accent Primary Button */
     .neu-btn-primary {
       background: linear-gradient(145deg, #10b981, #059669);
       color: white;
@@ -88,7 +84,6 @@
       box-shadow: 3px 3px 8px rgba(5, 150, 105, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.9);
     }
 
-    /* Inset Input Bar */
     .neu-input {
       background: var(--card-bg);
       border-radius: 16px;
@@ -103,7 +98,6 @@
       box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
     }
 
-    /* Tactile Switch / Pill */
     .neu-pill {
       background: var(--card-bg);
       border-radius: 9999px;
@@ -180,7 +174,7 @@
         <span class="text-[10px] font-black uppercase text-emerald-700 tracking-wider">The Living Study Curriculum</span>
         <h1 class="text-3xl font-black text-slate-800 mt-1">22-Week AI & ML Engineering Book</h1>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl">
-          Curated daily lessons with CampusX & CodeWithHarry videos, official documentation, practice outputs, and auto-saving study notes.
+          Curated daily lessons with CampusX & CodeWithHarry videos, official documentation, practice outputs, and individual daily reflection notes.
         </p>
       </div>
 
@@ -332,11 +326,13 @@
 
     let state = JSON.parse(localStorage.getItem('aiml_roadmap_progress') || '{}');
     let notes = JSON.parse(localStorage.getItem('aiml_roadmap_notes') || '{}');
+    let dailyNotes = JSON.parse(localStorage.getItem('aiml_roadmap_daily_notes') || '{}');
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
 
     function saveState() {
       localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
       localStorage.setItem('aiml_roadmap_notes', JSON.stringify(notes));
+      localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
       localStorage.setItem('aiml_roadmap_shifts', rollingShifts.toString());
       updateGlobalStats();
     }
@@ -354,11 +350,36 @@
       saveState();
     }
 
+    function saveDailyNote(taskId, field, val) {
+      if (!dailyNotes[taskId]) {
+        dailyNotes[taskId] = { doubts: '', needsCare: '' };
+      }
+      dailyNotes[taskId][field] = val;
+      localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
+      
+      const badge = document.getElementById(`badge-${taskId}`);
+      if (badge) {
+        const hasContent = !!((dailyNotes[taskId].doubts && dailyNotes[taskId].doubts.trim()) || (dailyNotes[taskId].needsCare && dailyNotes[taskId].needsCare.trim()));
+        badge.innerHTML = hasContent ? '<span class="neu-pill text-[9px] font-bold text-amber-700 px-2.5 py-0.5">⚠️ Needs Care / Notes Saved</span>' : '<span class="text-slate-400 text-[10px] font-normal">(click to log confusion or topics to revise)</span>';
+      }
+
+      if (typeof renderWeakSpotsList === 'function') {
+        renderWeakSpotsList();
+      }
+    }
+
+    function toggleDailyDrawer(taskId) {
+      const drawer = document.getElementById(`drawer-${taskId}`);
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
     function postponeTask(mode) {
       if (mode === 'tomorrow') {
         rollingShifts += 1;
         saveState();
-        alert("Active lesson postponed to tomorrow! The entire subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
+        alert("Active lesson postponed to tomorrow! The subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
       } else if (mode === 'buffer') {
         alert("Active lesson absorbed into an upcoming weekend buffer slot. Final target graduation date remains intact!");
       }
@@ -377,11 +398,11 @@
       }
     }
 
-    // Export progress JSON
     function exportBackupJSON() {
       const backup = {
         progress: state,
         notes: notes,
+        dailyNotes: dailyNotes,
         shifts: rollingShifts,
         exportedAt: new Date().toISOString()
       };
@@ -394,7 +415,6 @@
       URL.revokeObjectURL(url);
     }
 
-    // Import progress JSON
     function importBackupJSON(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -405,6 +425,7 @@
           if (data.progress) {
             state = data.progress;
             notes = data.notes || {};
+            dailyNotes = data.dailyNotes || {};
             rollingShifts = data.shifts || 0;
             saveState();
             alert("Progress backup successfully restored! Welcome back.");
@@ -421,13 +442,7 @@
       reader.readAsText(file);
     }
 
-    // Calculate Phase completions
     function getPhaseStats() {
-      // Phase 1: W1-5 (idx 0-4)
-      // Phase 2: W6-10 (idx 5-9)
-      // Phase 3: W11-14 (idx 10-13)
-      // Phase 4: W15-18 (idx 14-17)
-      // Phase 5: W19-22 (idx 18-21)
       const phases = [
         { id: 1, name: "Phase 1: Software Core & SQL", startW: 0, endW: 4, color: "#10b981", done: 0, total: 0 },
         { id: 2, name: "Phase 2: Math & Classical ML", startW: 5, endW: 9, color: "#06b6d4", done: 0, total: 0 },
@@ -457,6 +472,67 @@
       return phases;
     }
 
+    function renderWeakSpotsList() {
+      const list = document.getElementById('weak-spots-list');
+      const countBadge = document.getElementById('weak-spots-count');
+      if (!list) return;
+
+      const items = [];
+      for (const [taskId, note] of Object.entries(dailyNotes)) {
+        if ((note.doubts && note.doubts.trim()) || (note.needsCare && note.needsCare.trim())) {
+          const parts = taskId.split('-');
+          const wIdx = parseInt(parts[0], 10);
+          const vIdx = parseInt(parts[1], 10);
+          const week = weeksData[wIdx];
+          const video = week ? week.videos[vIdx] : null;
+          if (video) {
+            items.push({
+              taskId,
+              weekNum: wIdx + 1,
+              day: video.day,
+              title: video.title,
+              doubts: note.doubts,
+              needsCare: note.needsCare
+            });
+          }
+        }
+      }
+
+      if (countBadge) countBadge.innerText = `${items.length} Needs Care`;
+
+      if (items.length === 0) {
+        list.innerHTML = `
+          <div class="p-4 neu-inset rounded-2xl text-xs text-slate-500 text-center">
+            No doubts or weak spots logged yet! When studying each day, write any confusion in the daily note box so you can revisit it easily.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = items.map(it => `
+        <div class="neu-card-sm p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${it.day}: ${it.title}</span>
+            <a href="roadmap.html" class="text-[11px] text-emerald-700 hover:underline font-semibold font-mono">View in Curriculum →</a>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+            ${it.doubts ? `
+              <div class="neu-inset p-2.5 rounded-xl">
+                <span class="text-[10px] font-bold text-rose-700 block">🔴 Doubts / Unclear:</span>
+                <span class="text-slate-700">${it.doubts}</span>
+              </div>
+            ` : ''}
+            ${it.needsCare ? `
+              <div class="neu-inset p-2.5 rounded-xl">
+                <span class="text-[10px] font-bold text-amber-700 block">🟡 Needs Care / Revision:</span>
+                <span class="text-slate-700">${it.needsCare}</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
     function updateGlobalStats() {
       let total = 0;
       let completed = 0;
@@ -480,7 +556,7 @@
 
       const fEl = document.getElementById('finish-val');
       if (fEl) {
-        const baseFinish = new Date(2027, 3, 4); // Apr 4, 2027
+        const baseFinish = new Date(2027, 3, 4);
         baseFinish.setDate(baseFinish.getDate() + rollingShifts);
         const options = { month: 'short', day: 'numeric', year: 'numeric' };
         fEl.innerText = baseFinish.toLocaleDateString('en-US', options);
@@ -494,6 +570,9 @@
 
       if (typeof drawPhaseDonutChart === 'function') {
         drawPhaseDonutChart();
+      }
+      if (typeof renderWeakSpotsList === 'function') {
+        renderWeakSpotsList();
       }
     }
 
@@ -546,34 +625,63 @@
         const vList = w.videos.map((v, vIdx) => {
           const taskId = `${wIdx}-${vIdx}`;
           const isDone = !!state[taskId];
+          const dNote = dailyNotes[taskId] || { doubts: '', needsCare: '' };
+          const hasNotes = !!((dNote.doubts && dNote.doubts.trim()) || (dNote.needsCare && dNote.needsCare.trim()));
           
           let diffColor = 'text-emerald-700';
           if (v.difficulty === 'Medium') diffColor = 'text-cyan-700';
           if (v.difficulty === 'Heavy') diffColor = 'text-amber-700';
 
           return `
-            <div class="p-4 rounded-2xl neu-card-sm transition flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${isDone ? 'opacity-70 neu-inset' : ''}">
-              <div class="flex items-start gap-3.5 flex-1">
-                <input type="checkbox" onchange="toggleTask('${taskId}')" ${isDone ? 'checked' : ''} 
-                       class="mt-1 h-5 w-5 rounded-lg neu-inset text-emerald-600 focus:ring-0 cursor-pointer accent-emerald-600">
-                <div>
-                  <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-[10px] font-mono font-bold text-slate-600 neu-pill px-2 py-0.5">${v.day}</span>
-                    <span class="text-xs font-bold text-slate-800">${v.title}</span>
-                    <span class="text-[10px] font-bold neu-pill px-2 py-0.5 ${diffColor}">${v.difficulty} • ${v.time_est}</span>
+            <div class="p-4 rounded-2xl neu-card-sm transition space-y-3 ${isDone ? 'opacity-85' : ''}">
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start gap-3.5 flex-1">
+                  <input type="checkbox" onchange="toggleTask('${taskId}')" ${isDone ? 'checked' : ''} 
+                         class="mt-1 h-5 w-5 rounded-lg neu-inset text-emerald-600 focus:ring-0 cursor-pointer accent-emerald-600">
+                  <div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="text-[10px] font-mono font-bold text-slate-600 neu-pill px-2 py-0.5">${v.day}</span>
+                      <span class="text-xs font-bold text-slate-800">${v.title}</span>
+                      <span class="text-[10px] font-bold neu-pill px-2 py-0.5 ${diffColor}">${v.difficulty} • ${v.time_est}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">${v.topics}</p>
+                    <div class="text-[11px] font-mono text-emerald-700 mt-1.5">
+                      📂 Path: ${v.code_path}
+                    </div>
                   </div>
-                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">${v.topics}</p>
-                  <div class="text-[11px] font-mono text-emerald-700 mt-1.5">
-                    📂 Path: ${v.code_path}
+                </div>
+
+                <div class="shrink-0 flex items-center gap-2">
+                  <a href="${v.url}" target="_blank" class="neu-btn px-3.5 py-1.5 text-xs font-semibold text-emerald-700 flex items-center gap-1">
+                    ▶ Watch
+                  </a>
+                </div>
+              </div>
+
+              <!-- DAILY DOUBTS & NEEDS CARE DRAWER -->
+              <div class="pt-2 border-t border-slate-300/60">
+                <div class="flex items-center justify-between">
+                  <button type="button" onclick="toggleDailyDrawer('${taskId}')" class="text-[11px] font-bold text-slate-700 hover:text-slate-900 flex items-center gap-2 cursor-pointer">
+                    <span>📝 Daily Note: Doubts & Care Needed</span>
+                    <span id="badge-${taskId}">
+                      ${hasNotes ? '<span class="neu-pill text-[9px] font-bold text-amber-700 px-2.5 py-0.5">⚠️ Needs Care / Notes Saved</span>' : '<span class="text-slate-400 text-[10px] font-normal">(click to log confusion or topics to revise)</span>'}
+                    </span>
+                  </button>
+                  <button type="button" onclick="toggleDailyDrawer('${taskId}')" class="text-xs text-slate-400 hover:text-slate-600">▼</button>
+                </div>
+
+                <div id="drawer-${taskId}" class="${hasNotes ? '' : 'hidden'} mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 p-3.5 neu-inset rounded-xl">
+                  <div>
+                    <label class="text-[10px] font-bold text-rose-700 block mb-1">🔴 What I didn't understand / Doubts today:</label>
+                    <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Confused about why *args is a tuple but **kwargs is a dictionary..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.doubts || ''}</textarea>
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-bold text-amber-700 block mb-1">🟡 Needs the most care & revision in coming days:</label>
+                    <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Practice list slicing and dict methods again on Saturday buffer..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.needsCare || ''}</textarea>
                   </div>
                 </div>
               </div>
 
-              <div class="shrink-0 flex items-center gap-2">
-                <a href="${v.url}" target="_blank" class="neu-btn px-3.5 py-1.5 text-xs font-semibold text-emerald-700 flex items-center gap-1">
-                  ▶ Watch
-                </a>
-              </div>
             </div>
           `;
         }).join('');
@@ -591,21 +699,18 @@
               </div>
             </div>
 
-            <!-- CORE AI MISSION -->
             <div class="neu-inset p-4 rounded-2xl text-xs space-y-1">
               <span class="text-emerald-700 font-bold block">🎯 Weekly Engineering Anchor:</span>
               <p class="text-slate-700 leading-relaxed">${w.ai_mission}</p>
             </div>
 
-            <!-- LESSONS LIST -->
             <div class="space-y-3 pt-2">
               <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Curated Lessons</span>
               ${vList}
             </div>
 
-            <!-- NOTE BOX -->
             <div class="pt-4 border-t border-slate-300/80">
-              <label class="text-[11px] font-bold text-slate-600 block mb-1">✍️ Personal Journal & Technical Notes (Auto-saved):</label>
+              <label class="text-[11px] font-bold text-slate-600 block mb-1">✍️ Weekly Synthesis & Capstone Notes (Auto-saved):</label>
               <textarea onchange="saveNote(${wIdx}, this.value)" rows="2" placeholder="Write blockers, breakthroughs, formula derivations..." class="w-full neu-input p-3.5 text-xs text-slate-700 placeholder-slate-400">${savedNote}</textarea>
             </div>
           </div>

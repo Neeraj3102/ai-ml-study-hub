@@ -27,7 +27,6 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Raised Neumorphic Surface */
     .neu-card {
       background: var(--card-bg);
       border-radius: 24px;
@@ -42,14 +41,12 @@
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    /* Inset Neumorphic Surface (Sunken / Pressed) */
     .neu-inset {
       background: var(--card-bg);
       border-radius: 16px;
       box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
     }
 
-    /* Neumorphic Button */
     .neu-btn {
       background: var(--card-bg);
       border-radius: 14px;
@@ -72,7 +69,6 @@
       font-weight: 700;
     }
 
-    /* Accent Primary Button */
     .neu-btn-primary {
       background: linear-gradient(145deg, #10b981, #059669);
       color: white;
@@ -88,7 +84,6 @@
       box-shadow: 3px 3px 8px rgba(5, 150, 105, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.9);
     }
 
-    /* Inset Input Bar */
     .neu-input {
       background: var(--card-bg);
       border-radius: 16px;
@@ -103,7 +98,6 @@
       box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
     }
 
-    /* Tactile Switch / Pill */
     .neu-pill {
       background: var(--card-bg);
       border-radius: 9999px;
@@ -233,9 +227,7 @@
           <!-- SVG DONUT / PIE CHART -->
           <div class="relative w-48 h-48 flex items-center justify-center">
             <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
-              <!-- Background Circle -->
               <circle cx="50" cy="50" r="38" fill="transparent" stroke="#d5deec" stroke-width="10" />
-              <!-- Segments -->
               <circle id="donut-phase-1" cx="50" cy="50" r="38" fill="transparent" stroke="#10b981" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
               <circle id="donut-phase-2" cx="50" cy="50" r="38" fill="transparent" stroke="#06b6d4" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
               <circle id="donut-phase-3" cx="50" cy="50" r="38" fill="transparent" stroke="#3b82f6" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
@@ -243,7 +235,6 @@
               <circle id="donut-phase-5" cx="50" cy="50" r="38" fill="transparent" stroke="#f59e0b" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
             </svg>
             
-            <!-- Center Display (Tactile Extrusion) -->
             <div class="absolute w-28 h-28 rounded-full neu-card flex flex-col items-center justify-center select-none">
               <span id="global-progress-pct" class="text-2xl font-black text-slate-800">0%</span>
               <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Overall</span>
@@ -283,7 +274,23 @@
       </div>
 
       <!-- INJECTED ACTIVE MISSION CARD -->
-      <div id="today-mission-box" class="neu-inset p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div id="today-mission-box" class="neu-inset p-6 rounded-2xl flex flex-col gap-6">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- WEAK SPOTS & REVISION RADAR -->
+    <div class="neu-card p-6 sm:p-8 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-300/80 pb-3">
+        <div>
+          <span class="text-[10px] font-black uppercase text-amber-700 tracking-wider">Revision Radar</span>
+          <h3 class="text-xl font-bold text-slate-800">Concepts Needing Care & Active Doubts</h3>
+          <p class="text-xs text-slate-500">All topics from previous days where you logged confusion or needed revision. Review these first on buffer days!</p>
+        </div>
+        <span id="weak-spots-count" class="neu-pill px-3 py-1 text-xs font-mono font-bold text-amber-700">0 Logged</span>
+      </div>
+
+      <div id="weak-spots-list" class="space-y-3">
         <!-- Injected via JavaScript -->
       </div>
     </div>
@@ -461,11 +468,13 @@
 
     let state = JSON.parse(localStorage.getItem('aiml_roadmap_progress') || '{}');
     let notes = JSON.parse(localStorage.getItem('aiml_roadmap_notes') || '{}');
+    let dailyNotes = JSON.parse(localStorage.getItem('aiml_roadmap_daily_notes') || '{}');
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
 
     function saveState() {
       localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
       localStorage.setItem('aiml_roadmap_notes', JSON.stringify(notes));
+      localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
       localStorage.setItem('aiml_roadmap_shifts', rollingShifts.toString());
       updateGlobalStats();
     }
@@ -483,11 +492,36 @@
       saveState();
     }
 
+    function saveDailyNote(taskId, field, val) {
+      if (!dailyNotes[taskId]) {
+        dailyNotes[taskId] = { doubts: '', needsCare: '' };
+      }
+      dailyNotes[taskId][field] = val;
+      localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
+      
+      const badge = document.getElementById(`badge-${taskId}`);
+      if (badge) {
+        const hasContent = !!((dailyNotes[taskId].doubts && dailyNotes[taskId].doubts.trim()) || (dailyNotes[taskId].needsCare && dailyNotes[taskId].needsCare.trim()));
+        badge.innerHTML = hasContent ? '<span class="neu-pill text-[9px] font-bold text-amber-700 px-2.5 py-0.5">⚠️ Needs Care / Notes Saved</span>' : '<span class="text-slate-400 text-[10px] font-normal">(click to log confusion or topics to revise)</span>';
+      }
+
+      if (typeof renderWeakSpotsList === 'function') {
+        renderWeakSpotsList();
+      }
+    }
+
+    function toggleDailyDrawer(taskId) {
+      const drawer = document.getElementById(`drawer-${taskId}`);
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
     function postponeTask(mode) {
       if (mode === 'tomorrow') {
         rollingShifts += 1;
         saveState();
-        alert("Active lesson postponed to tomorrow! The entire subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
+        alert("Active lesson postponed to tomorrow! The subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
       } else if (mode === 'buffer') {
         alert("Active lesson absorbed into an upcoming weekend buffer slot. Final target graduation date remains intact!");
       }
@@ -506,11 +540,11 @@
       }
     }
 
-    // Export progress JSON
     function exportBackupJSON() {
       const backup = {
         progress: state,
         notes: notes,
+        dailyNotes: dailyNotes,
         shifts: rollingShifts,
         exportedAt: new Date().toISOString()
       };
@@ -523,7 +557,6 @@
       URL.revokeObjectURL(url);
     }
 
-    // Import progress JSON
     function importBackupJSON(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -534,6 +567,7 @@
           if (data.progress) {
             state = data.progress;
             notes = data.notes || {};
+            dailyNotes = data.dailyNotes || {};
             rollingShifts = data.shifts || 0;
             saveState();
             alert("Progress backup successfully restored! Welcome back.");
@@ -550,13 +584,7 @@
       reader.readAsText(file);
     }
 
-    // Calculate Phase completions
     function getPhaseStats() {
-      // Phase 1: W1-5 (idx 0-4)
-      // Phase 2: W6-10 (idx 5-9)
-      // Phase 3: W11-14 (idx 10-13)
-      // Phase 4: W15-18 (idx 14-17)
-      // Phase 5: W19-22 (idx 18-21)
       const phases = [
         { id: 1, name: "Phase 1: Software Core & SQL", startW: 0, endW: 4, color: "#10b981", done: 0, total: 0 },
         { id: 2, name: "Phase 2: Math & Classical ML", startW: 5, endW: 9, color: "#06b6d4", done: 0, total: 0 },
@@ -586,6 +614,67 @@
       return phases;
     }
 
+    function renderWeakSpotsList() {
+      const list = document.getElementById('weak-spots-list');
+      const countBadge = document.getElementById('weak-spots-count');
+      if (!list) return;
+
+      const items = [];
+      for (const [taskId, note] of Object.entries(dailyNotes)) {
+        if ((note.doubts && note.doubts.trim()) || (note.needsCare && note.needsCare.trim())) {
+          const parts = taskId.split('-');
+          const wIdx = parseInt(parts[0], 10);
+          const vIdx = parseInt(parts[1], 10);
+          const week = weeksData[wIdx];
+          const video = week ? week.videos[vIdx] : null;
+          if (video) {
+            items.push({
+              taskId,
+              weekNum: wIdx + 1,
+              day: video.day,
+              title: video.title,
+              doubts: note.doubts,
+              needsCare: note.needsCare
+            });
+          }
+        }
+      }
+
+      if (countBadge) countBadge.innerText = `${items.length} Needs Care`;
+
+      if (items.length === 0) {
+        list.innerHTML = `
+          <div class="p-4 neu-inset rounded-2xl text-xs text-slate-500 text-center">
+            No doubts or weak spots logged yet! When studying each day, write any confusion in the daily note box so you can revisit it easily.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = items.map(it => `
+        <div class="neu-card-sm p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${it.day}: ${it.title}</span>
+            <a href="roadmap.html" class="text-[11px] text-emerald-700 hover:underline font-semibold font-mono">View in Curriculum →</a>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+            ${it.doubts ? `
+              <div class="neu-inset p-2.5 rounded-xl">
+                <span class="text-[10px] font-bold text-rose-700 block">🔴 Doubts / Unclear:</span>
+                <span class="text-slate-700">${it.doubts}</span>
+              </div>
+            ` : ''}
+            ${it.needsCare ? `
+              <div class="neu-inset p-2.5 rounded-xl">
+                <span class="text-[10px] font-bold text-amber-700 block">🟡 Needs Care / Revision:</span>
+                <span class="text-slate-700">${it.needsCare}</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
     function updateGlobalStats() {
       let total = 0;
       let completed = 0;
@@ -609,7 +698,7 @@
 
       const fEl = document.getElementById('finish-val');
       if (fEl) {
-        const baseFinish = new Date(2027, 3, 4); // Apr 4, 2027
+        const baseFinish = new Date(2027, 3, 4);
         baseFinish.setDate(baseFinish.getDate() + rollingShifts);
         const options = { month: 'short', day: 'numeric', year: 'numeric' };
         fEl.innerText = baseFinish.toLocaleDateString('en-US', options);
@@ -623,6 +712,9 @@
 
       if (typeof drawPhaseDonutChart === 'function') {
         drawPhaseDonutChart();
+      }
+      if (typeof renderWeakSpotsList === 'function') {
+        renderWeakSpotsList();
       }
     }
 
@@ -639,23 +731,15 @@
     }
 
 
-    // Draw Interactive Neumorphic Donut Chart
     function drawPhaseDonutChart() {
       const phases = getPhaseStats();
       const legendList = document.getElementById('phase-legend-list');
-
-      // Circumference = 2 * PI * 38 ≈ 238.76
       const C = 238.76;
       let offset = 0;
-
-      // Color mapping
-      const colors = ['#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#f59e0b'];
 
       phases.forEach((p, i) => {
         const circle = document.getElementById(`donut-phase-${i+1}`);
         if (circle) {
-          // Segment length proportional to phase completion fraction
-          // Out of 5 equal phase portions (approx 47.75 length each)
           const phaseSliceMax = C / 5;
           const filledLength = (p.pct / 100) * phaseSliceMax;
 
@@ -685,7 +769,6 @@
       const container = document.getElementById('today-mission-box');
       if (!container) return;
 
-      // Find first uncompleted task
       let activeW = 0;
       let activeV = 0;
       let found = false;
@@ -705,27 +788,47 @@
       const week = weeksData[activeW];
       const video = week.videos[activeV];
       const taskId = `${activeW}-${activeV}`;
+      const dNote = dailyNotes[taskId] || { doubts: '', needsCare: '' };
 
       container.innerHTML = `
-        <div class="space-y-2 flex-1">
-          <div class="flex items-center gap-2">
-            <span class="neu-pill text-[10px] font-bold uppercase text-emerald-700 px-3 py-1 font-mono">Week ${activeW + 1} • ${video.day}</span>
-            <span class="text-xs font-semibold text-slate-600">${video.time_est} • ${video.difficulty}</span>
-          </div>
-          <h3 class="text-lg font-bold text-slate-800">${video.title}</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">${video.topics}</p>
-          <div class="text-[11px] font-mono text-emerald-700 pt-1">
-            📁 Path: ${video.code_path}
-          </div>
-        </div>
+        <div class="space-y-4 w-full">
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-2 flex-1">
+              <div class="flex items-center gap-2">
+                <span class="neu-pill text-[10px] font-bold uppercase text-emerald-700 px-3 py-1 font-mono">Week ${activeW + 1} • ${video.day}</span>
+                <span class="text-xs font-semibold text-slate-600">${video.time_est} • ${video.difficulty}</span>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800">${video.title}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">${video.topics}</p>
+              <div class="text-[11px] font-mono text-emerald-700 pt-1">
+                📂 Path: ${video.code_path}
+              </div>
+            </div>
 
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-          <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2.5 text-xs font-semibold text-slate-700 text-center flex items-center justify-center gap-1.5">
-            ▶ <span>Watch Lesson</span>
-          </a>
-          <button onclick="toggleTask('${taskId}')" class="neu-btn-primary px-5 py-2.5 text-xs font-bold text-center">
-            ✓ Mark Done
-          </button>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2.5 text-xs font-semibold text-slate-700 text-center flex items-center justify-center gap-1.5">
+                ▶ <span>Watch Lesson</span>
+              </a>
+              <button onclick="toggleTask('${taskId}')" class="neu-btn-primary px-5 py-2.5 text-xs font-bold text-center">
+                ✓ Mark Done
+              </button>
+            </div>
+          </div>
+
+          <!-- TODAY'S DAILY REFLECTION NOTES -->
+          <div class="pt-3 border-t border-slate-300/80">
+            <span class="text-xs font-bold text-slate-700 block mb-2">📝 Today's Reflection & Doubts (Auto-saved for revision):</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[10px] font-bold text-rose-700 block mb-1">🔴 What I didn't understand / Doubts today:</label>
+                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop termination condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400">${dNote.doubts || ''}</textarea>
+              </div>
+              <div>
+                <label class="text-[10px] font-bold text-amber-700 block mb-1">🟡 Needs the most care & revision in coming days:</label>
+                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Redo practice exercise 5 and 6 before moving to Week 2..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400">${dNote.needsCare || ''}</textarea>
+              </div>
+            </div>
+          </div>
         </div>
       `;
     }
@@ -733,6 +836,7 @@
     function renderCurrentPage() {
       renderTodayMission();
       drawPhaseDonutChart();
+      renderWeakSpotsList();
       updateGlobalStats();
     }
 
