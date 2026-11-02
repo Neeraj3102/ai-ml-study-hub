@@ -979,61 +979,80 @@
         return p.phase.toLowerCase().includes(activeFilter.toLowerCase());
       });
 
-      grid.innerHTML = filtered.map(p => `
-        <div class="neu-card p-5 sm:p-7 space-y-5">
-          
-          <!-- PROJECT HEADER -->
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="neu-pill px-3 py-0.5 text-[10px] font-mono font-bold text-teal-700">${escapeHTML(p.piece)}</span>
-                <span class="text-xs font-semibold text-slate-500">${escapeHTML(p.phase)}</span>
-                ${p.badge.includes('FLAGSHIP') ? '<span class="neu-pill px-2.5 py-0.5 text-[9px] font-bold text-purple-700 bg-purple-500/10 border border-purple-500/30">⭐ ' + escapeHTML(p.badge) + '</span>' : '<span class="text-[10px] font-mono text-slate-500">' + escapeHTML(p.badge) + '</span>'}
-              </div>
-              <h2 class="text-lg sm:text-xl font-black text-slate-800">${escapeHTML(p.title)}</h2>
-              <p class="text-xs text-slate-600">${escapeHTML(p.description)}</p>
-            </div>
+      grid.innerHTML = filtered.map(p => {
+        const isFlagship = (p.title || '').includes('FLAGSHIP');
+        const badgeText = p.phase_badge || (p.piece ? p.piece.split(':')[0] : 'Core');
+        const bullets = Array.isArray(p.resume_bullets) ? p.resume_bullets : [p.resume_bullet || ''];
+        const bulletsClipboardText = bullets.join('\n');
 
-            <!-- TECH STACK BADGES -->
-            <div class="flex flex-wrap gap-1.5 max-w-sm">
-              ${p.tech_stack.map(t => `<span class="neu-pill px-2.5 py-1 text-[10px] font-mono text-slate-700 font-semibold">${escapeHTML(t)}</span>`).join('')}
-            </div>
-          </div>
-
-          <!-- 3-COLUMN CONTENT -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        return `
+          <div class="neu-card p-5 sm:p-7 space-y-5">
             
-            <!-- REQUIREMENTS CHECKLIST -->
-            <div class="neu-inset p-4 rounded-2xl space-y-2">
-              <span class="text-[10px] font-bold uppercase text-slate-600 block mb-1">📋 Core Requirements:</span>
-              <ul class="space-y-1.5 text-slate-700">
-                ${p.requirements.map(r => `<li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span> <span>${escapeHTML(r)}</span></li>`).join('')}
-              </ul>
-            </div>
+            <!-- PROJECT HEADER -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-700/80 pb-4">
+              <div class="space-y-1.5 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="neu-pill px-3 py-0.5 text-[10px] font-mono font-bold text-teal-400">${escapeHTML(p.piece || '')}</span>
+                  <span class="text-xs font-semibold text-slate-400">${escapeHTML(p.phase || '')}</span>
+                  ${isFlagship 
+                    ? '<span class="neu-pill px-2.5 py-0.5 text-[9px] font-bold text-purple-300 bg-purple-500/20 border border-purple-500/40">⭐ FLAGSHIP CAPSTONE</span>' 
+                    : `<span class="neu-pill px-2.5 py-0.5 text-[10px] font-mono text-slate-300">${escapeHTML(badgeText)}</span>`
+                  }
+                  <span class="neu-pill px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30">${escapeHTML(p.difficulty || '')}</span>
+                  <span class="text-[10px] font-mono text-slate-400">⏱️ ${escapeHTML(p.time_est || '')}</span>
+                </div>
+                <h2 class="text-lg sm:text-xl font-black text-white">${escapeHTML(p.title || '')}</h2>
+                <p class="text-xs text-slate-300 leading-relaxed">${escapeHTML(p.subtitle || p.description || '')}</p>
+                <div class="text-[10px] font-mono text-emerald-400 pt-0.5">
+                  📂 Recommended Repo Path: <span class="font-bold">${escapeHTML(p.repo_path || '')}</span>
+                </div>
+              </div>
 
-            <!-- WEB APP / REPO BLUEPRINT -->
-            <div class="neu-inset p-4 rounded-2xl space-y-2">
-              <span class="text-[10px] font-bold uppercase text-teal-700 block mb-1">🌐 Web App UI & Repo Layout:</span>
-              <p class="text-slate-700 leading-relaxed">${escapeHTML(p.web_app_blueprint)}</p>
-              <div class="text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-300/60">
-                <b>Deliverable:</b> Standalone GitHub repo with live demo & tests.
+              <!-- TECH STACK BADGES -->
+              <div class="flex flex-wrap gap-1.5 max-w-sm shrink-0">
+                ${(p.tech_stack || []).map(t => `<span class="neu-pill px-2.5 py-1 text-[10px] font-mono text-slate-200 font-semibold bg-slate-800/80 border border-slate-700/60">${escapeHTML(t)}</span>`).join('')}
               </div>
             </div>
 
-            <!-- RESUME BULLET -->
-            <div class="neu-inset p-4 rounded-2xl space-y-2">
-              <span class="text-[10px] font-bold uppercase text-indigo-700 block mb-1">📄 Copy-Paste Resume Bullet:</span>
-              <p class="text-slate-800 font-medium italic leading-relaxed">"${escapeHTML(p.resume_bullet)}"</p>
-              <button onclick="navigator.clipboard.writeText('${p.resume_bullet.replace(/'/g, "\\'")}'); alert('Copied resume bullet to clipboard!');" 
-                      class="neu-btn px-3 py-1 text-[10px] font-bold text-indigo-700 flex items-center gap-1 mt-2">
-                📋 Copy Bullet
-              </button>
+            <!-- 3-COLUMN CONTENT -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              
+              <!-- REQUIREMENTS CHECKLIST -->
+              <div class="neu-inset p-4 rounded-2xl space-y-2 bg-slate-900/70 border border-slate-700/60">
+                <span class="text-[10px] font-bold uppercase text-emerald-400 block mb-1 font-mono">📋 Core Requirements:</span>
+                <ul class="space-y-1.5 text-slate-300">
+                  ${(p.requirements || []).map(r => `<li class="flex items-start gap-1.5"><span class="text-emerald-400 font-bold">✓</span> <span>${escapeHTML(r)}</span></li>`).join('')}
+                </ul>
+              </div>
+
+              <!-- WEB APP / REPO BLUEPRINT -->
+              <div class="neu-inset p-4 rounded-2xl space-y-2 bg-slate-900/70 border border-slate-700/60">
+                <span class="text-[10px] font-bold uppercase text-teal-400 block mb-1 font-mono">🌐 Web App UI & Repo Layout:</span>
+                <p class="text-slate-300 leading-relaxed">${escapeHTML(p.web_app_guide || p.web_app_blueprint || '')}</p>
+                <div class="text-[10px] font-mono text-slate-400 pt-2 border-t border-slate-700/60">
+                  <b>Concepts Applied:</b> ${escapeHTML(p.learned_applied || '')}
+                </div>
+              </div>
+
+              <!-- RESUME BULLET -->
+              <div class="neu-inset p-4 rounded-2xl space-y-2 bg-slate-900/70 border border-slate-700/60 flex flex-col justify-between">
+                <div>
+                  <span class="text-[10px] font-bold uppercase text-indigo-400 block mb-1 font-mono">📄 Copy-Paste Resume Bullets:</span>
+                  <ul class="space-y-1.5 text-slate-200 font-medium italic leading-relaxed">
+                    ${bullets.map(b => `<li class="flex items-start gap-1.5"><span class="text-indigo-400 not-italic">•</span> <span>"${escapeHTML(b)}"</span></li>`).join('')}
+                  </ul>
+                </div>
+                <button onclick="navigator.clipboard.writeText('${escapeHTML(bulletsClipboardText).replace(/'/g, "\\\'")}'); alert('Copied resume bullets to clipboard!');" 
+                        class="neu-btn px-3 py-1.5 text-[11px] font-bold text-indigo-300 hover:text-white flex items-center gap-1.5 mt-2 self-start">
+                  📋 <span>Copy Resume Bullets</span>
+                </button>
+              </div>
+
             </div>
 
           </div>
-
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderCurrentPage() {
