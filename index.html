@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | AI & ML Engineer Master Hub</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -147,6 +146,12 @@
       transform: translateY(0);
     }
 
+    /* Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(45, 55, 72, 0.4);
+      backdrop-filter: blur(4px);
+    }
+
   </style>
 </head>
 <body class="min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-white">
@@ -156,23 +161,56 @@
     <div id="cloud-toast" class="neu-card p-4 flex items-center gap-3 bg-white/95 border border-emerald-500/40 shadow-xl max-w-sm">
       <span class="text-xl">⚡</span>
       <div>
-        <span class="text-xs font-bold text-slate-800 block">Cross-Device Sync</span>
-        <span id="cloud-toast-msg" class="text-[11px] text-slate-600">Updated from your other device!</span>
+        <span class="text-xs font-bold text-slate-800 block">Security & Cloud Sync</span>
+        <span id="cloud-toast-msg" class="text-[11px] text-slate-600">Updated securely.</span>
+      </div>
+    </div>
+
+    <!-- CLOUD SYNC CONFIGURATION MODAL (ZERO SECRETS IN CODE) -->
+    <div id="sync-config-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+      <div class="neu-card p-6 sm:p-8 max-w-md w-full space-y-4 bg-[#e6ecf5] border border-white">
+        <div class="flex items-center justify-between border-b border-slate-300 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🔐</span>
+            <h3 class="font-black text-slate-800 text-base">Cross-Device Sync Security</h3>
+          </div>
+          <button onclick="toggleSyncModal(false)" class="text-slate-500 hover:text-slate-800 font-bold text-sm">✕</button>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          To sync between your laptop and mobile phone without exposing database keys in git, enter your unique Sync ID and Secret Passcode below:
+        </p>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Your Sync Identifier (Username / ID):</label>
+            <input type="text" id="cfg-sync-id" maxlength="64" placeholder="e.g. neeraj-master-ai" class="w-full neu-input px-3.5 py-2.5 text-xs text-slate-800">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Private Secret Passcode (min 8 characters):</label>
+            <input type="password" id="cfg-sync-secret" maxlength="128" placeholder="••••••••••••" class="w-full neu-input px-3.5 py-2.5 text-xs text-slate-800">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-300">
+          <button onclick="toggleSyncModal(false)" class="neu-btn px-4 py-2 text-xs font-semibold text-slate-700">Cancel</button>
+          <button onclick="saveSyncConfig()" class="neu-btn-primary px-5 py-2 text-xs font-bold">Save & Connect</button>
+        </div>
       </div>
     </div>
 
     <!-- STATUS TICKER -->
     <div class="border-b border-slate-300/60 bg-[#dde4f0]/80 text-[10px] sm:text-[11px] py-1.5 sm:py-2 px-3 sm:px-6 font-mono text-slate-700 overflow-hidden whitespace-nowrap select-none no-print">
       <div class="inline-block animate-pulse">
-        <span class="text-emerald-700 font-bold">🟢 REALTIME SUPABASE CLOUD SYNC ACTIVE</span> &nbsp;•&nbsp; 
-        <span>CHANGES ON LAPTOP SYNC TO MOBILE INSTANTLY</span> &nbsp;•&nbsp; 
+        <span class="text-emerald-700 font-bold">🛡️ HARDENED OWASP COMPLIANT HUB</span> &nbsp;•&nbsp; 
+        <span>ZERO EXPOSED SECRETS</span> &nbsp;•&nbsp; 
         <span>22 WEEKS & 150 DAYS</span> &nbsp;•&nbsp; 
         <span>18 PRE-BUDGETED BUFFER DAYS</span> &nbsp;•&nbsp; 
         <span class="text-slate-500">"Small daily consistency compounds into mastery."</span>
       </div>
     </div>
 
-    <!-- MAIN NAVBAR: MOBILE-RESPONSIVE WITH LIVE CLOUD STATUS -->
+    <!-- MAIN NAVBAR: MOBILE-RESPONSIVE WITH HARDENED STATUS -->
     <header class="relative md:sticky md:top-0 z-40 px-3.5 sm:px-6 py-2.5 sm:py-4 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print">
       <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         
@@ -185,7 +223,7 @@
             <div class="flex flex-col">
               <div class="flex items-center gap-1.5 sm:gap-2">
                 <span class="text-base sm:text-lg font-black text-slate-800 tracking-tight leading-tight">AI Engineer Lab</span>
-                <span class="neu-pill px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Neumorphic</span>
+                <span class="neu-pill px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Hardened</span>
               </div>
               <p class="text-[10px] sm:text-[11px] text-slate-500 hidden sm:block">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
             </div>
@@ -193,9 +231,9 @@
 
           <!-- MOBILE SYNC BADGE & QUICK BUTTONS -->
           <div class="flex md:hidden items-center gap-1.5 shrink-0">
-            <div id="sync-badge-mobile" class="neu-pill px-2 py-1 text-[9px] font-mono font-bold flex items-center gap-1 text-emerald-700 bg-emerald-500/10" title="Connected to Supabase Database">
+            <div id="sync-badge-mobile" onclick="toggleSyncModal(true)" class="neu-pill px-2 py-1 text-[9px] font-mono font-bold flex items-center gap-1 text-emerald-700 bg-emerald-500/10 cursor-pointer" title="Configure Cloud Sync">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="sync-text">Live Sync</span>
+              <span class="sync-text">Cloud Sync</span>
             </div>
             <button onclick="exportBackupJSON()" title="Export JSON backup" class="neu-btn px-2 py-1 text-[11px] font-semibold text-slate-700 flex items-center gap-1">
               💾
@@ -217,9 +255,9 @@
 
         <!-- DESKTOP CLOUD SYNC INDICATOR & CONTROLS -->
         <div class="hidden md:flex items-center gap-2.5 shrink-0">
-          <div id="sync-badge-desktop" class="neu-pill px-3 py-1.5 text-[11px] font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer" onclick="pullFromCloud(true)" title="Click to manually refresh data from Supabase Cloud Database">
+          <div id="sync-badge-desktop" onclick="toggleSyncModal(true)" class="neu-pill px-3 py-1.5 text-[11px] font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer" title="Click to manage sync credentials">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="sync-text">☁️ Live Cloud Synced</span>
+            <span class="sync-text">☁️ Cloud Sync (Encrypted)</span>
           </div>
 
           <button onclick="exportBackupJSON()" title="Export JSON backup to never lose progress" class="neu-btn px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
@@ -411,10 +449,10 @@
     <footer class="border-t border-slate-300/80 py-8 bg-[#e1e8f2] text-center text-xs text-slate-500 no-print mt-12 sm:mt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <span class="font-bold text-slate-700">Full-Stack AI & ML Engineer Master Hub</span> • Neumorphic Edition for Neeraj
+          <span class="font-bold text-slate-700">Full-Stack AI & ML Engineer Master Hub</span> • Security Hardened Edition
         </div>
         <div class="flex items-center gap-3 text-slate-600 flex-wrap justify-center">
-          <span class="neu-pill px-3 py-1 font-semibold text-emerald-700 text-[10px]">☁️ Realtime Supabase PostgreSQL Sync</span>
+          <span class="neu-pill px-3 py-1 font-semibold text-emerald-700 text-[10px]">🛡️ OWASP Secure & HTTPS Protected</span>
           <span>•</span>
           <span>15 Resume Projects</span>
           <span>•</span>
@@ -426,16 +464,15 @@
 
   <script>
     
-    const SUPABASE_URL = "https://iidpyplczxtjqfnaxpvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHB5cGxjenh0anFmbmF4cHZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTA1MDYsImV4cCI6MjEwNzk2NjUwNn0.tLMxgryw0h3awM-5MeVlwdT560XJoHwAs0vAaJL2HDw";
-
-    let supabaseClient = null;
-    try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch (e) {
-      console.warn("Supabase init error:", e);
+    // 1. XSS SANITIZATION UTILITY (INPUT SANITIZATION)
+    function escapeHTML(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     const weeksData = [{"week": "Week 1: Python Core Essentials, Input/Output & Conditionals", "phase": "Phase 1: Software Engineering Core (Diwali Week)", "dates": "Nov 2 \u2013 Nov 8, 2026 (Diwali on Nov 8; Nov 6-8 Light Festive Buffer)", "goal": "Write clean Python programs with variables, data types, user input, math operators, conditionals, and loops.", "notes_url": "https://www.codewithharry.com/notes/python-chapter-1/", "notes_label": "CodeWithHarry Python Ch 1-2 Notes & Harvard CS50P Notes Week 0-1", "english_res": "Harvard CS50P: Week 0 (Functions/Variables) & Week 1 (Conditionals)", "english_url": "https://cs50.harvard.edu/python/2022/weeks/0/", "math_res": "Khan Academy India (Hindi): Fractions, Decimals, Order of Operations (www.khanacademy.org/math/hindi)", "output_goal": "Build Number Guessing Game CLI & Complete Exercises 1\u201310 from Starter Pack", "videos": [{"id": "w1_v1", "day": "Day 1", "title": "Day #1: Intro to Programming & Python [CWH]", "url": "https://www.youtube.com/watch?v=7wnove7K-ZQ", "topics": "What is programming, interpreter vs compiler, Python 3 installation, VS Code setup.", "difficulty": "Light", "time_est": "45 min", "code_path": "01-ai-engineer/week-01/day__1__intro_to_pro.py"}, {"id": "w1_v2", "day": "Day 1", "title": "Day #2: Some Amazing Python Programs [CWH]", "url": "https://www.youtube.com/watch?v=Tto8TS-fJQU", "topics": "Ecosystem overview: AI, ML, Web APIs, Automation. What Python can do.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__2__some_amazing.py"}, {"id": "w1_v3", "day": "Day 1", "title": "Day #3: Modules and Pip in Python [CWH]", "url": "https://www.youtube.com/watch?v=qxPMmM93eDs", "topics": "Built-in modules vs external modules, pip install, terminal commands.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__3__modules_and.py"}, {"id": "w1_v4", "day": "Day 1", "title": "Day #4: Our First Python Program [CWH]", "url": "https://www.youtube.com/watch?v=7IWOYHFQvK8", "topics": "print('Hello World'), code execution flow, indentation rules.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__4__our_first_py.py"}, {"id": "w1_v5", "day": "Day 2", "title": "Day #5: Comments & Escape Sequences [CWH]", "url": "https://www.youtube.com/watch?v=qEi4np3121o", "topics": "Single/multi-line comments, \\n, \\t, print sep=' ' and end='\\n' parameters.", "difficulty": "Light", "time_est": "45 min", "code_path": "01-ai-engineer/week-01/day__5__comments___e.py"}, {"id": "w1_v6", "day": "Day 2", "title": "Day #6: Variables & Data Types [CWH]", "url": "https://www.youtube.com/watch?v=ORCuz7s5cCY", "topics": "Variables, int, float, str, bool, complex, type() function, type inspection.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__6__variables.py"}, {"id": "w1_v7", "day": "Day 2", "title": "Day #7 & #8: Operators & Calc Project [CWH]", "url": "https://www.youtube.com/watch?v=4zv-HPxBLv0", "topics": "Arithmetic operators (+, -, *, /, //, %, **). Build basic calculator CLI.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__7____8__operato.py"}, {"id": "w1_v8", "day": "Day 3", "title": "Day #9: Typecasting in Python [CWH]", "url": "https://www.youtube.com/watch?v=8jW7nzdtbL8", "topics": "Explicit vs implicit type conversion, converting str to int/float.", "difficulty": "Light", "time_est": "45 min", "code_path": "01-ai-engineer/week-01/day__9__typecasting.py"}, {"id": "w1_v9", "day": "Day 3", "title": "Day #10: Taking User Input [CWH]", "url": "https://www.youtube.com/watch?v=fT2KHpsvkyA", "topics": "input() function, handling user text and casting to numbers immediately.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__10__taking_user.py"}, {"id": "w1_v10", "day": "Day 4", "title": "Day #14: If Else Conditionals [CWH]", "url": "https://www.youtube.com/watch?v=A_Z_UqV2O04", "topics": "Comparison operators (==, !=, >, <, >=, <=), if, elif, else indentation logic.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__14__if_else_con.py"}, {"id": "w1_v11", "day": "Day 4", "title": "Day #17: For Loops in Python [CWH]", "url": "https://www.youtube.com/watch?v=56apzQj8f3o", "topics": "for item in sequence, iterating strings, range(start, stop, step) function.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__17__for_loops_i.py"}, {"id": "w1_v12", "day": "Day 5", "title": "Day #18: While Loops in Python [CWH]", "url": "https://www.youtube.com/watch?v=K1p_x9kUa6c", "topics": "while condition, loop counters, incrementing, avoiding infinite loops.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-01/day__18__while_loops.py"}], "ai_mission": "Python Foundations: Variables, input/output, math operators, conditionals, loops & CLI game logic"}, {"week": "Week 2: Data Structures, Functions & Git Fundamentals", "phase": "Phase 1: Software Engineering Core (Post-Diwali Week)", "dates": "Nov 9 \u2013 Nov 15, 2026 (Bhai Dooj on Nov 10; Weekend Wedding Buffer)", "goal": "Master Python data collections (Lists, Tuples, Dictionaries, Sets), reusable functions, file handling, and Git version control.", "notes_url": "https://www.codewithharry.com/notes/python-chapter-4/", "notes_label": "CodeWithHarry Notes Ch 3, 4, 5, 8 & Pro Git Book (git-scm.com/book/en/v2)", "english_res": "Harvard CS50P: Week 2 (Loops & Collections) & Week 6 (File I/O)", "english_url": "https://cs50.harvard.edu/python/2022/weeks/2/", "math_res": "Khan Academy: Coordinate Planes, Graphing Equations & Linear Expressions", "output_goal": "Contact Book CLI with JSON storage (Add, List, Search, Delete) committed to GitHub", "videos": [{"id": "w2_v1", "day": "Day 8", "title": "Day #11 & #12: Strings & Slicing [CWH]", "url": "https://www.youtube.com/watch?v=k4T_rVp47r0", "topics": "String indexing, negative indexing, slice notation [start:stop:step], len().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__11____12__strin.py"}, {"id": "w2_v2", "day": "Day 8", "title": "Day #13: String Methods in Python [CWH]", "url": "https://www.youtube.com/watch?v=0k_2y0aF3sE", "topics": "upper(), lower(), strip(), replace(), split(), count(), find(), startswith().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__13__string_meth.py"}, {"id": "w2_v3", "day": "Day 9", "title": "Day #20 & #21: Functions & Arguments [CWH]", "url": "https://www.youtube.com/watch?v=0XzM9i27Gq4", "topics": "def, parameters vs arguments, default values, return statement, *args/**kwargs.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__20____21__funct.py"}, {"id": "w2_v4", "day": "Day 10", "title": "Day #22 & #23: Lists & List Methods [CWH]", "url": "https://www.youtube.com/watch?v=7M_9g7vA_rI", "topics": "List indexing, mutable behavior, append(), insert(), extend(), pop(), sort().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__22____23__lists.py"}, {"id": "w2_v5", "day": "Day 11", "title": "Day #24 & #25: Tuples in Python [CWH]", "url": "https://www.youtube.com/watch?v=tI_gA_h7s0U", "topics": "Tuple immutability, tuple methods, packing/unpacking, converting to list.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__24____25__tuple.py"}, {"id": "w2_v6", "day": "Day 11", "title": "Day #31 & #32: Sets & Set Operations [CWH]", "url": "https://www.youtube.com/watch?v=H6iZ1Xm_q7I", "topics": "Unordered unique elements, union(), intersection(), difference(), symmetric_diff.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__31____32__sets.py"}, {"id": "w2_v7", "day": "Day 12", "title": "Day #33 & #34: Dictionaries & Methods [CWH]", "url": "https://www.youtube.com/watch?v=9_G_bYf8mQk", "topics": "Key-value mappings, dict[key] vs dict.get(), keys(), values(), items(), update().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/day__33____34__dicti.py"}, {"id": "w2_v8", "day": "Day 13", "title": "Git & GitHub Crash Course [Chai aur Code]", "url": "https://www.youtube.com/watch?v=apGV9Kg7ics", "topics": "git init, git add, git commit, git status, git log, creating repo on GitHub, push.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-02/git___github_crash_c.py"}], "ai_mission": "Data Collections & Git: Lists, dicts, sets, tuples, JSON persistence & GitHub version control"}, {"week": "Week 3: Object-Oriented Programming (OOP) & Practical Python", "phase": "Phase 1: Software Engineering Core (Wedding Season Buffer)", "dates": "Nov 16 \u2013 Nov 22, 2026 (Wedding / Reception Weekend Buffer)", "goal": "Write modular, professional code using Classes, Constructors, Inheritance, Exception Handling, and File I/O.", "notes_url": "https://www.codewithharry.com/notes/python-chapter-10/", "notes_label": "CodeWithHarry Notes Ch 9, 10, 11 & CampusX Python OOP Guides", "english_res": "Harvard CS50P: Week 8 (Object-Oriented Programming)", "english_url": "https://cs50.harvard.edu/python/2022/weeks/8/", "math_res": "Khan Academy: Statistical Measures (Mean, Median, Mode, Variance Intuition)", "output_goal": "Refactor Contact Book into clean OOP classes with Custom Exceptions and Logging", "videos": [{"id": "w3_v1", "day": "Day 15", "title": "Day #36 & #37: Exception Handling [CWH]", "url": "https://www.youtube.com/watch?v=8mG_W0yW5Z4", "topics": "try, except, else, finally blocks, ValueError, ZeroDivisionError handling.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/day__36____37__excep.py"}, {"id": "w3_v2", "day": "Day 15", "title": "Day #38: Raising Custom Errors [CWH]", "url": "https://www.youtube.com/watch?v=x7K9Q_rE9uU", "topics": "raise keyword, inheriting from Exception, defining meaningful error messages.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/day__38__raising_cus.py"}, {"id": "w3_v3", "day": "Day 16", "title": "Day #49 & #50: File I/O in Python [CWH]", "url": "https://www.youtube.com/watch?v=zG_iR_s0D0E", "topics": "open(filename, mode), 'r', 'w', 'a', with open(...) as f context managers, readlines().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/day__49____50__file.py"}, {"id": "w3_v4", "day": "Day 17", "title": "OOPs in Python: Classes & Objects [CampusX / CWH]", "url": "https://www.youtube.com/watch?v=2T_Wp4_w5Y8", "topics": "Classes as blueprints, objects as instances, attributes, self parameter.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/oops_in_python__clas.py"}, {"id": "w3_v5", "day": "Day 17", "title": "Constructors & Instance State [CampusX]", "url": "https://www.youtube.com/watch?v=N9y7U_wK3qA", "topics": "__init__ dunder method, initializing object state, instance attributes.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/constructors___insta.py"}, {"id": "w3_v6", "day": "Day 18", "title": "Encapsulation, Getters & Setters [CampusX]", "url": "https://www.youtube.com/watch?v=k3Y_h9_Qp7w", "topics": "@property decorator, encapsulation, protecting internal state.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/encapsulation__gette.py"}, {"id": "w3_v7", "day": "Day 19", "title": "Inheritance & Polymorphism [CampusX]", "url": "https://www.youtube.com/watch?v=Y7i2_Q8rWzE", "topics": "Single inheritance, child class inheriting parent methods, code reuse.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/inheritance___polymo.py"}, {"id": "w3_v8", "day": "Day 19", "title": "Dunder Magic Methods (__str__, __repr__) [CampusX]", "url": "https://www.youtube.com/watch?v=q6b9_Ym7WpE", "topics": "super() call, __str__, __repr__, __len__ magic methods.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-03/dunder_magic_methods.py"}], "ai_mission": "Object-Oriented Python: Clean class design, inheritance, custom exceptions, encapsulation & logging"}, {"week": "Week 4: Relational Databases & SQL for Data/ML", "phase": "Phase 1: Database & Data Architecture", "dates": "Nov 23 \u2013 Nov 29, 2026 (Event / Social Buffer Day Included)", "goal": "Model data relationships, create schemas, and write complex analytical queries with joins and aggregations.", "notes_url": "https://www.kaggle.com/learn/intro-to-sql", "notes_label": "Kaggle SQL Tutorials & PostgreSQL Official Tutorial Docs", "english_res": "Kaggle: Intro to SQL & Advanced SQL Courses", "english_url": "https://www.kaggle.com/learn/intro-to-sql", "math_res": "Khan Academy: Set Theory, Venn Diagrams & Relational Logic", "output_goal": "E-Commerce Database Schema (Users, Products, Orders) + 15 Analytical Queries", "videos": [{"id": "w4_v1", "day": "Day 22", "title": "SQL Foundations: Databases & Tables [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "What is RDBMS, SQLite vs PostgreSQL, tables, rows, columns, data types.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/sql_foundations__dat.py"}, {"id": "w4_v2", "day": "Day 22", "title": "SQL CRUD: CREATE, INSERT, SELECT [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "CREATE TABLE, Primary Keys, INSERT INTO, basic SELECT * FROM table.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/sql_crud__create__in.py"}, {"id": "w4_v3", "day": "Day 23", "title": "Filtering & Sorting: WHERE, ORDER BY [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "WHERE clause, comparison operators, AND, OR, NOT, IN, BETWEEN, LIKE, LIMIT.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/filtering___sorting.py"}, {"id": "w4_v4", "day": "Day 24", "title": "Aggregations: GROUP BY & HAVING [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "COUNT(), SUM(), AVG(), MIN(), MAX(), GROUP BY columns, filtering with HAVING.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/aggregations__group.py"}, {"id": "w4_v5", "day": "Day 25", "title": "Relational Modeling & JOINS [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "Foreign keys, 1-to-many relationships, INNER JOIN, LEFT JOIN, FULL OUTER JOIN.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/relational_modeling.py"}, {"id": "w4_v6", "day": "Day 26", "title": "Subqueries & Window Functions [CampusX SQL]", "url": "https://www.youtube.com/watch?v=hlGoQC332VM", "topics": "Nested SELECT subqueries, Common Table Expressions (WITH CTE), ROW_NUMBER().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-04/subqueries___window.py"}], "ai_mission": "Relational Databases: Schema modeling, tables, multi-table JOINS, aggregations & SQL analytical queries"}, {"week": "Week 5: NumPy & Pandas Data Wrangling (CampusX)", "phase": "Phase 1: Numerical Data Wrangling", "dates": "Nov 30 \u2013 Dec 6, 2026 (Catch-up / Wedding Buffer Day Included)", "goal": "Master numerical arrays and tabular data using CampusX's practical data manipulation series on Kaggle datasets.", "notes_url": "https://pandas.pydata.org/docs/user_guide/10min.html", "notes_label": "CampusX NumPy/Pandas Notebooks & Pandas Official Guide", "english_res": "FreeCodeCamp: Data Analysis with Python (NumPy & Pandas Full Course)", "english_url": "https://www.youtube.com/watch?v=r-uOLxNrNk8", "math_res": "Khan Academy: Matrix Addition, Multiplication, Dot Products & Summary Statistics", "output_goal": "Clean and profile a Kaggle dataset (e.g. Telco Churn CSV) with summary tables", "videos": [{"id": "w5_v1", "day": "Day 29", "title": "What is NumPy & Array Creation [CampusX ML]", "url": "https://www.youtube.com/watch?v=Rbg7m2uQ5Vw", "topics": "np.array(), ndarray attributes (.shape, .dtype, .ndim), np.zeros, np.ones, np.arange.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/what_is_numpy___arra.py"}, {"id": "w5_v2", "day": "Day 29", "title": "Vectorization & Array Broadcasting [CampusX ML]", "url": "https://www.youtube.com/watch?v=Rbg7m2uQ5Vw", "topics": "Element-wise math (+, -, *, /), dot products (@), broadcasting rules, memory speed.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/vectorization___arra.py"}, {"id": "w5_v3", "day": "Day 30", "title": "NumPy Indexing, Slicing & Masking [CampusX ML]", "url": "https://www.youtube.com/watch?v=Rbg7m2uQ5Vw", "topics": "2D slicing arr[row, col], boolean masking arr[arr > 5], filtering arrays without loops.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/numpy_indexing__slic.py"}, {"id": "w5_v4", "day": "Day 31", "title": "Pandas Series & DataFrames [CampusX ML]", "url": "https://www.youtube.com/watch?v=ZyhVh-qRZPA", "topics": "pd.Series, pd.DataFrame, reading CSV files (pd.read_csv), .head(), .info(), .describe().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/pandas_series___data.py"}, {"id": "w5_v5", "day": "Day 32", "title": "Handling Missing Values & Outliers [CampusX ML]", "url": "https://www.youtube.com/watch?v=WGUNAJki2S4", "topics": "Handling nulls (.isna(), .dropna(), .fillna()), mean/median imputation, outlier checks.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/handling_missing_val.py"}, {"id": "w5_v6", "day": "Day 33", "title": "Filtering & GroupBy Aggregations [CampusX ML]", "url": "https://www.youtube.com/watch?v=ZyhVh-qRZPA", "topics": "Boolean indexing df[df['age'] > 25], .groupby('category').agg(), .pivot_table().", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/filtering___groupby.py"}, {"id": "w5_v7", "day": "Day 34", "title": "Merging & Joining DataFrames [CampusX ML]", "url": "https://www.youtube.com/watch?v=ZyhVh-qRZPA", "topics": "pd.merge() for SQL-like joins (inner, left), pd.concat() for row/column stacking.", "difficulty": "Medium", "time_est": "90 min", "code_path": "01-ai-engineer/week-05/merging___joining_da.py"}], "ai_mission": "Numerical Computing & Wrangling: NumPy array vectorization, broadcasting & Pandas DataFrame wrangling"}, {"week": "Week 6: Gradient Descent & Math for ML (CampusX Core)", "phase": "Phase 2: Math & Classical Machine Learning", "dates": "Dec 7 \u2013 Dec 13, 2026 (Wedding / Reception Weekend Buffer)", "goal": "Build mathematical and visual intuition for Gradient Descent from scratch using CampusX's dedicated lectures.", "notes_url": "https://www.youtube.com/playlist?list=PLKnIA16_Rmvbr7zKYQuBfsVkjoLcJgxHH", "notes_label": "CampusX 100 Days of ML: Gradient Descent & Math Notes", "english_res": "3Blue1Brown: Essence of Linear Algebra & Essence of Calculus", "english_url": "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab", "math_res": "Khan Academy India: Probability Distributions, Normal Distribution & Derivatives", "output_goal": "Implement Gradient Descent in pure NumPy for a line y = mx + b; plot the loss curve", "videos": [{"id": "w6_v1", "day": "Day 36", "title": "What is Machine Learning? [CampusX #1]", "url": "https://www.youtube.com/watch?v=ZftI2fEz0Fw", "topics": "AI vs ML vs DL, model formulation, loss minimization overview.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-06/what_is_machine_lear.py"}, {"id": "w6_v2", "day": "Day 37", "title": "Dot Products, Norms & Cosine Similarity [3B1B]", "url": "https://www.youtube.com/watch?v=LyGKycYT2v0", "topics": "Dot product intuition, L1 vs L2 norms, measuring angle/similarity between vectors.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-06/dot_products__norms.py"}, {"id": "w6_v3", "day": "Day 38", "title": "Derivatives & The Gradient Vector [3B1B]", "url": "https://www.youtube.com/watch?v=WUvTyaaNkzM", "topics": "Partial derivatives, what the gradient vector points to, intuition of slope descent.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-06/derivatives___the_gr.py"}, {"id": "w6_v4", "day": "Day 39", "title": "Gradient Descent From Scratch [CampusX #47]", "url": "https://www.youtube.com/watch?v=a_XrmKlaGTs", "topics": "Mathematical derivation, loss function derivative, weight update rule: w = w - lr * grad.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-06/gradient_descent_fro.py"}, {"id": "w6_v5", "day": "Day 40", "title": "Batch vs Stochastic vs Mini-Batch GD [CampusX #48]", "url": "https://www.youtube.com/watch?v=fFwRC-fapIU", "topics": "Comparing GD variants on convergence speed, computational overhead, and noisy steps.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-06/batch_vs_stochastic.py"}, {"id": "w6_v6", "day": "Day 41", "title": "Loss Functions: MSE vs. Log Loss [CampusX]", "url": "https://www.youtube.com/watch?v=6ArSys5qHAU", "topics": "Mean Squared Error for regression, why MSE fails on classification, Binary Cross-Entropy.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-06/loss_functions__mse.py"}], "ai_mission": "Math for Machine Learning: Gradient descent derivation, loss functions (MSE/LogLoss) & optimization"}, {"week": "Week 7: Linear & Logistic Regression (CampusX ML)", "phase": "Phase 2: Math & Classical Machine Learning", "dates": "Dec 14 \u2013 Dec 20, 2026 (Mid-December Wedding Buffer)", "goal": "Master linear models, Ridge/Lasso regularization, logistic decision boundaries, and evaluation metrics with CampusX.", "notes_url": "https://scikit-learn.org/stable/supervised_learning.html", "notes_label": "CampusX Regression Notes & Scikit-Learn Official User Guide", "english_res": "StatQuest with Josh Starmer: Machine Learning Fundamentals", "english_url": "https://www.youtube.com/playlist?list=PLblh5JKOoLUICTaGLRoHQDuF_7q2GfuJF", "math_res": "Khan Academy: Linear Equations, Best-Fit Lines & Sigmoid Activation Function", "output_goal": "Train Logistic Regression model on a medical dataset; generate Confusion Matrix & PR curve", "videos": [{"id": "w7_v1", "day": "Day 43", "title": "Simple Linear Regression Math & Code [CampusX #45]", "url": "https://www.youtube.com/watch?v=dr7z7a_8lQw", "topics": "OLS closed-form solution, slope & intercept formula, fitting line on data.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/simple_linear_regres.py"}, {"id": "w7_v2", "day": "Day 44", "title": "Multiple Linear Regression [CampusX #46]", "url": "https://www.youtube.com/watch?v=A9SezQlvakw", "topics": "N-dimensional regression, matrix formulation (X^T X)^-1 X^T y, R2 score & adjusted R2.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/multiple_linear_regr.py"}, {"id": "w7_v3", "day": "Day 45", "title": "Ridge Regression (L2 Penalty) [CampusX #51]", "url": "https://www.youtube.com/watch?v=roTZJaxjnJc", "topics": "Overfitting prevention, coefficient shrinkage, lambda penalty geometric intuition.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/ridge_regression__l2.py"}, {"id": "w7_v4", "day": "Day 45", "title": "Lasso Regression & Feature Selection [CampusX #52]", "url": "https://www.youtube.com/watch?v=8NOdgjC1988", "topics": "L1 penalty forcing weights to exact zero; sparsity and automatic feature selection.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/lasso_regression___f.py"}, {"id": "w7_v5", "day": "Day 46", "title": "Logistic Regression Math & Sigmoid [CampusX #57]", "url": "https://www.youtube.com/watch?v=mJlRTUuVr04", "topics": "Odds ratio, log-odds, sigmoid mapping to (0, 1), maximum likelihood estimation.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/logistic_regression.py"}, {"id": "w7_v6", "day": "Day 47", "title": "Confusion Matrix, Precision & Recall [CampusX #59]", "url": "https://www.youtube.com/watch?v=4HyTlbHUKSw", "topics": "True Positive, False Positive, Precision vs Recall trade-off, F1-Score, ROC-AUC.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-07/confusion_matrix__pr.py"}], "ai_mission": "Supervised Learning: Linear regression, Logistic regression, decision boundaries, ROC-AUC & Precision-Recall"}, {"week": "Week 8: Decision Trees, Random Forests & XGBoost (CampusX)", "phase": "Phase 2: Math & Classical Machine Learning", "dates": "Dec 21 \u2013 Dec 27, 2026 (Christmas Holiday & Social Buffer)", "goal": "Master non-linear decision trees, bagging ensembles, and gradient boosting algorithms with CampusX.", "notes_url": "https://xgboost.readthedocs.io/en/stable/tutorials/model.html", "notes_label": "CampusX Ensemble Learning Notebooks & XGBoost Documentation", "english_res": "StatQuest: Decision Trees, Random Forests & XGBoost Series", "english_url": "https://www.youtube.com/watch?v=_L39rN6gz7Y", "math_res": "Khan Academy: Logarithms, Entropy & Information Theory Basics", "output_goal": "Benchmark Random Forest vs. XGBoost on Telco Churn dataset with feature importance charts", "videos": [{"id": "w8_v1", "day": "Day 50", "title": "Decision Trees: Gini Impurity & Entropy [CampusX]", "url": "https://www.youtube.com/watch?v=_L39rN6gz7Y", "topics": "How trees split data, calculating Gini impurity by hand, information gain, tree depth.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-08/decision_trees__gini.py"}, {"id": "w8_v2", "day": "Day 51", "title": "Tree Pruning & Hyperparameters [CampusX]", "url": "https://www.youtube.com/watch?v=D0efHEJsfHo", "topics": "max_depth, min_samples_split, min_samples_leaf, preventing tree overfitting.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-08/tree_pruning___hyper.py"}, {"id": "w8_v3", "day": "Day 52", "title": "Random Forests & Bagging Ensembles [CampusX]", "url": "https://www.youtube.com/watch?v=J4Wdy0Wc_xQ", "topics": "Bootstrap aggregating, row and column sampling, OOB score, voting classifier.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-08/random_forests___bag.py"}, {"id": "w8_v4", "day": "Day 53", "title": "AdaBoost & Sequential Learning [CampusX]", "url": "https://www.youtube.com/watch?v=LsK-xG1cLYA", "topics": "Why boosting builds on previous errors, sample weights update mechanics.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-08/adaboost___sequentia.py"}, {"id": "w8_v5", "day": "Day 54", "title": "Gradient Boosting & XGBoost [CampusX]", "url": "https://www.youtube.com/watch?v=OtD8wVaFm6E", "topics": "Fitting decision trees to pseudo-residuals, learning rate shrinkage, XGBoost speed.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-08/gradient_boosting.py"}, {"id": "w8_v6", "day": "Day 55", "title": "Feature Importance & Model Evaluation [CampusX]", "url": "https://www.youtube.com/watch?v=0k_2y0aF3sE", "topics": "MDI feature importance, permutation importance, intro to SHAP values.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-08/feature_importance.py"}], "ai_mission": "Ensembles & Boosting: Decision trees, Gini impurity, Random Forest bagging & XGBoost gradient boosting"}, {"week": "Week 9: Feature Engineering & Scikit-Learn Pipelines (CampusX)", "phase": "Phase 2: Math & Classical Machine Learning", "dates": "Dec 28, 2026 \u2013 Jan 3, 2027 (New Year Celebration Buffer)", "goal": "Build robust, reproducible pipelines using CampusX's dedicated ColumnTransformer and Pipeline masterclasses.", "notes_url": "https://scikit-learn.org/stable/common_pitfalls.html", "notes_label": "CampusX Pipeline Notebooks & Scikit-Learn Common Pitfalls Guide", "english_res": "Scikit-Learn Official Tutorial: Pipelines and Composite Estimators", "english_url": "https://scikit-learn.org/stable/modules/compose.html", "math_res": "Khan Academy: K-Fold Cross Validation & Combinatorics of Hyperparameter Grids", "output_goal": "Build an end-to-end Pipeline with ColumnTransformer, OneHotEncoder & Scaler; save with joblib", "videos": [{"id": "w9_v1", "day": "Day 57", "title": "Handling Categorical Data [CampusX #28]", "url": "https://www.youtube.com/watch?v=UZio8TcTMrI", "topics": "Ordinal encoding vs One-Hot Encoding, dummy variable trap, handle_unknown='ignore'.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-09/handling_categorical.py"}, {"id": "w9_v2", "day": "Day 58", "title": "Feature Scaling: Standardization vs Norm [CampusX #27]", "url": "https://www.youtube.com/watch?v=93rKZs0MkgU", "topics": "StandardScaler (z-score) vs MinMaxScaler, when to use which on linear vs tree models.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-09/feature_scaling__sta.py"}, {"id": "w9_v3", "day": "Day 59", "title": "Scikit-Learn ColumnTransformer [CampusX #31]", "url": "https://www.youtube.com/watch?v=vVhD2EyS41Y", "topics": "Applying different transformations to numeric vs categorical columns cleanly in one step.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-09/scikit_learn_columnt.py"}, {"id": "w9_v4", "day": "Day 60", "title": "Building Scikit-Learn Pipelines [CampusX #32]", "url": "https://www.youtube.com/watch?v=vVhD2EyS41Y", "topics": "Chaining preprocessing with estimator; preventing data leakage completely.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-09/building_scikit_lear.py"}, {"id": "w9_v5", "day": "Day 61", "title": "Cross-Validation Done Right [CampusX]", "url": "https://www.youtube.com/watch?v=fSytzGwwBVw", "topics": "Stratified K-Fold inside pipelines, evaluating baseline without test data leakage.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-09/cross_validation_don.py"}, {"id": "w9_v6", "day": "Day 62", "title": "Pipeline Serialization with Joblib [CampusX]", "url": "https://www.youtube.com/watch?v=5nYqK-HaoKY", "topics": "joblib.dump() and joblib.load(), testing predictions on unseen single-row inputs.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-09/pipeline_serializati.py"}], "ai_mission": "Production Pipelines: Scikit-Learn ColumnTransformer, categorical encoding, scaling & cross-validation"}, {"week": "Week 10: PORTFOLIO PROJECT 1 \u2014 End-to-End ML Prediction Engine", "phase": "Phase 2: Milestone Portfolio Project", "dates": "Jan 4 \u2013 Jan 10, 2027 (New Year Sprint Week)", "goal": "Publish your first full-fledged Machine Learning portfolio project on GitHub following CampusX project best practices.", "notes_url": "https://github.com/", "notes_label": "CampusX End-to-End Project Architecture & Model Cards", "english_res": "Google ML Guides: Rules of Machine Learning (Best Practices for ML Engineering)", "english_url": "https://developers.google.com/machine-learning/guides/rules-of-ml", "math_res": "Model Metric Synthesis: Precision-Recall Tradeoff curves & Business Cost Matrices", "output_goal": "PORTFOLIO PROJECT 1 LIVE: End-to-End Customer Churn Prediction Engine on GitHub", "videos": [{"id": "w10_v1", "day": "Day 64", "title": "End-to-End ML Project Walkthrough [CampusX]", "url": "https://www.youtube.com/watch?v=yIYKR4sgzI8", "topics": "Problem framing, choosing dataset, building baseline model.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-10/end_to_end_ml_projec.py"}, {"id": "w10_v2", "day": "Day 65", "title": "Data Cleaning & Feature Engineering [CampusX]", "url": "https://www.youtube.com/watch?v=WGUNAJki2S4", "topics": "Feature selection, handling missing values, creating clean train/test splits.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-10/data_cleaning___feat.py"}, {"id": "w10_v3", "day": "Day 66", "title": "Pipeline Construction & Model Comparison [CampusX]", "url": "https://www.youtube.com/watch?v=OtD8wVaFm6E", "topics": "Comparing Logistic Regression, Random Forest, and XGBoost on Stratified 5-Fold.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-10/pipeline_constructio.py"}, {"id": "w10_v4", "day": "Day 67", "title": "Tuning & Final Model Evaluation [CampusX]", "url": "https://www.youtube.com/watch?v=4jRBRDbJemM", "topics": "Hyperparameter optimization, final test set evaluation, generating confusion matrix.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-10/tuning___final_model.py"}, {"id": "w10_v5", "day": "Day 68", "title": "Pipeline Serialization & Smoke Testing", "url": "https://www.youtube.com/watch?v=5nYqK-HaoKY", "topics": "Packaging pipeline into model.joblib, writing sample prediction test script.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "02-ai-engineer/week-10/pipeline_serializati.py"}, {"id": "w10_v6", "day": "Day 69", "title": "Writing a Production-Grade README", "url": "https://www.youtube.com/watch?v=apGV9Kg7ics", "topics": "Documenting problem, metrics table, setup instructions, limitations, and future steps.", "difficulty": "Medium", "time_est": "90 min", "code_path": "02-ai-engineer/week-10/writing_a_production.py"}], "ai_mission": "MILESTONE PROJECT 1: End-to-end predictive ML pipeline with Optuna tuning & model card documentation"}, {"week": "Week 11: HTTP, REST & FastAPI for Machine Learning", "phase": "Phase 3: Production Backend & Model Serving", "dates": "Jan 11 \u2013 Jan 17, 2027 (Winter Wedding Weekend Buffer)", "goal": "Build async APIs with FastAPI & Pydantic to serve Machine Learning predictions with interactive Swagger UI.", "notes_url": "https://fastapi.tiangolo.com/tutorial/", "notes_label": "FastAPI Official Documentation & CampusX API Deployment Guides", "english_res": "FastAPI Official Tutorial: First Steps, Path Params, Query Params, Request Body", "english_url": "https://fastapi.tiangolo.com/tutorial/first-steps/", "math_res": "Network Latency & Throughput Intuition (Requests Per Second - RPS, p95/p99 Latency)", "output_goal": "Build Model Prediction REST API with Pydantic validation returning dummy predictions", "videos": [{"id": "w11_v1", "day": "Day 71", "title": "How the Web Works: HTTP, DNS & REST", "url": "https://www.youtube.com/watch?v=yE6tIle64tU", "topics": "Client-server architecture, HTTP methods (GET, POST, PUT, DELETE), status codes.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/how_the_web_works__h.py"}, {"id": "w11_v2", "day": "Day 72", "title": "Deploying ML Models with FastAPI [CampusX / Tiangolo]", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Why FastAPI for ML, async/await in Python, installing uvicorn, running your first @app.get('/').", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/deploying_ml_models.py"}, {"id": "w11_v3", "day": "Day 73", "title": "Pydantic v2: Schema Validation & Typing", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "BaseModel, input feature validation, automatic 422 Unprocessable Entity error handling.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/pydantic_v2__schema.py"}, {"id": "w11_v4", "day": "Day 74", "title": "Path & Query Parameters in FastAPI", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Path(..., ge=1), Query filtering, optional parameters, returning structured JSON responses.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/path___query_paramet.py"}, {"id": "w11_v5", "day": "Day 75", "title": "Error Handling & HTTP Exceptions", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Raising HTTPException(status_code=404), custom exception handlers in FastAPI.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/error_handling___htt.py"}, {"id": "w11_v6", "day": "Day 76", "title": "Interactive API Documentation", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Exploring Swagger UI (/docs) and ReDoc (/redoc), testing endpoints in browser.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-11/interactive_api_docu.py"}], "ai_mission": "REST APIs for ML: FastAPI async endpoints, Pydantic v2 schema validation & interactive Swagger UI docs"}, {"week": "Week 12: Database Integration & SQLAlchemy 2.0 ORM", "phase": "Phase 3: Production Backend & Model Serving", "dates": "Jan 18 \u2013 Jan 24, 2027 (Wedding / Family Event Buffer)", "goal": "Persist data with SQLAlchemy 2.0 and PostgreSQL; inject database sessions cleanly using FastAPI Dependencies.", "notes_url": "https://docs.sqlalchemy.org/en/20/orm/quickstart.html", "notes_label": "SQLAlchemy 2.0 Unified Tutorial & Migration Guidelines", "english_res": "FastAPI Documentation: SQL (Relational) Databases with SQLAlchemy", "english_url": "https://fastapi.tiangolo.com/tutorial/sql-databases/", "math_res": "Connection Pool Sizing: Concurrency, Thread Pools & Database Contention", "output_goal": "Connect Prediction API to PostgreSQL to log every prediction request, latency, and inputs", "videos": [{"id": "w12_v1", "day": "Day 78", "title": "SQLAlchemy 2.0 Declarative Models", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "DeclarativeBase, Mapped types, mapped_column, primary keys, relationships.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/sqlalchemy_2_0_decla.py"}, {"id": "w12_v2", "day": "Day 79", "title": "Engine, Sessionmaker & Connection Pooling", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "create_engine, SessionLocal, pool_size, max_overflow, managing DB lifecycles.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/engine__sessionmaker.py"}, {"id": "w12_v3", "day": "Day 80", "title": "Repository Pattern & CRUD Operations", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Separating DB queries from API routes: db.execute(select(...)), insert, commit.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/repository_pattern.py"}, {"id": "w12_v4", "day": "Day 81", "title": "FastAPI Dependency Injection (Depends)", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "yield get_db(), ensuring sessions close cleanly after each request completes.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/fastapi_dependency_i.py"}, {"id": "w12_v5", "day": "Day 82", "title": "Database Migrations with Alembic", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "alembic init, env.py setup, alembic revision --autogenerate, alembic upgrade head.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/database_migrations.py"}, {"id": "w12_v6", "day": "Day 83", "title": "Building the Prediction Logger Entity", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Storing prediction_id, user_id, input_features, prediction, latency_ms, created_at.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-12/building_the_predict.py"}], "ai_mission": "Database Persistence: PostgreSQL storage, SQLAlchemy 2.0 ORM, Alembic migrations & prediction logger"}, {"week": "Week 13: Authentication, Security & Redis Caching", "phase": "Phase 3: Production Backend & Model Serving", "dates": "Jan 25 \u2013 Jan 31, 2027 (End-of-Month Review & Buffer)", "goal": "Protect API endpoints with JWT authentication and implement Redis caching to eliminate redundant computations.", "notes_url": "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/", "notes_label": "FastAPI Security & JWT Docs; Redis Developer Quickstart", "english_res": "FastAPI Tutorial: Security with OAuth2 and Password Hashing", "english_url": "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/", "math_res": "Hash Functions & Salt Mechanics (Bcrypt Work Factor & Expiration Time Math)", "output_goal": "Secured API with /register, /login, JWT protected /predict route, and Redis prediction caching", "videos": [{"id": "w13_v1", "day": "Day 85", "title": "Password Hashing with Passlib & Bcrypt", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Never store plaintext; salts, one-way hash functions, pwd_context.hash/verify.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-13/password_hashing_wit.py"}, {"id": "w13_v2", "day": "Day 86", "title": "JSON Web Tokens (JWT) Deep Dive", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Header, Payload, Signature; issuing tokens, setting expiration times (exp).", "difficulty": "Heavy", "time_est": "120 min", "code_path": "03-ai-engineer/week-13/json_web_tokens__jwt.py"}, {"id": "w13_v3", "day": "Day 87", "title": "OAuth2PasswordBearer & Protected Routes", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "FastAPI OAuth2 flow, extracting bearer token, decoding JWT, getting current user.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-13/oauth2passwordbearer.py"}, {"id": "w13_v4", "day": "Day 88", "title": "Redis Foundations: In-Memory Data Store", "url": "https://www.youtube.com/watch?v=1b9iUqT_b8Y", "topics": "Why Redis is blazing fast, key-value data structures, TTL (Time To Live).", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-13/redis_foundations__i.py"}, {"id": "w13_v5", "day": "Day 89", "title": "Cache-Aside Pattern for ML Inference", "url": "https://www.youtube.com/watch?v=1b9iUqT_b8Y", "topics": "Hashing input features into cache key; returning cached prediction if hit.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-13/cache_aside_pattern.py"}, {"id": "w13_v6", "day": "Day 90", "title": "API Rate Limiting with Redis", "url": "https://www.youtube.com/watch?v=1b9iUqT_b8Y", "topics": "Sliding window rate limiting with Redis to protect costly endpoints from abuse.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-13/api_rate_limiting_wi.py"}], "ai_mission": "Security & In-Memory Caching: JWT authentication, OAuth2 password hashing & Redis cache-aside inference"}, {"week": "Week 14: PORTFOLIO PROJECT 2 \u2014 Containerized ML Inference Microservice", "phase": "Phase 3: Milestone Portfolio Project", "dates": "Feb 1 \u2013 Feb 7, 2027 (Docker & Production Sprint)", "goal": "Package your trained ML model, FastAPI backend, PostgreSQL, and Redis into Docker containers and deploy.", "notes_url": "https://docs.docker.com/get-started/", "notes_label": "Docker Official Get Started Guide & Compose Specification", "english_res": "Docker Documentation: Multi-stage Builds & Compose for Python Microservices", "english_url": "https://docs.docker.com/build/building/multi-stage/", "math_res": "Container Resource Allocation: CPU Quotas, Memory Limits & OOM Killers", "output_goal": "PORTFOLIO PROJECT 2 LIVE: Containerized ML Inference Microservice with Docker Compose", "videos": [{"id": "w14_v1", "day": "Day 92", "title": "Containers vs Virtual Machines", "url": "https://www.youtube.com/watch?v=rOTqprHv1YE", "topics": "Kernel namespaces, cgroups, why containers are lightweight, Docker architecture.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-14/containers_vs_virtua.py"}, {"id": "w14_v2", "day": "Day 93", "title": "Writing a Production Dockerfile", "url": "https://www.youtube.com/watch?v=rOTqprHv1YE", "topics": "Multi-stage builds, non-root user, slim Python base, .dockerignore best practices.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "03-ai-engineer/week-14/writing_a_production.py"}, {"id": "w14_v3", "day": "Day 94", "title": "Multi-Container Docker Compose", "url": "https://www.youtube.com/watch?v=rOTqprHv1YE", "topics": "Orchestrating web, db (Postgres), and cache (Redis) with health checks & networks.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-14/multi_container_dock.py"}, {"id": "w14_v4", "day": "Day 95", "title": "Loading ML Models on Startup (Lifespan)", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "FastAPI lifespan async context manager; loading joblib pipeline into memory once.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-14/loading_ml_models_on.py"}, {"id": "w14_v5", "day": "Day 96", "title": "Automated Testing with Pytest & HTTPX", "url": "https://www.youtube.com/watch?v=cHYq14du8xQ", "topics": "Unit testing routes, testing auth failures, testing model output schema format.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-14/automated_testing_wi.py"}, {"id": "w14_v6", "day": "Day 97", "title": "Free Cloud Deployment (Railway / Render)", "url": "https://www.youtube.com/watch?v=rOTqprHv1YE", "topics": "Pushing Docker image, configuring environment variables, verifying public live URL.", "difficulty": "Medium", "time_est": "90 min", "code_path": "03-ai-engineer/week-14/free_cloud_deploymen.py"}], "ai_mission": "MILESTONE PROJECT 2: Containerized ML inference microservice suite orchestrated with Docker Compose"}, {"week": "Week 15: PyTorch & Neural Network Foundations", "phase": "Phase 4: Deep Learning, Embeddings & RAG", "dates": "Feb 8 \u2013 Feb 14, 2027 (Valentine's / Event Buffer Weekend)", "goal": "Build deep learning intuition; master PyTorch tensors, autograd, custom layers, and the training loop.", "notes_url": "https://pytorch.org/tutorials/beginner/basics/intro.html", "notes_label": "PyTorch Official Tutorials: Learn the Basics (Tensors to Training Loops)", "english_res": "PyTorch Official Tutorials: Quickstart & Deep Learning with PyTorch: A 60 Minute Blitz", "english_url": "https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html", "math_res": "Khan Academy / 3Blue1Brown: What is a Neural Network & Gradient Backpropagation", "output_goal": "Train a 3-Layer MLP from scratch in PyTorch on tabular data; log training loss curves", "videos": [{"id": "w15_v1", "day": "Day 99", "title": "PyTorch Tensors & Hardware Acceleration", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "Tensors vs NumPy arrays, shapes, slicing, moving tensors to GPU (cuda/mps).", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/pytorch_tensors___ha.py"}, {"id": "w15_v2", "day": "Day 100", "title": "Autograd: Automatic Differentiation", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "Computational graph, requires_grad=True, loss.backward(), tensor.grad accumulation.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/autograd__automatic.py"}, {"id": "w15_v3", "day": "Day 101", "title": "Building Neural Networks with nn.Module", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "nn.Linear, activation functions (ReLU, GELU), defining forward() method.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/building_neural_netw.py"}, {"id": "w15_v4", "day": "Day 102", "title": "Loss Functions & Optimizers in PyTorch", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "CrossEntropyLoss, MSELoss, AdamW optimizer, optimizer.zero_grad(), optimizer.step().", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/loss_functions___opt.py"}, {"id": "w15_v5", "day": "Day 103", "title": "PyTorch Dataset & DataLoader", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "Custom __len__ and __getitem__, batch_size, shuffle=True, multi-worker loading.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/pytorch_dataset___da.py"}, {"id": "w15_v6", "day": "Day 104", "title": "The Canonical PyTorch Training Loop", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "topics": "Epoch loop, train mode vs eval mode (model.train(), model.eval(), torch.no_grad()).", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-15/the_canonical_pytorc.py"}], "ai_mission": "Deep Learning Foundations: PyTorch tensors, autograd, nn.Module, custom Datasets & GPU training loops"}, {"week": "Week 16: Transformers, Tokenization & Text Embeddings", "phase": "Phase 4: Deep Learning, Embeddings & RAG", "dates": "Feb 15 \u2013 Feb 21, 2027 (Mid-Feb Event Buffer)", "goal": "Master the Transformer architecture (Self-Attention), tokenizers, and dense semantic vector embeddings.", "notes_url": "https://huggingface.co/learn/nlp-course/chapter1/1", "notes_label": "Hugging Face NLP Course: Transformer Models & CampusX GenAI Guides", "english_res": "Hugging Face NLP Course: Transformers, Tokenizers & Pipeline API", "english_url": "https://huggingface.co/learn/nlp-course/chapter1/1", "math_res": "Self-Attention Math: Query, Key, Value Dot Products & Softmax Normalization", "output_goal": "Build a Semantic Search CLI using sentence-transformers to find top-3 closest documents", "videos": [{"id": "w16_v1", "day": "Day 106", "title": "Evolution of NLP: TF-IDF to Transformers", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "Limitations of bag-of-words and RNNs; why parallel attention conquered NLP.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/evolution_of_nlp__tf.py"}, {"id": "w16_v2", "day": "Day 107", "title": "The Transformer: Self-Attention Explained", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "Query, Key, Value intuition; scaled dot-product attention formula; multi-head attention.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/the_transformer__sel.py"}, {"id": "w16_v3", "day": "Day 108", "title": "Encoder vs Decoder Architectures", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "BERT (bi-directional encoder for embeddings) vs GPT (autoregressive decoder for generation).", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/encoder_vs_decoder_a.py"}, {"id": "w16_v4", "day": "Day 109", "title": "Tokenization Mechanics (BPE & WordPiece)", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "Subword tokenization, vocabulary files, token IDs, context window limitations.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/tokenization_mechani.py"}, {"id": "w16_v5", "day": "Day 110", "title": "Dense Vector Embeddings in Practice [CampusX GenAI]", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "Mapping sentences to 384/1536-dimensional vectors; cosine distance between concepts.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/dense_vector_embeddi.py"}, {"id": "w16_v6", "day": "Day 111", "title": "HuggingFace sentence-transformers", "url": "https://www.youtube.com/watch?v=wjZofJX0v4U", "topics": "Loading all-MiniLM-L6-v2, model.encode(sentences), calculating similarity matrices.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-16/huggingface_sentence.py"}], "ai_mission": "Transformers & NLP: Pretrained transformer models, tokenizers, sentence embeddings & transfer learning"}, {"week": "Week 17: Vector Databases & Document Chunking (CampusX)", "phase": "Phase 4: Deep Learning, Embeddings & RAG", "dates": "Feb 22 \u2013 Feb 28, 2027 (End-of-Feb Buffer)", "goal": "Store, index, and retrieve millions of vectors efficiently with HNSW indexes and intelligent chunking.", "notes_url": "https://docs.trychroma.com/", "notes_label": "ChromaDB Documentation & CampusX Vector Store Architecture Guide", "english_res": "Pinecone / ChromaDB Guides: Chunking Strategies for LLM Applications", "english_url": "https://docs.trychroma.com/getting-started", "math_res": "Hierarchical Navigable Small World (HNSW) Graphs & Approximate Nearest Neighbor Math", "output_goal": "Ingestion Pipeline that parses PDFs/markdown files, chunks them, and stores embeddings with metadata", "videos": [{"id": "w17_v1", "day": "Day 113", "title": "Vector Databases vs Relational Databases [CampusX RAG]", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Exact nearest neighbor (O(N) scan) vs Approximate Nearest Neighbor (ANN) index.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "04-ai-engineer/week-17/vector_databases_vs.py"}, {"id": "w17_v2", "day": "Day 114", "title": "HNSW & Vector Indexing Under the Hood", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Multi-layer skip graphs for vectors, distance metrics (Cosine vs Euclidean vs Dot product).", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-17/hnsw___vector_indexi.py"}, {"id": "w17_v3", "day": "Day 115", "title": "Setting up ChromaDB & pgvector [CampusX]", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Running ChromaDB in Docker, enabling vector extension in PostgreSQL (CREATE EXTENSION vector).", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-17/setting_up_chromadb.py"}, {"id": "w17_v4", "day": "Day 116", "title": "Document Chunking Strategies [CampusX]", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Fixed-size vs recursive character chunking; chunk_size vs chunk_overlap trade-offs.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-17/document_chunking_st.py"}, {"id": "w17_v5", "day": "Day 117", "title": "Metadata Filtering During Retrieval", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Pre-filtering vs post-filtering by document category, author, date, or user permissions.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-17/metadata_filtering_d.py"}, {"id": "w17_v6", "day": "Day 118", "title": "Hybrid Search: BM25 + Vector Search", "url": "https://www.youtube.com/watch?v=klTvEwg3oJg", "topics": "Why vector search fails on exact keywords/part numbers; combining lexical with semantic.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-17/hybrid_search__bm25.py"}], "ai_mission": "Vector Databases: Dense text embeddings, pgvector / ChromaDB similarity indexing & semantic search"}, {"week": "Week 18: PORTFOLIO PROJECT 3 \u2014 Enterprise RAG Knowledge Engine API", "phase": "Phase 4: Milestone Portfolio Project", "dates": "Mar 1 \u2013 Mar 7, 2027 (RAG Sprint Week)", "goal": "Build and ship an end-to-end Retrieval-Augmented Generation (RAG) backend API with streaming citations.", "notes_url": "https://platform.openai.com/docs/guides/rag", "notes_label": "CampusX Complete RAG Guide & OpenAI/Gemini Architecture Patterns", "english_res": "Google Gemini API Guides: RAG & Grounding with Custom Data", "english_url": "https://ai.google.dev/gemini-api/docs", "math_res": "RAG Evaluation Metrics: Faithfulness, Answer Relevance & Context Recall Formulas", "output_goal": "PORTFOLIO PROJECT 3 LIVE: Enterprise RAG Knowledge Engine API with token streaming", "videos": [{"id": "w18_v1", "day": "Day 120", "title": "The Production RAG Architecture [CampusX RAG]", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Query rewording, dense retrieval, context window prompt injection, hallucination control.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "04-ai-engineer/week-18/the_production_rag_a.py"}, {"id": "w18_v2", "day": "Day 121", "title": "Calling LLM APIs with Python SDKs [CampusX]", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Using google-genai or openai SDK, system prompts, temperature, structured outputs.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-18/calling_llm_apis_wit.py"}, {"id": "w18_v3", "day": "Day 122", "title": "Streaming Token Responses in FastAPI", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "FastAPI StreamingResponse, Server-Sent Events (SSE), real-time token delivery to UI.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-18/streaming_token_resp.py"}, {"id": "w18_v4", "day": "Day 123", "title": "Enforcing JSON Schemas with Pydantic", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Guaranteed structured outputs from LLMs: answer, citations list, confidence score.", "difficulty": "Medium", "time_est": "90 min", "code_path": "04-ai-engineer/week-18/enforcing_json_schem.py"}, {"id": "w18_v5", "day": "Day 124", "title": "RAG Evaluation with Ragas / TruLens", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Automated scoring of RAG outputs: measuring hallucinations without human labeling.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "04-ai-engineer/week-18/rag_evaluation_with.py"}, {"id": "w18_v6", "day": "Day 125", "title": "Packaging, Testing & Deploying RAG API", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Dockerizing vector store + FastAPI, writing automated integration tests with pytest.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "04-ai-engineer/week-18/packaging__testing.py"}], "ai_mission": "MILESTONE PROJECT 3: Full-stack RAG system over technical documentation with citations & no hallucinations"}, {"week": "Week 19: Tool Calling & Agentic Loops (CampusX LangGraph)", "phase": "Phase 5: Agentic AI, MCP & Capstone Platform", "dates": "Mar 8 \u2013 Mar 14, 2027 (Agentic Systems Week)", "goal": "Move beyond single-turn RAG: build autonomous multi-step reasoning agents that use tools and maintain state.", "notes_url": "https://docs.langchain.com/oss/python/langgraph/overview", "notes_label": "CampusX LangGraph Guide & LangGraph Official Architecture Docs", "english_res": "LangGraph Documentation: Multi-Agent Systems & State Machines", "english_url": "https://docs.langchain.com/oss/python/langgraph/overview", "math_res": "Finite State Machines (FSM), Directed Graphs & Loop Termination Convergence", "output_goal": "Build an Agent that queries your PostgreSQL database and executes actions in natural language", "videos": [{"id": "w19_v1", "day": "Day 127", "title": "From Chains to Autonomous Agents [CampusX Agents]", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "The ReAct framework (Reasoning + Acting), perception-action loop, stopping conditions.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-19/from_chains_to_auton.py"}, {"id": "w19_v2", "day": "Day 128", "title": "Function Calling / Tool Calling Mechanics [CampusX]", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "How LLMs generate JSON function arguments, executing Python functions safely.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-19/function_calling___t.py"}, {"id": "w19_v3", "day": "Day 129", "title": "LangGraph Foundations: State, Nodes & Edges [CampusX]", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "StateGraph, TypedDict state schema, adding processing nodes, conditional branch edges.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-19/langgraph_foundation.py"}, {"id": "w19_v4", "day": "Day 130", "title": "Handling Cyclic Loops & Stop Conditions", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "Preventing infinite loops, maximum iteration limits, error recovery during tool execution.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-19/handling_cyclic_loop.py"}, {"id": "w19_v5", "day": "Day 131", "title": "Multi-Turn Memory & Checkpointing", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "MemorySaver, persisting conversation state to PostgreSQL, resume previous conversations.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-19/multi_turn_memory.py"}, {"id": "w19_v6", "day": "Day 132", "title": "Human-in-the-Loop Approval Workflows", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "Pausing agent execution before high-risk actions (e.g., executing DB writes or sending emails).", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-19/human_in_the_loop_ap.py"}], "ai_mission": "Tool Use & Function Calling: Structured JSON schemas, multi-step tool calls & agent reasoning loops"}, {"week": "Week 20: Model Context Protocol (MCP) Integration", "phase": "Phase 5: Agentic AI, MCP & Capstone Platform", "dates": "Mar 15 \u2013 Mar 21, 2027 (Model Context Protocol Week)", "goal": "Master Model Context Protocol (MCP), the universal standard for exposing data and tools to AI systems.", "notes_url": "https://modelcontextprotocol.io/", "notes_label": "Official Model Context Protocol (MCP) Specification & Architecture", "english_res": "Official MCP Docs: Building Servers, Tools, Resources & Prompts", "english_url": "https://modelcontextprotocol.io/introduction", "math_res": "JSON-RPC Protocol Math: Framing, Request-Response Serialization & Transport Latency", "output_goal": "Build a custom MCP Server in Python exposing backend database queries and analytics to AI clients", "videos": [{"id": "w20_v1", "day": "Day 134", "title": "What is MCP and Why Does it Matter?", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "The fragmentation of AI integrations; why MCP is the USB-C of AI development.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/what_is_mcp_and_why.py"}, {"id": "w20_v2", "day": "Day 135", "title": "MCP Architecture: Host, Client, Server", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "STDIO transport vs Server-Sent Events (SSE); JSON-RPC message formatting.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/mcp_architecture__ho.py"}, {"id": "w20_v3", "day": "Day 136", "title": "The 3 MCP Primitives: Tools, Resources, Prompts", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "Tools (model-executable actions), Resources (read-only data streams), Prompts (templates).", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/the_3_mcp_primitives.py"}, {"id": "w20_v4", "day": "Day 137", "title": "Building an MCP Server in Python", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "Using mcp official Python SDK, @mcp.tool() decorator, defining typed inputs with Pydantic.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/building_an_mcp_serv.py"}, {"id": "w20_v5", "day": "Day 138", "title": "Connecting AI Clients to Your MCP Server", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "Configuring Claude Desktop, Cursor, and Antigravity to consume your custom MCP tools.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/connecting_ai_client.py"}, {"id": "w20_v6", "day": "Day 139", "title": "Enterprise Security in MCP", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "Input sanitization, enforcing read-only database connections, rate limiting tools.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-20/enterprise_security.py"}], "ai_mission": "Model Context Protocol (MCP): Building a custom Python MCP server exposing local DBs & tools to LLMs"}, {"week": "Week 21: CAPSTONE FLAGSHIP PROJECT \u2014 Unified AI Knowledge Platform", "phase": "Phase 5: Capstone Flagship Project", "dates": "Mar 22 \u2013 Mar 28, 2027 (Capstone Launch Week)", "goal": "Unite everything learned: Backend API + PostgreSQL + Redis + Vector RAG + LangGraph Agent + Custom MCP Server.", "notes_url": "https://github.com/", "notes_label": "Flagship Capstone Spec: Architecture Blueprint & Deployment Guide", "english_res": "Full-Stack AI Architecture Guide: End-to-End Enterprise Design", "english_url": "https://modelcontextprotocol.io/", "math_res": "System Capacity Planning: Memory Budgets, Vector Storage Scaling & Concurrent Users", "output_goal": "FLAGSHIP CAPSTONE LIVE: Full AI Support & Knowledge Platform deployed with video demo", "videos": [{"id": "w21_v1", "day": "Day 141", "title": "System Design & Architecture Spec", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "Client -> FastAPI -> JWT Auth -> PostgreSQL -> Redis -> Vector DB -> LLM Agent -> MCP Server.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-21/system_design___arch.py"}, {"id": "w21_v2", "day": "Day 142", "title": "Building the Core Backend & Auth Layer", "url": "https://www.youtube.com/watch?v=q8EevlEpQ2A", "topics": "FastAPI endpoints, user authentication, permission roles, database models.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-21/building_the_core_ba.py"}, {"id": "w21_v3", "day": "Day 143", "title": "Document Ingestion & Vector Service", "url": "https://www.youtube.com/watch?v=tcqEUSNCn8I", "topics": "Background document processing, chunking, embeddings, pgvector storage.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-21/document_ingestion.py"}, {"id": "w21_v4", "day": "Day 144", "title": "Agentic Tool Calling & Reasoning Engine", "url": "https://www.youtube.com/watch?v=jSPv_tA8bYg", "topics": "LangGraph state machine calling database tools, search tools, and calculating outputs.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-21/agentic_tool_calling.py"}, {"id": "w21_v5", "day": "Day 145", "title": "Custom MCP Server Integration", "url": "https://www.youtube.com/watch?v=9yWv7j_3z08", "topics": "Exposing the internal backend services through an external MCP server.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-21/custom_mcp_server_in.py"}, {"id": "w21_v6", "day": "Day 146", "title": "Docker Compose Orchestration & Demo Video", "url": "https://www.youtube.com/watch?v=rOTqprHv1YE", "topics": "One-command docker compose up; recording a polished 2-minute walkthrough video.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-21/docker_compose_orche.py"}], "ai_mission": "MILESTONE PROJECT 4 (CAPSTONE): Autonomous multi-agent research & execution system with LangGraph"}, {"week": "Week 22: Polish, R\u00e9sum\u00e9, System Design & Interview Sprint", "phase": "Phase 5: Career & Interview Readiness", "dates": "Mar 29 \u2013 Apr 4, 2027 (Career Sprint Week)", "goal": "Audit your portfolio, craft a high-impact AI/ML Engineer resume, prepare system design answers, and start applying.", "notes_url": "https://github.com/", "notes_label": "AI/ML Engineer Resume Template & 20 Core Interview Questions Bank", "english_res": "Gaurav Sen: System Design Playlist & Machine Learning System Design Interview Guide", "english_url": "https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX", "math_res": "Estimation Math: Back-of-the-envelope calculations for storage, bandwidth & GPU RAM", "output_goal": "FINAL MILESTONE: Tailored Resume, Polished GitHub Portfolio & 10 Job Applications Sent", "videos": [{"id": "w22_v1", "day": "Day 148", "title": "GitHub Profile Overhaul & Portfolio Audit", "url": "https://www.youtube.com/watch?v=apGV9Kg7ics", "topics": "Pinned repositories, clean READMEs, badges, architecture diagrams, live demo links.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-22/github_profile_overh.py"}, {"id": "w22_v2", "day": "Day 149", "title": "1-Page AI/ML Engineer R\u00e9sum\u00e9 Crafting", "url": "https://www.youtube.com/watch?v=apGV9Kg7ics", "topics": "Focusing on quantifiable metrics: latency reduction, cache hit rates, model precision.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-22/1_page_ai_ml_enginee.py"}, {"id": "w22_v3", "day": "Day 150", "title": "ML System Design: Scaling Inference & RAG", "url": "https://www.youtube.com/watch?v=bUHFg8CZFCA", "topics": "Batch vs online inference, caching embeddings, vector index partitioning, API gateways.", "difficulty": "Heavy", "time_est": "120 min", "code_path": "05-ai-engineer/week-22/ml_system_design__sc.py"}, {"id": "w22_v4", "day": "Day 151", "title": "Behavioral & Technical Question Bank", "url": "https://www.youtube.com/watch?v=bUHFg8CZFCA", "topics": "Explaining tradeoffs: RAG vs Fine-tuning, dealing with hallucinations, data drift.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-22/behavioral___technic.py"}, {"id": "w22_v5", "day": "Day 152", "title": "Live Mock Interview Simulation", "url": "https://www.youtube.com/watch?v=bUHFg8CZFCA", "topics": "Practicing 45-minute coding & architecture walkthrough aloud under time constraints.", "difficulty": "Medium", "time_est": "90 min", "code_path": "05-ai-engineer/week-22/live_mock_interview.py"}, {"id": "w22_v6", "day": "Day 153", "title": "Job & Internship Application Sprint", "url": "https://www.youtube.com/watch?v=bUHFg8CZFCA", "topics": "Submitting 10-15 targeted applications for AI Engineer / Backend AI roles with custom notes.", "difficulty": "Light", "time_est": "45 min", "code_path": "05-ai-engineer/week-22/job___internship_app.py"}], "ai_mission": "Career & System Design Sprint: ML system design mock interviews, GitHub portfolio showcase & applications"}];
@@ -446,6 +483,10 @@
     let dailyNotes = JSON.parse(localStorage.getItem('aiml_roadmap_daily_notes') || '{}');
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
     let activeLessonIndex = parseInt(localStorage.getItem('aiml_active_lesson_index') || '-1', 10);
+
+    // Sync Credentials kept strictly in local storage (never in Git / source code)
+    let syncId = localStorage.getItem('aiml_sync_id') || '';
+    let syncSecret = localStorage.getItem('aiml_sync_secret') || '';
 
     const allTasks = [];
     weeksData.forEach((w, wIdx) => {
@@ -472,15 +513,15 @@
         if (status === 'syncing') {
           if (txt) txt.innerText = 'Syncing...';
           if (dot) { dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-ping'; }
-          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-amber-700 bg-amber-500/10';
+          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-amber-700 bg-amber-500/10 cursor-pointer';
         } else if (status === 'synced') {
-          if (txt) txt.innerText = b === bDesktop ? '☁️ Live Cloud Synced' : 'Live Sync';
+          if (txt) txt.innerText = b === bDesktop ? '☁️ Cloud Sync (Connected)' : 'Live Sync';
           if (dot) { dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse'; }
-          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10';
+          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer';
         } else if (status === 'offline') {
-          if (txt) txt.innerText = 'Local (Offline)';
+          if (txt) txt.innerText = b === bDesktop ? 'Local (Click to Connect)' : 'Local';
           if (dot) { dot.className = 'w-2 h-2 rounded-full bg-slate-400'; }
-          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-slate-600 bg-slate-500/10';
+          b.className = 'neu-pill px-2.5 py-1 text-[10px] font-mono font-bold flex items-center gap-1.5 text-slate-600 bg-slate-500/10 cursor-pointer';
         }
       });
     }
@@ -489,7 +530,7 @@
       const toast = document.getElementById('cloud-toast');
       const toastMsg = document.getElementById('cloud-toast-msg');
       if (toast && toastMsg) {
-        toastMsg.innerText = msg;
+        toastMsg.innerText = escapeHTML(msg);
         toast.classList.add('show');
         setTimeout(() => {
           toast.classList.remove('show');
@@ -497,81 +538,108 @@
       }
     }
 
+    function toggleSyncModal(show) {
+      const m = document.getElementById('sync-config-modal');
+      if (!m) return;
+      if (show) {
+        const idInp = document.getElementById('cfg-sync-id');
+        const secInp = document.getElementById('cfg-sync-secret');
+        if (idInp) idInp.value = syncId;
+        if (secInp) secInp.value = syncSecret;
+        m.classList.remove('hidden');
+      } else {
+        m.classList.add('hidden');
+      }
+    }
+
+    function saveSyncConfig() {
+      const idInp = document.getElementById('cfg-sync-id');
+      const secInp = document.getElementById('cfg-sync-secret');
+      const newId = (idInp?.value || '').trim();
+      const newSecret = (secInp?.value || '').trim();
+
+      if (newId.length < 3) {
+        alert("Sync Identifier must be at least 3 characters.");
+        return;
+      }
+      if (newSecret.length < 8) {
+        alert("Sync Secret must be at least 8 characters for cryptographic security.");
+        return;
+      }
+
+      syncId = newId;
+      syncSecret = newSecret;
+      localStorage.setItem('aiml_sync_id', syncId);
+      localStorage.setItem('aiml_sync_secret', syncSecret);
+      toggleSyncModal(false);
+      showToastNotification("Sync credentials securely saved in your browser!");
+      pullFromCloud();
+    }
+
     let cloudPushTimer = null;
     function syncToCloud() {
-      if (!supabaseClient) return;
+      if (!syncId || !syncSecret) {
+        updateSyncBadge('offline');
+        return;
+      }
       updateSyncBadge('syncing');
       clearTimeout(cloudPushTimer);
       cloudPushTimer = setTimeout(async () => {
         try {
-          const { error } = await supabaseClient.from('study_hub_sync').upsert({
-            user_id: 'neeraj',
-            progress: state,
-            notes: notes,
-            daily_notes: dailyNotes,
-            shifts: rollingShifts,
-            active_lesson_index: activeLessonIndex,
-            updated_at: new Date().toISOString()
+          const res = await fetch('/api/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'push',
+              syncId: syncId,
+              syncSecret: syncSecret,
+              payload: {
+                progress: state,
+                notes: notes,
+                dailyNotes: dailyNotes,
+                shifts: rollingShifts,
+                activeLessonIndex: activeLessonIndex
+              }
+            })
           });
-          if (!error) {
+
+          if (res.ok) {
             updateSyncBadge('synced');
           } else {
-            console.error("Supabase upsert error:", error);
             updateSyncBadge('offline');
           }
         } catch(err) {
-          console.error("Supabase connection error:", err);
           updateSyncBadge('offline');
         }
-      }, 350);
+      }, 400);
     }
 
-    async function pullFromCloud(manual) {
-      if (!supabaseClient) return;
+    async function pullFromCloud() {
+      if (!syncId || !syncSecret) {
+        updateSyncBadge('offline');
+        return;
+      }
       updateSyncBadge('syncing');
       try {
-        const { data, error } = await supabaseClient
-          .from('study_hub_sync')
-          .select('*')
-          .eq('user_id', 'neeraj')
-          .single();
+        const res = await fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'pull',
+            syncId: syncId,
+            syncSecret: syncSecret
+          })
+        });
 
-        if (data && !error) {
-          state = data.progress || {};
-          notes = data.notes || {};
-          dailyNotes = data.daily_notes || {};
-          rollingShifts = data.shifts || 0;
-          activeLessonIndex = data.active_lesson_index !== undefined ? data.active_lesson_index : -1;
-
-          localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
-          localStorage.setItem('aiml_roadmap_notes', JSON.stringify(notes));
-          localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
-          localStorage.setItem('aiml_roadmap_shifts', rollingShifts.toString());
-          localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
-
-          if (typeof renderCurrentPage === 'function') {
-            renderCurrentPage();
-          }
-          updateSyncBadge('synced');
-          if (manual) showToastNotification("Data successfully refreshed from Supabase Cloud!");
-        }
-      } catch(err) {
-        console.error("Cloud pull error:", err);
-        updateSyncBadge('offline');
-      }
-    }
-
-    function initRealtimeCloudListener() {
-      if (!supabaseClient) return;
-      supabaseClient
-        .channel('study_hub_channel')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'study_hub_sync' }, payload => {
-          if (payload.new && payload.new.user_id === 'neeraj') {
-            state = payload.new.progress || {};
-            notes = payload.new.notes || {};
-            dailyNotes = payload.new.daily_notes || {};
-            rollingShifts = payload.new.shifts || 0;
-            activeLessonIndex = payload.new.active_lesson_index !== undefined ? payload.new.active_lesson_index : -1;
+        if (res.ok) {
+          const result = await res.json();
+          if (result.data && result.data.status === 'ok') {
+            const d = result.data;
+            state = d.progress || {};
+            notes = d.notes || {};
+            dailyNotes = d.daily_notes || {};
+            rollingShifts = d.shifts || 0;
+            activeLessonIndex = d.active_lesson_index !== undefined ? d.active_lesson_index : -1;
 
             localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
             localStorage.setItem('aiml_roadmap_notes', JSON.stringify(notes));
@@ -583,10 +651,14 @@
               renderCurrentPage();
             }
             updateSyncBadge('synced');
-            showToastNotification("⚡ Live sync received from your other device!");
+            showToastNotification("Latest study state synchronized securely!");
           }
-        })
-        .subscribe();
+        } else {
+          updateSyncBadge('offline');
+        }
+      } catch(err) {
+        updateSyncBadge('offline');
+      }
     }
 
     function getEffectiveActiveIndex() {
@@ -673,7 +745,7 @@
     }
 
     function saveNote(wIdx, text) {
-      notes[wIdx] = text;
+      notes[wIdx] = (text || '').slice(0, 2000);
       saveState();
     }
 
@@ -681,7 +753,7 @@
       if (!dailyNotes[taskId]) {
         dailyNotes[taskId] = { doubts: '', needsCare: '' };
       }
-      dailyNotes[taskId][field] = val;
+      dailyNotes[taskId][field] = (val || '').slice(0, 1000);
       localStorage.setItem('aiml_roadmap_daily_notes', JSON.stringify(dailyNotes));
       
       const badge = document.getElementById(`badge-${taskId}`);
@@ -727,7 +799,7 @@
 
     function exportBackupJSON() {
       const backupData = {
-        version: "2.0-ai-engineer-neumorphic",
+        version: "2.1-ai-engineer-hardened",
         exportedAt: new Date().toISOString(),
         progress: state,
         notes: notes,
@@ -751,22 +823,23 @@
       reader.onload = function(evt) {
         try {
           const data = JSON.parse(evt.target.result);
-          if (data.progress) {
+          if (data && typeof data === 'object' && data.progress && typeof data.progress === 'object') {
             state = data.progress;
-            notes = data.notes || {};
-            dailyNotes = data.dailyNotes || {};
-            rollingShifts = data.shifts || 0;
-            activeLessonIndex = data.activeLessonIndex !== undefined ? data.activeLessonIndex : -1;
+            notes = (data.notes && typeof data.notes === 'object') ? data.notes : {};
+            dailyNotes = (data.dailyNotes && typeof data.dailyNotes === 'object') ? data.dailyNotes : {};
+            rollingShifts = typeof data.shifts === 'number' ? data.shifts : 0;
+            activeLessonIndex = typeof data.activeLessonIndex === 'number' ? data.activeLessonIndex : -1;
             saveState();
-            alert("Progress backup successfully restored and synced to Supabase Cloud!");
+            alert("Progress backup verified and restored successfully!");
             if (typeof renderCurrentPage === 'function') {
               renderCurrentPage();
             }
           } else {
-            alert("Invalid backup file format.");
+            alert("Invalid backup format. Please verify the JSON file.");
           }
         } catch(err) {
-          alert("Error reading file: " + err.message);
+          // Debug mode off: do not expose internal error messages or paths to user
+          alert("Unable to process the backup file. Please ensure it is a valid JSON file.");
         }
       };
       reader.readAsText(file);
@@ -839,23 +912,24 @@
         return;
       }
 
+      // SANITIZED VIA escapeHTML() TO PREVENT XSS
       list.innerHTML = items.map(it => `
         <div class="neu-card-sm p-4 space-y-2">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${it.day}: ${it.title}</span>
+            <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${escapeHTML(it.day)}: ${escapeHTML(it.title)}</span>
             <a href="roadmap.html" class="text-[11px] text-emerald-700 hover:underline font-semibold font-mono">View in Curriculum →</a>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
             ${it.doubts ? `
               <div class="neu-inset p-2.5 rounded-xl">
                 <span class="text-[10px] font-bold text-rose-700 block">🔴 Doubts / Unclear:</span>
-                <span class="text-slate-700">${it.doubts}</span>
+                <span class="text-slate-700">${escapeHTML(it.doubts)}</span>
               </div>
             ` : ''}
             ${it.needsCare ? `
               <div class="neu-inset p-2.5 rounded-xl">
                 <span class="text-[10px] font-bold text-amber-700 block">🟡 Needs Care / Revision:</span>
-                <span class="text-slate-700">${it.needsCare}</span>
+                <span class="text-slate-700">${escapeHTML(it.needsCare)}</span>
               </div>
             ` : ''}
           </div>
@@ -930,7 +1004,7 @@
           <div class="flex items-center justify-between p-2 rounded-xl neu-inset">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${p.color}"></span>
-              <span class="font-semibold text-slate-700 text-xs">${p.name.split(':')[0]}</span>
+              <span class="font-semibold text-slate-700 text-xs">${escapeHTML(p.name.split(':')[0])}</span>
             </div>
             <div class="flex items-center gap-2 font-mono text-xs">
               <span class="text-slate-500">${p.done}/${p.total}</span>
@@ -953,7 +1027,7 @@
       const dNote = dailyNotes[taskId] || { doubts: '', needsCare: '' };
 
       const topicPills = video.topics.split(',').map(t => `
-        <span class="neu-pill text-xs font-medium text-slate-700 px-2.5 py-1 bg-white/40">${t.trim()}</span>
+        <span class="neu-pill text-xs font-medium text-slate-700 px-2.5 py-1 bg-white/40">${escapeHTML(t.trim())}</span>
       `).join('');
 
       const optionsHtml = allTasks.map((t, i) => `
@@ -996,15 +1070,15 @@
                 <span class="text-xs font-semibold text-slate-600">${video.time_est} • ${video.difficulty}</span>
                 ${isDone ? '<span class="neu-pill text-[10px] font-bold text-emerald-700 bg-emerald-500/10 px-2.5 py-0.5 border border-emerald-600/30">✓ Completed</span>' : '<span class="neu-pill text-[10px] font-bold text-amber-700 bg-amber-500/10 px-2.5 py-0.5 border border-amber-600/30">⏳ In Progress</span>'}
               </div>
-              <h3 class="text-lg sm:text-xl font-black text-slate-800 leading-snug">${video.title}</h3>
+              <h3 class="text-lg sm:text-xl font-black text-slate-800 leading-snug">${escapeHTML(video.title)}</h3>
               <div class="text-[11px] font-mono text-emerald-700 break-all">
-                📂 Code Path: <span class="font-bold">${video.code_path}</span>
+                📂 Code Path: <span class="font-bold">${escapeHTML(video.code_path)}</span>
               </div>
             </div>
 
             <!-- INTERACTIVE BUTTONS WITH UNDO TICK & LIVE SYNC -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto shrink-0">
-              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 text-center">
+              <a href="${escapeHTML(video.url)}" target="_blank" rel="noopener noreferrer" class="neu-btn px-4 py-2 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 text-center">
                 ▶ <span>Watch Video</span>
               </a>
 
@@ -1030,7 +1104,7 @@
             </div>
             
             <p class="text-xs text-slate-700 leading-relaxed font-medium">
-              ${video.topics}
+              ${escapeHTML(video.topics)}
             </p>
 
             <div class="flex flex-wrap gap-1.5 pt-1">
@@ -1044,11 +1118,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label class="text-[10px] font-bold text-rose-700 block mb-1">🔴 What I didn't understand / Doubts:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.doubts || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" maxlength="1000" placeholder="e.g. Struggled with while loop condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${escapeHTML(dNote.doubts || '')}</textarea>
               </div>
               <div>
                 <label class="text-[10px] font-bold text-amber-700 block mb-1">🟡 Needs the most care & revision in coming days:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Revisit string slicing negative indexes..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.needsCare || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" maxlength="1000" placeholder="e.g. Revisit string slicing negative indexes..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${escapeHTML(dNote.needsCare || '')}</textarea>
               </div>
             </div>
           </div>
@@ -1064,8 +1138,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderCurrentPage();
-      pullFromCloud(false);
-      initRealtimeCloudListener();
+      pullFromCloud();
     });
   </script>
 </body>
