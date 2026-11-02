@@ -84,6 +84,21 @@
       box-shadow: 3px 3px 8px rgba(5, 150, 105, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.9);
     }
 
+    .neu-btn-danger {
+      background: var(--card-bg);
+      color: #b91c1c;
+      border-radius: 14px;
+      box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .neu-btn-danger:hover {
+      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      color: #991b1b;
+    }
+
     .neu-input {
       background: var(--card-bg);
       border-radius: 16px;
@@ -201,105 +216,6 @@
       <!-- Injected by JS -->
     </div>
 
-    
-    <!-- MENTAL FUEL & FOCUS WALLPAPERS (AT THE VERY BOTTOM) -->
-    <section class="mt-16 neu-card p-8 sm:p-10 space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
-        <div>
-          <span class="text-[10px] font-black uppercase text-amber-600 tracking-wider">Psychological Stamina</span>
-          <h3 class="text-xl font-bold text-slate-800">Mental Fuel & Dual-Monitor Wallpapers</h3>
-          <p class="text-xs text-slate-500">Curated high-res motivation cards for low-focus days. Click to inspect or download.</p>
-        </div>
-        <span class="neu-pill px-3 py-1 text-xs font-mono text-slate-600">5 High-Res Assets</span>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
-        
-        <div onclick="openLightbox('wallpapers/web/jordan_belfort_bet.jpg', 'Bet On Yourself', 'High conviction in your own engineering journey.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/jordan_belfort_bet.jpg" alt="Bet On Yourself" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Bet On Yourself</h5>
-            <p class="text-[10px] text-slate-500">Unshakable Conviction</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/mcconaughey_comeback.jpg', 'The Personal Comeback', 'Focus and momentum when no one is watching.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/mcconaughey_comeback.jpg" alt="The Comeback" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">The Comeback</h5>
-            <p class="text-[10px] text-slate-500">Relentless Momentum</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/tony_stark_resilience.jpg', 'Engineering Stamina', 'Iterate until the model, database, and API are bulletproof.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/tony_stark_resilience.jpg" alt="Engineering Stamina" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Forge Architecture</h5>
-            <p class="text-[10px] text-slate-500">Deep Work Ethic</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/tyler_durden_now.jpg', 'Stop Procrastinating', 'No excuses. Code, compile, verify.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/tyler_durden_now.jpg" alt="Stop Procrastinating" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Direct Execution</h5>
-            <p class="text-[10px] text-slate-500">Zero Excuses</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/cliff_booth_you.jpg', 'Unshakable Composure', 'Cool under pressure. Keep calm through debugging.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/cliff_booth_you.jpg" alt="Unshakable Composure" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Calm Under Fire</h5>
-            <p class="text-[10px] text-slate-500">Mental Equilibrium</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- LIGHTBOX MODAL -->
-    <div id="lightbox-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
-      <div class="neu-card bg-[#e6ecf5] max-w-2xl w-full p-6 space-y-4" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-center px-1">
-          <div>
-            <h4 id="lightbox-title" class="text-base font-bold text-slate-800">Title</h4>
-            <p id="lightbox-desc" class="text-xs text-slate-500">Description</p>
-          </div>
-          <button onclick="closeLightbox()" class="neu-btn px-3 py-1 text-slate-600 hover:text-slate-900 font-bold">✕</button>
-        </div>
-        <div class="rounded-2xl overflow-hidden border border-slate-300 max-h-[70vh] flex items-center justify-center bg-black">
-          <img id="lightbox-img" src="" alt="Wallpaper Preview" class="w-full h-auto object-contain">
-        </div>
-        <div class="flex justify-end gap-2 pt-1">
-          <a id="lightbox-download" href="" download class="neu-btn-primary px-5 py-2 font-bold text-xs rounded-xl transition">
-            ⬇ Download High Res
-          </a>
-        </div>
-      </div>
-    </div>
-
-
   </main>
 
   
@@ -328,6 +244,61 @@
     let notes = JSON.parse(localStorage.getItem('aiml_roadmap_notes') || '{}');
     let dailyNotes = JSON.parse(localStorage.getItem('aiml_roadmap_daily_notes') || '{}');
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
+    let activeLessonIndex = parseInt(localStorage.getItem('aiml_active_lesson_index') || '-1', 10);
+
+    // Build flat array of all 140 daily tasks for seamless previous/next navigation
+    const allTasks = [];
+    weeksData.forEach((w, wIdx) => {
+      w.videos.forEach((v, vIdx) => {
+        allTasks.push({
+          taskId: `${wIdx}-${vIdx}`,
+          wIdx: wIdx,
+          vIdx: vIdx,
+          weekNum: wIdx + 1,
+          weekTitle: w.week,
+          phase: w.phase,
+          video: v
+        });
+      });
+    });
+
+    function getEffectiveActiveIndex() {
+      if (activeLessonIndex >= 0 && activeLessonIndex < allTasks.length) {
+        return activeLessonIndex;
+      }
+      const firstUncompleted = allTasks.findIndex(t => !state[t.taskId]);
+      return firstUncompleted !== -1 ? firstUncompleted : 0;
+    }
+
+    function stepLesson(delta) {
+      const curr = getEffectiveActiveIndex();
+      const target = curr + delta;
+      if (target >= 0 && target < allTasks.length) {
+        activeLessonIndex = target;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
+      }
+    }
+
+    function jumpToLesson(idx) {
+      if (idx >= 0 && idx < allTasks.length) {
+        activeLessonIndex = idx;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
+      }
+    }
+
+    function jumpToLessonByTaskId(taskId) {
+      const idx = allTasks.findIndex(t => t.taskId === taskId);
+      if (idx !== -1) {
+        jumpToLesson(idx);
+        alert("Lesson set as active! View and continue it on your Dashboard.");
+      }
+    }
 
     function saveState() {
       localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
@@ -342,6 +313,31 @@
       saveState();
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();
+      }
+    }
+
+    function undoTickTask(id) {
+      state[id] = false;
+      saveState();
+      const idx = allTasks.findIndex(t => t.taskId === id);
+      if (idx !== -1) {
+        activeLessonIndex = idx;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+      }
+      if (typeof renderCurrentPage === 'function') {
+        renderCurrentPage();
+      }
+    }
+
+    function markTaskDone(id, advance) {
+      state[id] = true;
+      saveState();
+      if (advance) {
+        stepLesson(1);
+      } else {
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
       }
     }
 
@@ -556,7 +552,7 @@
 
       const fEl = document.getElementById('finish-val');
       if (fEl) {
-        const baseFinish = new Date(2027, 3, 4);
+        const baseFinish = new Date(2027, 3, 4); // Apr 4, 2027
         baseFinish.setDate(baseFinish.getDate() + rollingShifts);
         const options = { month: 'short', day: 'numeric', year: 'numeric' };
         fEl.innerText = baseFinish.toLocaleDateString('en-US', options);
@@ -574,18 +570,6 @@
       if (typeof renderWeakSpotsList === 'function') {
         renderWeakSpotsList();
       }
-    }
-
-    function openLightbox(src, title, desc) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox-title').innerText = title;
-      document.getElementById('lightbox-desc').innerText = desc;
-      document.getElementById('lightbox-download').href = src;
-      document.getElementById('lightbox-modal').classList.remove('hidden');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox-modal').classList.add('hidden');
     }
 
 

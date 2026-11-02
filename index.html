@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neumorphic Dashboard | AI & ML Engineer Master Hub</title>
+  <title>Dashboard | AI & ML Engineer Master Hub</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +82,21 @@
     .neu-btn-primary:hover {
       background: linear-gradient(145deg, #059669, #047857);
       box-shadow: 3px 3px 8px rgba(5, 150, 105, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.9);
+    }
+
+    .neu-btn-danger {
+      background: var(--card-bg);
+      color: #b91c1c;
+      border-radius: 14px;
+      box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .neu-btn-danger:hover {
+      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      color: #991b1b;
     }
 
     .neu-input {
@@ -186,20 +201,8 @@
 
         <p class="text-sm text-slate-600 leading-relaxed max-w-xl">
           Curated with CampusX, CodeWithHarry, Harvard CS50, and 3Blue1Brown. 
-          Your progress is <b>permanently saved in your browser</b>—even after taking 2 days off, you pick up smoothly right where you left off.
+          Step smoothly from Python foundations to low-latency serving, vector RAG, and LangGraph multi-agent systems.
         </p>
-
-        <!-- DATA PERSISTENCE REASSURANCE BANNER -->
-        <div class="neu-inset p-4 rounded-2xl max-w-xl flex items-start gap-3">
-          <span class="text-2xl mt-0.5">🛡️</span>
-          <div class="text-xs space-y-1">
-            <span class="font-bold text-slate-800">Your Data Is Safe: LocalStorage & Backup</span>
-            <p class="text-slate-500 leading-relaxed">
-              Every completed lesson, note, and schedule adjustment is persisted locally in your browser. 
-              Taking a 2-day break for low focus? No problem! Day 1 stays checked, and you continue from Day 2/3 with zero data loss.
-            </p>
-          </div>
-        </div>
 
         <!-- QUICK ACTION PILLS -->
         <div class="flex flex-wrap gap-3 pt-2">
@@ -255,13 +258,15 @@
 
     </div>
 
-    <!-- ACTIVE MISSION / RESUME FROM BREAK CONTROLLER -->
+    <!-- DEDICATED BOX: THAT DAY'S STUDY TOPICS & SYLLABUS BREAKDOWN (WITH UNDO TICK & LIVE SYNC) -->
     <div class="neu-card p-6 sm:p-8 space-y-6">
+      
+      <!-- CARD HEADER & RESCHEDULE CONTROLS -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-300/80 pb-4">
         <div>
-          <span class="text-[10px] font-black uppercase text-emerald-700 tracking-wider">Momentum & Recovery</span>
-          <h2 class="text-xl font-bold text-slate-800">Your Next Active Lesson (Resume Work)</h2>
-          <p class="text-xs text-slate-500">Pick up smoothly right from your current active day. Had low focus? Postpone with 1 click.</p>
+          <span class="text-[10px] font-black uppercase text-emerald-700 tracking-wider">Active Day Command Box</span>
+          <h2 class="text-2xl font-black text-slate-800">Today's Study Topics & Practice Breakdown</h2>
+          <p class="text-xs text-slate-500">Full topics syllabus for the active day. Tick or undo tick with instant live sync.</p>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="postponeTask('tomorrow')" class="neu-btn px-3.5 py-2 text-xs font-bold text-amber-700 flex items-center gap-1">
@@ -273,8 +278,8 @@
         </div>
       </div>
 
-      <!-- INJECTED ACTIVE MISSION CARD -->
-      <div id="today-mission-box" class="neu-inset p-6 rounded-2xl flex flex-col gap-6">
+      <!-- INJECTED ACTIVE MISSION & TOPICS BOX -->
+      <div id="today-mission-box" class="neu-inset p-6 sm:p-7 rounded-3xl space-y-6">
         <!-- Injected via JavaScript -->
       </div>
     </div>
@@ -343,105 +348,6 @@
       </div>
     </div>
 
-    
-    <!-- MENTAL FUEL & FOCUS WALLPAPERS (AT THE VERY BOTTOM) -->
-    <section class="mt-16 neu-card p-8 sm:p-10 space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
-        <div>
-          <span class="text-[10px] font-black uppercase text-amber-600 tracking-wider">Psychological Stamina</span>
-          <h3 class="text-xl font-bold text-slate-800">Mental Fuel & Dual-Monitor Wallpapers</h3>
-          <p class="text-xs text-slate-500">Curated high-res motivation cards for low-focus days. Click to inspect or download.</p>
-        </div>
-        <span class="neu-pill px-3 py-1 text-xs font-mono text-slate-600">5 High-Res Assets</span>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
-        
-        <div onclick="openLightbox('wallpapers/web/jordan_belfort_bet.jpg', 'Bet On Yourself', 'High conviction in your own engineering journey.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/jordan_belfort_bet.jpg" alt="Bet On Yourself" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Bet On Yourself</h5>
-            <p class="text-[10px] text-slate-500">Unshakable Conviction</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/mcconaughey_comeback.jpg', 'The Personal Comeback', 'Focus and momentum when no one is watching.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/mcconaughey_comeback.jpg" alt="The Comeback" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">The Comeback</h5>
-            <p class="text-[10px] text-slate-500">Relentless Momentum</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/tony_stark_resilience.jpg', 'Engineering Stamina', 'Iterate until the model, database, and API are bulletproof.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/tony_stark_resilience.jpg" alt="Engineering Stamina" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Forge Architecture</h5>
-            <p class="text-[10px] text-slate-500">Deep Work Ethic</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/tyler_durden_now.jpg', 'Stop Procrastinating', 'No excuses. Code, compile, verify.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/tyler_durden_now.jpg" alt="Stop Procrastinating" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Direct Execution</h5>
-            <p class="text-[10px] text-slate-500">Zero Excuses</p>
-          </div>
-        </div>
-
-        <div onclick="openLightbox('wallpapers/web/cliff_booth_you.jpg', 'Unshakable Composure', 'Cool under pressure. Keep calm through debugging.')" 
-             class="group cursor-pointer rounded-2xl overflow-hidden neu-card-sm transition hover:-translate-y-1">
-          <div class="h-36 overflow-hidden relative">
-            <img src="wallpapers/web/cliff_booth_you.jpg" alt="Unshakable Composure" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
-          </div>
-          <div class="p-3 bg-[#e6ecf5]">
-            <h5 class="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition">Calm Under Fire</h5>
-            <p class="text-[10px] text-slate-500">Mental Equilibrium</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- LIGHTBOX MODAL -->
-    <div id="lightbox-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
-      <div class="neu-card bg-[#e6ecf5] max-w-2xl w-full p-6 space-y-4" onclick="event.stopPropagation()">
-        <div class="flex justify-between items-center px-1">
-          <div>
-            <h4 id="lightbox-title" class="text-base font-bold text-slate-800">Title</h4>
-            <p id="lightbox-desc" class="text-xs text-slate-500">Description</p>
-          </div>
-          <button onclick="closeLightbox()" class="neu-btn px-3 py-1 text-slate-600 hover:text-slate-900 font-bold">✕</button>
-        </div>
-        <div class="rounded-2xl overflow-hidden border border-slate-300 max-h-[70vh] flex items-center justify-center bg-black">
-          <img id="lightbox-img" src="" alt="Wallpaper Preview" class="w-full h-auto object-contain">
-        </div>
-        <div class="flex justify-end gap-2 pt-1">
-          <a id="lightbox-download" href="" download class="neu-btn-primary px-5 py-2 font-bold text-xs rounded-xl transition">
-            ⬇ Download High Res
-          </a>
-        </div>
-      </div>
-    </div>
-
-
   </main>
 
   
@@ -470,6 +376,61 @@
     let notes = JSON.parse(localStorage.getItem('aiml_roadmap_notes') || '{}');
     let dailyNotes = JSON.parse(localStorage.getItem('aiml_roadmap_daily_notes') || '{}');
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
+    let activeLessonIndex = parseInt(localStorage.getItem('aiml_active_lesson_index') || '-1', 10);
+
+    // Build flat array of all 140 daily tasks for seamless previous/next navigation
+    const allTasks = [];
+    weeksData.forEach((w, wIdx) => {
+      w.videos.forEach((v, vIdx) => {
+        allTasks.push({
+          taskId: `${wIdx}-${vIdx}`,
+          wIdx: wIdx,
+          vIdx: vIdx,
+          weekNum: wIdx + 1,
+          weekTitle: w.week,
+          phase: w.phase,
+          video: v
+        });
+      });
+    });
+
+    function getEffectiveActiveIndex() {
+      if (activeLessonIndex >= 0 && activeLessonIndex < allTasks.length) {
+        return activeLessonIndex;
+      }
+      const firstUncompleted = allTasks.findIndex(t => !state[t.taskId]);
+      return firstUncompleted !== -1 ? firstUncompleted : 0;
+    }
+
+    function stepLesson(delta) {
+      const curr = getEffectiveActiveIndex();
+      const target = curr + delta;
+      if (target >= 0 && target < allTasks.length) {
+        activeLessonIndex = target;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
+      }
+    }
+
+    function jumpToLesson(idx) {
+      if (idx >= 0 && idx < allTasks.length) {
+        activeLessonIndex = idx;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
+      }
+    }
+
+    function jumpToLessonByTaskId(taskId) {
+      const idx = allTasks.findIndex(t => t.taskId === taskId);
+      if (idx !== -1) {
+        jumpToLesson(idx);
+        alert("Lesson set as active! View and continue it on your Dashboard.");
+      }
+    }
 
     function saveState() {
       localStorage.setItem('aiml_roadmap_progress', JSON.stringify(state));
@@ -484,6 +445,31 @@
       saveState();
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();
+      }
+    }
+
+    function undoTickTask(id) {
+      state[id] = false;
+      saveState();
+      const idx = allTasks.findIndex(t => t.taskId === id);
+      if (idx !== -1) {
+        activeLessonIndex = idx;
+        localStorage.setItem('aiml_active_lesson_index', activeLessonIndex.toString());
+      }
+      if (typeof renderCurrentPage === 'function') {
+        renderCurrentPage();
+      }
+    }
+
+    function markTaskDone(id, advance) {
+      state[id] = true;
+      saveState();
+      if (advance) {
+        stepLesson(1);
+      } else {
+        if (typeof renderCurrentPage === 'function') {
+          renderCurrentPage();
+        }
       }
     }
 
@@ -698,7 +684,7 @@
 
       const fEl = document.getElementById('finish-val');
       if (fEl) {
-        const baseFinish = new Date(2027, 3, 4);
+        const baseFinish = new Date(2027, 3, 4); // Apr 4, 2027
         baseFinish.setDate(baseFinish.getDate() + rollingShifts);
         const options = { month: 'short', day: 'numeric', year: 'numeric' };
         fEl.innerText = baseFinish.toLocaleDateString('en-US', options);
@@ -716,18 +702,6 @@
       if (typeof renderWeakSpotsList === 'function') {
         renderWeakSpotsList();
       }
-    }
-
-    function openLightbox(src, title, desc) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox-title').innerText = title;
-      document.getElementById('lightbox-desc').innerText = desc;
-      document.getElementById('lightbox-download').href = src;
-      document.getElementById('lightbox-modal').classList.remove('hidden');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox-modal').classList.add('hidden');
     }
 
 
@@ -776,87 +750,109 @@
       const isDone = !!state[taskId];
       const dNote = dailyNotes[taskId] || { doubts: '', needsCare: '' };
 
-      // Dropdown options of nearby lessons for fast jump
-      const optionsHtml = allTasks.slice(0, 30).map((t, i) => `
+      // Split topics into pill tags
+      const topicPills = video.topics.split(',').map(t => `
+        <span class="neu-pill text-xs font-medium text-slate-700 px-3 py-1 bg-white/40">${t.trim()}</span>
+      `).join('');
+
+      // Fast jump dropdown
+      const optionsHtml = allTasks.map((t, i) => `
         <option value="${i}" ${i === activeIdx ? 'selected' : ''}>
-          W${t.weekNum} • ${t.video.day}: ${t.video.title.slice(0, 32)}... ${state[t.taskId] ? '✓' : ''}
+          W${t.weekNum} • ${t.video.day}: ${t.video.title.slice(0, 34)}... ${state[t.taskId] ? '✓' : ''}
         </option>
       `).join('');
 
       container.innerHTML = `
-        <div class="space-y-4 w-full">
+        <div class="space-y-6 w-full">
           
-          <!-- STEPPER & NAVIGATION CONTROLLER (GO BACK / STEP FORWARD) -->
+          <!-- NAVIGATION CONTROLLER (GO BACK / FORWARD / JUMP) -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/60 pb-3">
             <div class="flex items-center gap-2">
               <button onclick="stepLesson(-1)" ${activeIdx === 0 ? 'disabled' : ''} 
-                      class="neu-btn px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
+                      class="neu-btn px-3.5 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
                 <span>⏮️ Go Back</span>
               </button>
               <button onclick="stepLesson(1)" ${activeIdx === allTasks.length - 1 ? 'disabled' : ''} 
-                      class="neu-btn px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === allTasks.length - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
-                <span>Next Lesson ⏭️</span>
+                      class="neu-btn px-3.5 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === allTasks.length - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
+                <span>Next Day ⏭️</span>
               </button>
-              <span class="text-xs font-mono text-slate-500 pl-1">Lesson ${activeIdx + 1} of ${allTasks.length}</span>
+              <span class="text-xs font-mono text-slate-600 pl-1 font-semibold">Lesson ${activeIdx + 1} of ${allTasks.length}</span>
             </div>
 
             <!-- FAST JUMP SELECTOR -->
             <div class="flex items-center gap-2">
-              <span class="text-[11px] font-bold text-slate-500">Jump to:</span>
-              <select onchange="jumpToLesson(parseInt(this.value, 10))" class="neu-input px-3 py-1.5 text-xs text-slate-700 bg-transparent font-mono cursor-pointer">
+              <span class="text-[11px] font-bold text-slate-500">Jump to Day:</span>
+              <select onchange="jumpToLesson(parseInt(this.value, 10))" class="neu-input px-3 py-1.5 text-xs text-slate-700 bg-transparent font-mono cursor-pointer max-w-[220px]">
                 ${optionsHtml}
               </select>
             </div>
           </div>
 
-          <!-- ACTIVE LESSON INFO & STATUS -->
+          <!-- ACTIVE LESSON HEADER & ACTIONS -->
           <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="space-y-2 flex-1">
-              <div class="flex items-center gap-2">
+            <div class="space-y-1.5 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
                 <span class="neu-pill text-[10px] font-bold uppercase text-emerald-700 px-3 py-1 font-mono">Week ${taskObj.weekNum} • ${video.day}</span>
                 <span class="text-xs font-semibold text-slate-600">${video.time_est} • ${video.difficulty}</span>
-                ${isDone ? '<span class="neu-pill text-[10px] font-bold text-emerald-700 bg-emerald-500/10 px-2.5 py-0.5">✓ Marked Completed</span>' : '<span class="neu-pill text-[10px] font-bold text-amber-700 bg-amber-500/10 px-2.5 py-0.5">⏳ In Progress</span>'}
+                ${isDone ? '<span class="neu-pill text-[10px] font-bold text-emerald-700 bg-emerald-500/10 px-3 py-0.5 border border-emerald-600/30">✓ Completed</span>' : '<span class="neu-pill text-[10px] font-bold text-amber-700 bg-amber-500/10 px-3 py-0.5 border border-amber-600/30">⏳ In Progress</span>'}
               </div>
-              <h3 class="text-lg font-bold text-slate-800">${video.title}</h3>
-              <p class="text-xs text-slate-600 leading-relaxed">${video.topics}</p>
-              <div class="text-[11px] font-mono text-emerald-700 pt-1">
-                📂 Path: ${video.code_path}
+              <h3 class="text-xl font-black text-slate-800">${video.title}</h3>
+              <div class="text-[11px] font-mono text-emerald-700">
+                📂 Code Path: <span class="font-bold">${video.code_path}</span>
               </div>
             </div>
 
-            <!-- INTERACTIVE BUTTONS WITH DYNAMIC LIVE SYNC -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2.5 text-xs font-semibold text-slate-700 text-center flex items-center justify-center gap-1.5">
-                ▶ <span>Watch Lesson</span>
+            <!-- INTERACTIVE BUTTONS WITH UNDO TICK & LIVE SYNC -->
+            <div class="flex flex-wrap items-center gap-3 shrink-0">
+              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2.5 text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                ▶ <span>Watch Video</span>
               </a>
 
               ${isDone ? `
-                <button onclick="restartFromCurrentLesson('${taskId}')" class="neu-btn px-4 py-2.5 text-xs font-bold text-rose-700 flex items-center justify-center gap-1.5" title="Unmarks this lesson and sets as active so you can re-study it. Live gauge immediately updates.">
-                  <span>↩️ Reopen & Restart from Day ${taskObj.video.day}</span>
+                <button onclick="undoTickTask('${taskId}')" class="neu-btn-danger px-4 py-2.5 text-xs font-bold flex items-center gap-1.5" title="Click to undo tick. The live donut chart and stats immediately retract!">
+                  <span>↩️ Undo Tick (Mark Incomplete)</span>
                 </button>
               ` : `
-                <button onclick="toggleTask('${taskId}'); stepLesson(1);" class="neu-btn-primary px-5 py-2.5 text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-md">
-                  <span>✓ Mark Done & Advance</span>
-                  <span>→</span>
+                <button onclick="markTaskDone('${taskId}', true)" class="neu-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-1.5">
+                  <span>✓ Mark Done & Advance →</span>
                 </button>
               `}
             </div>
           </div>
 
-          <!-- TODAY'S DAILY REFLECTION NOTES -->
-          <div class="pt-3 border-t border-slate-300/80">
+          <!-- DEDICATED SYLLABUS & STUDY TOPICS LIST -->
+          <div class="neu-card-sm p-4 sm:p-5 space-y-3 bg-[#eaf0f9]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span>📖</span> Syllabus & Concepts Covered Today:
+              </span>
+              <span class="text-[10px] font-mono text-slate-500">Master all items below</span>
+            </div>
+            
+            <p class="text-xs text-slate-700 leading-relaxed font-medium">
+              ${video.topics}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              ${topicPills}
+            </div>
+          </div>
+
+          <!-- TODAY'S DAILY REFLECTION & DOUBTS -->
+          <div class="pt-2 border-t border-slate-300/80">
             <span class="text-xs font-bold text-slate-700 block mb-2">📝 Lesson Reflection & Doubts (Auto-saved for revision):</span>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label class="text-[10px] font-bold text-rose-700 block mb-1">🔴 What I didn't understand / Doubts:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop termination condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400">${dNote.doubts || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop termination condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.doubts || ''}</textarea>
               </div>
               <div>
                 <label class="text-[10px] font-bold text-amber-700 block mb-1">🟡 Needs the most care & revision in coming days:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Redo practice exercise 5 and 6 before moving to Week 2..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400">${dNote.needsCare || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Redo practice exercise 5 and 6 before moving to Week 2..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.needsCare || ''}</textarea>
               </div>
             </div>
           </div>
+
         </div>
       `;
     }
