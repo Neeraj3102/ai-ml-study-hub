@@ -177,9 +177,16 @@
           <button onclick="toggleSyncModal(false)" class="text-slate-500 hover:text-slate-800 font-bold text-sm">✕</button>
         </div>
 
-        <p class="text-xs text-slate-600 leading-relaxed">
-          To sync between your laptop and mobile phone without exposing database keys in git, enter your unique Sync ID and Secret Passcode below:
-        </p>
+        <div class="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-900 text-xs leading-relaxed space-y-1.5">
+          <div class="font-bold flex items-center gap-1.5 text-blue-900">
+            <span>💡</span> <span>How Sync Works (Choose Your Own Credentials):</span>
+          </div>
+          <p class="text-[11px] text-slate-700 leading-normal">
+            • Enter any username you want as your <strong>Sync ID</strong> (e.g. <code class="bg-blue-100 px-1 py-0.5 rounded font-mono font-bold">neeraj</code>).<br>
+            • Choose any private password for your <strong>Secret Passcode</strong> (at least 8 characters).<br>
+            • Type the <strong>exact same Sync ID & password on your phone</strong> to sync everything in real time!
+          </p>
+        </div>
 
         <div class="space-y-3 text-xs">
           <div>
@@ -210,64 +217,62 @@
       </div>
     </div>
 
-    <!-- MAIN NAVBAR: MOBILE-RESPONSIVE WITH HARDENED STATUS -->
-    <header class="relative md:sticky md:top-0 z-40 px-3.5 sm:px-6 py-2.5 sm:py-4 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+    <!-- MAIN NAVBAR: 2-TIER RESPONSIVE (ZERO OVERLAP ON ANY SCREEN) -->
+    <header class="relative md:sticky md:top-0 z-40 px-3 sm:px-6 py-2.5 sm:py-3.5 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print shadow-sm">
+      <div class="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center justify-between gap-2.5 sm:gap-3.5">
         
-        <!-- TOP ROW ON MOBILE: LOGO + LIVE STATUS + COMPACT ACTIONS -->
-        <div class="flex items-center justify-between w-full md:w-auto">
-          <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
-            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl neu-card flex items-center justify-center font-black text-emerald-600 text-base sm:text-lg shrink-0 group-hover:scale-105 transition">
+        <!-- ROW 1: BRAND LOGO + QUICK ACTIONS ON COMPACT SCREENS -->
+        <div class="flex items-center justify-between w-full xl:w-auto shrink-0 gap-3">
+          <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl neu-card flex items-center justify-center font-black text-emerald-600 text-base sm:text-lg shrink-0 group-hover:scale-105 transition">
               ⚡
             </div>
             <div class="flex flex-col">
-              <div class="flex items-center gap-1.5 sm:gap-2">
+              <div class="flex items-center gap-1.5">
                 <span class="text-base sm:text-lg font-black text-slate-800 tracking-tight leading-tight">AI Engineer Lab</span>
-                <span class="neu-pill px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Hardened</span>
+                <span class="neu-pill px-2 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">Hardened</span>
               </div>
               <p class="text-[10px] sm:text-[11px] text-slate-500 hidden sm:block">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
             </div>
           </a>
 
-          <!-- MOBILE SYNC BADGE & QUICK BUTTONS -->
-          <div class="flex md:hidden items-center gap-1.5 shrink-0">
-            <div id="sync-badge-mobile" onclick="toggleSyncModal(true)" class="neu-pill px-2 py-1 text-[9px] font-mono font-bold flex items-center gap-1 text-emerald-700 bg-emerald-500/10 cursor-pointer" title="Configure Cloud Sync">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <!-- QUICK ACTIONS & SYNC (VISIBLE ON TABLETS / MOBILE / LAPTOPS < 1280px) -->
+          <div class="flex xl:hidden items-center gap-1.5 sm:gap-2 shrink-0">
+            <div id="sync-badge-mobile" onclick="toggleSyncModal(true)" class="neu-pill px-2.5 py-1 text-[10px] sm:text-xs font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer hover:bg-emerald-500/20 transition" title="Click to configure Cloud Sync">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span class="sync-text">Cloud Sync</span>
             </div>
-            <button onclick="exportBackupJSON()" title="Export JSON backup" class="neu-btn px-2 py-1 text-[11px] font-semibold text-slate-700 flex items-center gap-1">
-              💾
+            <button onclick="exportBackupJSON()" title="Export JSON backup" class="neu-btn px-2.5 py-1 text-xs font-semibold text-slate-700 flex items-center gap-1">
+              💾 <span class="hidden sm:inline">Backup</span>
             </button>
-            <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-2.5 py-1 text-[11px] font-bold flex items-center gap-1">
-              📄 <span>PDF</span>
+            <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-2.5 py-1 text-xs font-bold flex items-center gap-1">
+              📄 <span class="hidden sm:inline">PDF</span>
             </a>
           </div>
         </div>
 
-        <!-- NAV LINKS: HORIZONTAL SCROLL ON MOBILE, CENTERED ON DESKTOP -->
-        <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1 px-0.5 justify-start md:justify-center">
-          <a href="index.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">⚡ Dashboard</a>
-<a href="roadmap.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
-<a href="projects.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">🛠️ Resume Lab (15 Projects)</a>
-<a href="tracker.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn active text-emerald-600 font-bold">⏱️ Adaptive Rolling Engine</a>
-
+        <!-- ROW 2 ON TABLET/LAPTOP, CENTERED ON DESKTOP: NEVER-CLIPPED NAV TABS -->
+        <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar w-full xl:w-auto py-1 px-1 justify-start xl:justify-center shrink-0">
+          <a href="index.html" class="px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">⚡ Dashboard</a>
+          <a href="roadmap.html" class="px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
+          <a href="projects.html" class="px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">🛠️ Resume Lab (15 Projects)</a>
+          <a href="tracker.html" class="px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition shrink-0 whitespace-nowrap neu-btn active text-emerald-600 shadow-inner">⏱️ Adaptive Rolling Engine</a>
         </nav>
 
-        <!-- DESKTOP CLOUD SYNC INDICATOR & CONTROLS -->
-        <div class="hidden md:flex items-center gap-2.5 shrink-0">
-          <div id="sync-badge-desktop" onclick="toggleSyncModal(true)" class="neu-pill px-3 py-1.5 text-[11px] font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer" title="Click to manage sync credentials">
+        <!-- DESKTOP ACTIONS (ON EXTRA WIDE SCREENS >= 1280px) -->
+        <div class="hidden xl:flex items-center gap-2.5 shrink-0">
+          <div id="sync-badge-desktop" onclick="toggleSyncModal(true)" class="neu-pill px-3 py-1.5 text-xs font-mono font-bold flex items-center gap-1.5 text-emerald-700 bg-emerald-500/10 cursor-pointer hover:bg-emerald-500/20 transition" title="Click to manage sync credentials">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="sync-text">☁️ Cloud Sync (Encrypted)</span>
+            <span class="sync-text">☁️ Cloud Sync</span>
           </div>
-
-          <button onclick="exportBackupJSON()" title="Export JSON backup to never lose progress" class="neu-btn px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+          <button onclick="exportBackupJSON()" title="Export JSON backup to never lose progress" class="neu-btn px-3 py-1.5 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
             💾 <span>Backup</span>
           </button>
-          <label class="neu-btn px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer" title="Import previously saved JSON backup">
+          <label class="neu-btn px-3 py-1.5 text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer" title="Import previously saved JSON backup">
             📥 <span>Restore</span>
             <input type="file" id="import-backup-file" onchange="importBackupJSON(event)" class="hidden" accept=".json">
           </label>
-          <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-3.5 py-2 text-xs font-bold flex items-center gap-1">
+          <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-3 py-1.5 text-xs font-bold flex items-center gap-1">
             📄 <span>23-P PDF</span>
           </a>
         </div>
