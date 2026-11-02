@@ -258,7 +258,7 @@ function renderDailyProjectCardHTML(taskObj, week) {
 
   return `
     <!-- DAILY SCRATCH REVISION PROJECT (BUILT FROM SCRATCH) -->
-    <div class="neu-card-sm p-4 sm:p-5 space-y-3.5 bg-gradient-to-br from-emerald-950/40 via-slate-900/70 to-slate-900/90 border border-emerald-500/40 rounded-2xl shadow-lg">
+    <div class="neu-card-sm daily-project-card p-4 sm:p-5 space-y-3.5 bg-gradient-to-br from-emerald-950/40 via-slate-900/70 to-slate-900/90 border border-emerald-500/40 rounded-2xl shadow-lg">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
           <span class="text-base sm:text-lg">🛠️</span>
