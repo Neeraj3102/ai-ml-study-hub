@@ -258,7 +258,7 @@ function renderDailyProjectCardHTML(taskObj, week) {
 
   return `
     <!-- DAILY SCRATCH REVISION PROJECT (BUILT FROM SCRATCH) -->
-    <div class="neu-card-sm daily-project-card p-4 sm:p-5 space-y-3.5 bg-gradient-to-br from-emerald-950/40 via-slate-900/70 to-slate-900/90 border border-emerald-500/40 rounded-2xl shadow-lg">
+    <div class="neu-card p-4 sm:p-5 space-y-3.5 daily-project-card rounded-2xl border border-emerald-500/40">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
           <span class="text-base sm:text-lg">🛠️</span>
@@ -268,28 +268,28 @@ function renderDailyProjectCardHTML(taskObj, week) {
       </div>
 
       <div>
-        <h4 class="text-sm sm:text-base font-bold text-white mb-1 flex items-center gap-2 flex-wrap">
+        <h4 class="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-2 flex-wrap">
           <span>${escapeHTML(proj.title)}</span>
           <span class="text-[10px] font-mono font-normal text-slate-400">⏱️ ${escapeHTML(proj.time)}</span>
         </h4>
-        <p class="text-xs text-slate-300 leading-relaxed font-normal">
+        <p class="text-xs text-slate-600 leading-relaxed font-normal">
           ${escapeHTML(proj.description)}
         </p>
       </div>
 
       <!-- 3-STEP REVISION CHECKLIST -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
-        <div class="neu-inset p-3 rounded-xl bg-slate-900/80 border border-slate-700/60">
+        <div class="neu-inset p-3 rounded-xl">
           <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">Step 1: Setup & Input</span>
-          <span class="text-slate-300 text-[11px] leading-snug block">${escapeHTML(proj.step1)}</span>
+          <span class="text-slate-700 text-[11px] leading-snug block">${escapeHTML(proj.step1)}</span>
         </div>
-        <div class="neu-inset p-3 rounded-xl bg-slate-900/80 border border-slate-700/60">
+        <div class="neu-inset p-3 rounded-xl">
           <span class="text-[10px] font-mono font-bold text-slate-400 block mb-1">Step 2: Core Logic</span>
-          <span class="text-slate-300 text-[11px] leading-snug block">${escapeHTML(proj.step2)}</span>
+          <span class="text-slate-700 text-[11px] leading-snug block">${escapeHTML(proj.step2)}</span>
         </div>
-        <div class="neu-inset p-3 rounded-xl bg-slate-900/80 border border-slate-700/60">
+        <div class="neu-inset p-3 rounded-xl">
           <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-1">Step 3: Verification</span>
-          <span class="text-slate-300 text-[11px] leading-snug block">${escapeHTML(proj.step3)}</span>
+          <span class="text-slate-700 text-[11px] leading-snug block">${escapeHTML(proj.step3)}</span>
         </div>
       </div>
 
