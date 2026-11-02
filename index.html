@@ -266,6 +266,7 @@
       backdrop-filter: blur(8px);
     }
   </style>
+  <script src="js/daily_projects.js"></script>
 </head>
 <body class="min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-white">
     <!-- LIVING AURORA MESH BACKGROUND (NON-BLOCKING, ZERO OVERFLOW) -->
@@ -1225,6 +1226,9 @@
               ${topicPills}
             </div>
           </div>
+
+          
+          ${renderDailyProjectCardHTML(taskObj, weeksData[taskObj.weekNum - 1])}
 
           <!-- TODAY'S DAILY REFLECTION & DOUBTS -->
           <div class="pt-2 border-t border-slate-300/80">

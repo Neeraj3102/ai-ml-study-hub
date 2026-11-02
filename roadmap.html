@@ -266,6 +266,7 @@
       backdrop-filter: blur(8px);
     }
   </style>
+  <script src="js/daily_projects.js"></script>
 </head>
 <body class="min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-white">
     <!-- LIVING AURORA MESH BACKGROUND (NON-BLOCKING, ZERO OVERFLOW) -->
@@ -750,6 +751,12 @@
       syncToCloud();
     }
 
+    
+    function toggleProjectDrawer(taskId) {
+      const d = document.getElementById(`project-drawer-${taskId}`);
+      if (d) d.classList.toggle('hidden');
+    }
+  
     function toggleDailyDrawer(taskId) {
       const drawer = document.getElementById(`drawer-${taskId}`);
       if (drawer) {
@@ -1092,8 +1099,11 @@
                           <a href="${escapeHTML(v.url)}" target="_blank" rel="noopener noreferrer" class="neu-btn px-3 py-1 text-xs font-bold text-slate-700 flex items-center gap-1">
                             ▶ <span>Watch</span>
                           </a>
-                          <button onclick="toggleDailyDrawer('${taskId}')" class="neu-btn px-2.5 py-1 text-xs font-bold text-slate-700" title="Open doubts / notes drawer">
+                          <button onclick="toggleDailyDrawer('${taskId}')" class="neu-btn px-2.5 py-1 text-xs font-bold text-slate-300 hover:text-white" title="Open doubts / notes drawer">
                             📝
+                          </button>
+                          <button onclick="toggleProjectDrawer('${taskId}')" class="neu-btn px-2.5 py-1 text-xs font-bold text-emerald-400 flex items-center gap-1 hover:text-emerald-300" title="View Daily Scratch Project to Build & Revise">
+                            🛠️ <span class="hidden sm:inline">Project</span>
                           </button>
                         </div>
 
@@ -1113,6 +1123,11 @@
                                    placeholder="e.g. Review regularization hyperparameter tuning on buffer day..." class="w-full neu-input px-2.5 py-1.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">
                           </div>
                         </div>
+                      </div>
+
+                      <!-- INDIVIDUAL DAILY SCRATCH PROJECT DRAWER -->
+                      <div id="project-drawer-${taskId}" class="hidden pt-2 border-t border-slate-700/60">
+                        ${renderDailyProjectCardHTML({ video: v, weekNum: wIdx + 1, weekGoal: w.output_goal }, w)}
                       </div>
 
                     </div>
