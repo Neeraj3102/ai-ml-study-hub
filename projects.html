@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Project Lab | AI & ML Engineer Master Hub</title>
+  <title>Resume Lab (15 Projects) | AI & ML Engineer Master Hub</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,10 +21,24 @@
       --accent-dark: #059669;
     }
 
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     .neu-card {
@@ -125,7 +139,7 @@
 
   
     <!-- SLEEK STATUS TICKER -->
-    <div class="border-b border-slate-300/60 bg-[#dde4f0]/80 text-[11px] py-2 px-6 font-mono text-slate-700 overflow-hidden whitespace-nowrap select-none no-print">
+    <div class="border-b border-slate-300/60 bg-[#dde4f0]/80 text-[10px] sm:text-[11px] py-1.5 sm:py-2 px-3 sm:px-6 font-mono text-slate-700 overflow-hidden whitespace-nowrap select-none no-print">
       <div class="inline-block animate-pulse">
         <span class="text-emerald-700 font-bold">🟢 AI ENGINEERING WORKSPACE</span> &nbsp;•&nbsp; 
         <span>22 WEEKS & 150 DAYS</span> &nbsp;•&nbsp; 
@@ -136,35 +150,51 @@
       </div>
     </div>
 
-    <!-- MAIN NAVBAR -->
-    <header class="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-[#e6ecf5]/85 border-b border-white/60 no-print">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- MAIN NAVBAR: RESPONSIVE & MOBILE-FRIENDLY (NEVER HOVERS OVER TEXT) -->
+    <header class="relative md:sticky md:top-0 z-40 px-3.5 sm:px-6 py-2.5 sm:py-4 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         
-        <!-- LOGO & BADGE -->
-        <a href="index.html" class="flex items-center gap-3.5 group">
-          <div class="w-11 h-11 rounded-2xl neu-card flex items-center justify-center font-black text-emerald-600 text-lg group-hover:scale-105 transition">
-            ⚡
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-lg font-black text-slate-800 tracking-tight">AI Engineer Lab</span>
-              <span class="neu-pill px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Neumorphic</span>
+        <!-- TOP ROW ON MOBILE: LOGO + COMPACT ACTIONS -->
+        <div class="flex items-center justify-between w-full md:w-auto">
+          <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl neu-card flex items-center justify-center font-black text-emerald-600 text-base sm:text-lg shrink-0 group-hover:scale-105 transition">
+              ⚡
             </div>
-            <p class="text-[11px] text-slate-500">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
-          </div>
-        </a>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="text-base sm:text-lg font-black text-slate-800 tracking-tight leading-tight">AI Engineer Lab</span>
+                <span class="neu-pill px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Neumorphic</span>
+              </div>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 hidden sm:block">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
+            </div>
+          </a>
 
-        <!-- NAV LINKS -->
-        <nav class="flex items-center gap-2 flex-wrap justify-center">
-          <a href="index.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">⚡ Dashboard</a>
-<a href="roadmap.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
-<a href="projects.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn active text-emerald-600 font-bold">🛠️ Resume Lab (15 Projects)</a>
-<a href="tracker.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">⏱️ Adaptive Rolling Engine</a>
+          <!-- MOBILE ACTIONS (INLINE WITH LOGO SO NO EXTRA HEIGHT IS ADDED) -->
+          <div class="flex md:hidden items-center gap-1.5 shrink-0">
+            <button onclick="exportBackupJSON()" title="Export JSON backup" class="neu-btn px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 flex items-center gap-1">
+              💾
+            </button>
+            <label class="neu-btn px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 flex items-center gap-1 cursor-pointer" title="Import JSON backup">
+              📥
+              <input type="file" onchange="importBackupJSON(event)" class="hidden" accept=".json">
+            </label>
+            <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-2.5 py-1.5 text-[11px] font-bold flex items-center gap-1">
+              📄 <span>PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- NAV LINKS: SWIPEABLE HORIZONTAL PILL BAR ON MOBILE, CENTERED ON DESKTOP -->
+        <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1 px-0.5 justify-start md:justify-center">
+          <a href="index.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">⚡ Dashboard</a>
+<a href="roadmap.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
+<a href="projects.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn active text-emerald-600 font-bold">🛠️ Resume Lab (15 Projects)</a>
+<a href="tracker.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">⏱️ Adaptive Rolling Engine</a>
 
         </nav>
 
-        <!-- BACKUP & EXPORT CONTROLS -->
-        <div class="flex items-center gap-2">
+        <!-- DESKTOP BACKUP & EXPORT CONTROLS -->
+        <div class="hidden md:flex items-center gap-2 shrink-0">
           <button onclick="exportBackupJSON()" title="Export JSON backup to never lose progress" class="neu-btn px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
             💾 <span>Backup</span>
           </button>
@@ -181,51 +211,43 @@
     </header>
     
 
-  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-8 flex-1 space-y-6 sm:space-y-8">
 
-    <!-- PAGE HERO -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-300/80 pb-6">
+    <!-- PAGE HEADER -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-300/80 pb-4 sm:pb-6">
       <div>
-        <span class="text-[10px] font-black uppercase text-teal-700 tracking-wider">Hands-On Portfolio Lab</span>
-        <h1 class="text-3xl font-black text-slate-800 mt-1">15 Resume Projects for Every Piece</h1>
+        <span class="text-[10px] font-black uppercase text-teal-700 tracking-wider">Production Portfolio Builder</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-800 mt-1">15 Piece-by-Piece Resume Projects</h1>
         <p class="text-xs text-slate-500 mt-1 max-w-2xl">
-          Apply every single concept learned into a portfolio-ready project with functional requirements, web app guides, and resume bullets.
+          One project for every piece of your curriculum. Build working web apps, production microservices, vector search engines, and multi-agent systems with copy-paste resume bullets.
         </p>
       </div>
 
-      <!-- FILTER TABS -->
-      <div class="flex flex-wrap gap-2" id="project-filters">
-        <button onclick="setProjectFilter('all')" class="proj-filter-btn neu-btn active px-3.5 py-1.5 text-xs font-bold" data-filter="all">All (15)</button>
-        <button onclick="setProjectFilter('Phase 1')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-semibold" data-filter="Phase 1">Phase 1</button>
-        <button onclick="setProjectFilter('Phase 2')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-semibold" data-filter="Phase 2">Phase 2</button>
-        <button onclick="setProjectFilter('Phase 3')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-semibold" data-filter="Phase 3">Phase 3</button>
-        <button onclick="setProjectFilter('Phase 4')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-semibold" data-filter="Phase 4">Phase 4</button>
-        <button onclick="setProjectFilter('Phase 5')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-semibold" data-filter="Phase 5">Phase 5</button>
-        <button onclick="setProjectFilter('Flagship')" class="proj-filter-btn neu-btn px-3.5 py-1.5 text-xs font-bold text-amber-700" data-filter="Flagship">⭐ 4 Flagships</button>
+      <!-- FILTER TABS: HORIZONTAL SCROLL ON MOBILE -->
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1" id="phase-filter-bar">
+        <button onclick="filterProjects('all')" class="proj-filter-btn neu-btn active px-3 py-1.5 text-xs font-bold shrink-0 whitespace-nowrap" data-filter="all">All (15 Projects)</button>
+        <button onclick="filterProjects('Phase 1')" class="proj-filter-btn neu-btn px-3 py-1.5 text-xs font-semibold shrink-0 whitespace-nowrap" data-filter="Phase 1">Phase 1 (3)</button>
+        <button onclick="filterProjects('Phase 2')" class="proj-filter-btn neu-btn px-3 py-1.5 text-xs font-semibold shrink-0 whitespace-nowrap" data-filter="Phase 2">Phase 2 (3)</button>
+        <button onclick="filterProjects('Phase 3')" class="proj-filter-btn neu-btn px-3 py-1.5 text-xs font-semibold shrink-0 whitespace-nowrap" data-filter="Phase 3">Phase 3 (3)</button>
+        <button onclick="filterProjects('Phase 4')" class="proj-filter-btn neu-btn px-3 py-1.5 text-xs font-semibold shrink-0 whitespace-nowrap" data-filter="Phase 4">Phase 4 (3)</button>
+        <button onclick="filterProjects('Phase 5')" class="proj-filter-btn neu-btn px-3 py-1.5 text-xs font-semibold shrink-0 whitespace-nowrap" data-filter="Phase 5">Phase 5 (3)</button>
       </div>
     </div>
 
-    <!-- SEARCH BAR -->
-    <div class="relative w-full">
-      <input type="text" id="project-search" onkeyup="renderProjects()" placeholder="Search projects by tech (e.g. FastAPI, Docker, XGBoost, PyTorch, RAG, MCP, LangGraph)..." 
-             class="w-full neu-input px-5 py-3.5 text-xs placeholder-slate-400">
-      <span class="absolute right-5 top-3.5 text-slate-400 text-sm">🔍</span>
-    </div>
-
-    <!-- PROJECT FEED -->
-    <div id="projects-feed" class="space-y-8">
-      <!-- Injected by JavaScript -->
+    <!-- PROJECTS GRID -->
+    <div id="projects-grid" class="space-y-6 sm:space-y-8">
+      <!-- Injected by JS -->
     </div>
 
   </main>
 
   
-    <footer class="border-t border-slate-300/80 py-8 bg-[#e1e8f2] text-center text-xs text-slate-500 no-print mt-16">
-      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <footer class="border-t border-slate-300/80 py-8 bg-[#e1e8f2] text-center text-xs text-slate-500 no-print mt-12 sm:mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <span class="font-bold text-slate-700">Full-Stack AI & ML Engineer Master Hub</span> • Neumorphic Edition for Neeraj
         </div>
-        <div class="flex items-center gap-3 text-slate-600">
+        <div class="flex items-center gap-3 text-slate-600 flex-wrap justify-center">
           <span class="neu-pill px-3 py-1 font-semibold text-emerald-700 text-[10px]">Auto-saved in LocalStorage</span>
           <span>•</span>
           <span>15 Resume Projects</span>
@@ -247,7 +269,6 @@
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
     let activeLessonIndex = parseInt(localStorage.getItem('aiml_active_lesson_index') || '-1', 10);
 
-    // Build flat array of all 140 daily tasks for seamless previous/next navigation
     const allTasks = [];
     weeksData.forEach((w, wIdx) => {
       w.videos.forEach((v, vIdx) => {
@@ -376,34 +397,35 @@
       if (mode === 'tomorrow') {
         rollingShifts += 1;
         saveState();
-        alert("Active lesson postponed to tomorrow! The subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
+        alert(`Today's task postponed to tomorrow! All remaining deadlines shift forward by +1 day.`);
       } else if (mode === 'buffer') {
-        alert("Active lesson absorbed into an upcoming weekend buffer slot. Final target graduation date remains intact!");
+        const remainingBuffer = Math.max(0, 18 - rollingShifts);
+        if (remainingBuffer > 0) {
+          rollingShifts += 1;
+          saveState();
+          alert(`Absorbed into planned buffer! Remaining buffer days: ${remainingBuffer - 1} days. Graduation date remains protected!`);
+        } else {
+          rollingShifts += 1;
+          saveState();
+          alert("All 18 buffer days consumed. Calendar shifted by +1 day.");
+        }
       }
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();
       }
     }
 
-    function resetAllShifts() {
-      if (confirm("Reset calendar shifts back to the baseline schedule (Nov 2, 2026 - Apr 4, 2027)?")) {
-        rollingShifts = 0;
-        saveState();
-        if (typeof renderCurrentPage === 'function') {
-          renderCurrentPage();
-        }
-      }
-    }
-
     function exportBackupJSON() {
-      const backup = {
+      const backupData = {
+        version: "2.0-ai-engineer-neumorphic",
+        exportedAt: new Date().toISOString(),
         progress: state,
         notes: notes,
         dailyNotes: dailyNotes,
         shifts: rollingShifts,
-        exportedAt: new Date().toISOString()
+        activeLessonIndex: activeLessonIndex
       };
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -424,6 +446,7 @@
             notes = data.notes || {};
             dailyNotes = data.dailyNotes || {};
             rollingShifts = data.shifts || 0;
+            activeLessonIndex = data.activeLessonIndex !== undefined ? data.activeLessonIndex : -1;
             saveState();
             alert("Progress backup successfully restored! Welcome back.");
             if (typeof renderCurrentPage === 'function') {
@@ -508,7 +531,7 @@
 
       list.innerHTML = items.map(it => `
         <div class="neu-card-sm p-4 space-y-2">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
             <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${it.day}: ${it.title}</span>
             <a href="roadmap.html" class="text-[11px] text-emerald-700 hover:underline font-semibold font-mono">View in Curriculum →</a>
           </div>
@@ -574,144 +597,94 @@
     }
 
 
-    let currentProjectFilter = 'all';
+    let activeFilter = 'all';
 
-    function setProjectFilter(f) {
-      currentProjectFilter = f;
+    function filterProjects(f) {
+      activeFilter = f;
       document.querySelectorAll('.proj-filter-btn').forEach(btn => {
         if (btn.getAttribute('data-filter') === f) {
-          btn.classList.add('active', 'text-emerald-700', 'font-bold');
+          btn.classList.add('active', 'font-bold');
         } else {
-          btn.classList.remove('active', 'text-emerald-700', 'font-bold');
+          btn.classList.remove('active', 'font-bold');
         }
       });
       renderProjects();
     }
 
     function renderProjects() {
-      const container = document.getElementById('projects-feed');
-      const q = (document.getElementById('project-search').value || '').toLowerCase();
+      const grid = document.getElementById('projects-grid');
+      if (!grid) return;
 
       const filtered = projectsData.filter(p => {
-        if (currentProjectFilter === 'Flagship') {
-          if (!p.title.includes('FLAGSHIP')) return false;
-        } else if (currentProjectFilter !== 'all') {
-          if (!p.phase.includes(currentProjectFilter)) return false;
-        }
-
-        if (!q) return true;
-        return p.title.toLowerCase().includes(q) || 
-               p.subtitle.toLowerCase().includes(q) || 
-               p.tech_stack.some(t => t.toLowerCase().includes(q)) ||
-               p.learned_applied.toLowerCase().includes(q);
+        if (activeFilter === 'all') return true;
+        return p.phase.toLowerCase().includes(activeFilter.toLowerCase());
       });
 
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="p-8 text-center text-slate-500 neu-card">No matching projects found.</div>';
-        return;
-      }
+      grid.innerHTML = filtered.map(p => `
+        <div class="neu-card p-5 sm:p-7 space-y-5">
+          
+          <!-- PROJECT HEADER -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="neu-pill px-3 py-0.5 text-[10px] font-mono font-bold text-teal-700">${p.piece}</span>
+                <span class="text-xs font-semibold text-slate-500">${p.phase}</span>
+                ${p.badge.includes('FLAGSHIP') ? '<span class="neu-pill px-2.5 py-0.5 text-[9px] font-bold text-purple-700 bg-purple-500/10 border border-purple-500/30">⭐ ' + p.badge + '</span>' : '<span class="text-[10px] font-mono text-slate-500">' + p.badge + '</span>'}
+              </div>
+              <h2 class="text-lg sm:text-xl font-black text-slate-800">${p.title}</h2>
+              <p class="text-xs text-slate-600">${p.description}</p>
+            </div>
 
-      container.innerHTML = filtered.map(p => {
-        const isFlagship = p.title.includes('FLAGSHIP');
-
-        const techBadges = p.tech_stack.map(t => `
-          <span class="neu-pill text-[10px] font-mono text-slate-700 px-3 py-1 font-semibold">${t}</span>
-        `).join('');
-
-        const reqList = p.requirements.map(r => `
-          <li class="flex items-start gap-2.5 text-xs text-slate-700">
-            <span class="text-emerald-600 font-bold mt-0.5">✔</span>
-            <span>${r}</span>
-          </li>
-        `).join('');
-
-        const bulletsList = p.resume_bullets.map(b => `
-          <div class="neu-inset p-3.5 rounded-xl text-xs font-mono text-slate-700 flex items-start gap-2.5">
-            <span class="text-teal-600 font-bold">•</span>
-            <span>${b}</span>
+            <!-- TECH STACK BADGES -->
+            <div class="flex flex-wrap gap-1.5 max-w-sm">
+              ${p.tech_stack.map(t => `<span class="neu-pill px-2.5 py-1 text-[10px] font-mono text-slate-700 font-semibold">${t}</span>`).join('')}
+            </div>
           </div>
-        `).join('');
 
-        return `
-          <div class="neu-card p-6 sm:p-8 space-y-6">
+          <!-- 3-COLUMN CONTENT -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             
-            <!-- HEADER -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="neu-pill text-[10px] font-black uppercase text-emerald-700 px-3 py-0.5">${p.phase_badge}</span>
-                  <span class="text-xs font-mono text-slate-500">${p.piece}</span>
-                  ${isFlagship ? '<span class="neu-pill text-[10px] font-bold text-amber-700 px-2.5 py-0.5">⭐ FLAGSHIP PORTFOLIO</span>' : ''}
-                </div>
-                <h2 class="text-2xl font-black text-slate-800 mt-1.5">${p.title}</h2>
-                <p class="text-xs text-slate-600 mt-1">${p.subtitle}</p>
-              </div>
-
-              <div class="text-right shrink-0">
-                <span class="text-xs font-mono text-slate-500 block">${p.time_est}</span>
-                <span class="neu-pill text-[10px] font-bold text-emerald-700 px-3 py-1 mt-1 inline-block">${p.difficulty}</span>
-              </div>
-            </div>
-
-            <!-- TECH STACK PILLS -->
-            <div class="flex flex-wrap gap-2">
-              ${techBadges}
-            </div>
-
-            <!-- WHAT YOU LEARNED & APPLIED -->
-            <div class="neu-inset p-4 rounded-2xl text-xs space-y-1">
-              <span class="text-emerald-700 font-bold block">💡 What You Learned & Apply Here:</span>
-              <p class="text-slate-700 leading-relaxed">${p.learned_applied}</p>
-            </div>
-
             <!-- REQUIREMENTS CHECKLIST -->
-            <div class="space-y-2.5">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">📋 System Specifications & Requirements:</span>
-              <ul class="space-y-2 pl-1">
-                ${reqList}
+            <div class="neu-inset p-4 rounded-2xl space-y-2">
+              <span class="text-[10px] font-bold uppercase text-slate-600 block mb-1">📋 Core Requirements:</span>
+              <ul class="space-y-1.5 text-slate-700">
+                ${p.requirements.map(r => `<li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span> <span>${r}</span></li>`).join('')}
               </ul>
             </div>
 
-            <!-- HOW TO MAKE A WEBSITE / UI FROM IT -->
-            <div class="neu-card-sm p-4 space-y-1.5 bg-[#eaf0f9]">
-              <span class="text-xs font-bold text-teal-800 flex items-center gap-1.5">
-                <span>🌐</span> How to Turn This Into a Live Web App / Website:
-              </span>
-              <p class="text-xs text-slate-700 leading-relaxed">
-                ${p.web_app_guide}
-              </p>
-            </div>
-
-            <!-- RESUME BULLET POINTS -->
-            <div class="space-y-2.5">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">📄 Copy-Paste Ready Resume Impact Bullets:</span>
-              <div class="space-y-2">
-                ${bulletsList}
+            <!-- WEB APP / REPO BLUEPRINT -->
+            <div class="neu-inset p-4 rounded-2xl space-y-2">
+              <span class="text-[10px] font-bold uppercase text-teal-700 block mb-1">🌐 Web App UI & Repo Layout:</span>
+              <p class="text-slate-700 leading-relaxed">${p.web_app_blueprint}</p>
+              <div class="text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-300/60">
+                <b>Deliverable:</b> Standalone GitHub repo with live demo & tests.
               </div>
             </div>
 
-            <!-- REPO PATH & GITHUB BLUEPRINT -->
-            <div class="pt-3 border-t border-slate-300/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-              <div class="text-slate-600 font-mono text-[11px]">
-                📁 Recommended Repo: <span class="text-emerald-700 font-bold">${p.repo_path}</span>
-              </div>
-              <a href="https://github.com" target="_blank" class="neu-btn px-4 py-2 font-bold text-slate-800 flex items-center gap-1.5">
-                <span>Create GitHub Repo</span>
-                <span>↗</span>
-              </a>
+            <!-- RESUME BULLET -->
+            <div class="neu-inset p-4 rounded-2xl space-y-2">
+              <span class="text-[10px] font-bold uppercase text-indigo-700 block mb-1">📄 Copy-Paste Resume Bullet:</span>
+              <p class="text-slate-800 font-medium italic leading-relaxed">"${p.resume_bullet}"</p>
+              <button onclick="navigator.clipboard.writeText('${p.resume_bullet.replace(/'/g, "\\'")}'); alert('Copied resume bullet to clipboard!');" 
+                      class="neu-btn px-3 py-1 text-[10px] font-bold text-indigo-700 flex items-center gap-1 mt-2">
+                📋 Copy Bullet
+              </button>
             </div>
 
           </div>
-        `;
-      }).join('');
+
+        </div>
+      `).join('');
     }
 
     function renderCurrentPage() {
-      renderProjects();
       updateGlobalStats();
+      renderProjects();
     }
 
-    renderCurrentPage();
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentPage();
+    });
   </script>
 </body>
 </html>

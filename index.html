@@ -21,10 +21,24 @@
       --accent-dark: #059669;
     }
 
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     .neu-card {
@@ -125,7 +139,7 @@
 
   
     <!-- SLEEK STATUS TICKER -->
-    <div class="border-b border-slate-300/60 bg-[#dde4f0]/80 text-[11px] py-2 px-6 font-mono text-slate-700 overflow-hidden whitespace-nowrap select-none no-print">
+    <div class="border-b border-slate-300/60 bg-[#dde4f0]/80 text-[10px] sm:text-[11px] py-1.5 sm:py-2 px-3 sm:px-6 font-mono text-slate-700 overflow-hidden whitespace-nowrap select-none no-print">
       <div class="inline-block animate-pulse">
         <span class="text-emerald-700 font-bold">🟢 AI ENGINEERING WORKSPACE</span> &nbsp;•&nbsp; 
         <span>22 WEEKS & 150 DAYS</span> &nbsp;•&nbsp; 
@@ -136,35 +150,51 @@
       </div>
     </div>
 
-    <!-- MAIN NAVBAR -->
-    <header class="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-[#e6ecf5]/85 border-b border-white/60 no-print">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- MAIN NAVBAR: RESPONSIVE & MOBILE-FRIENDLY (NEVER HOVERS OVER TEXT) -->
+    <header class="relative md:sticky md:top-0 z-40 px-3.5 sm:px-6 py-2.5 sm:py-4 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         
-        <!-- LOGO & BADGE -->
-        <a href="index.html" class="flex items-center gap-3.5 group">
-          <div class="w-11 h-11 rounded-2xl neu-card flex items-center justify-center font-black text-emerald-600 text-lg group-hover:scale-105 transition">
-            ⚡
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-lg font-black text-slate-800 tracking-tight">AI Engineer Lab</span>
-              <span class="neu-pill px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Neumorphic</span>
+        <!-- TOP ROW ON MOBILE: LOGO + COMPACT ACTIONS -->
+        <div class="flex items-center justify-between w-full md:w-auto">
+          <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl neu-card flex items-center justify-center font-black text-emerald-600 text-base sm:text-lg shrink-0 group-hover:scale-105 transition">
+              ⚡
             </div>
-            <p class="text-[11px] text-slate-500">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
-          </div>
-        </a>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span class="text-base sm:text-lg font-black text-slate-800 tracking-tight leading-tight">AI Engineer Lab</span>
+                <span class="neu-pill px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Neumorphic</span>
+              </div>
+              <p class="text-[10px] sm:text-[11px] text-slate-500 hidden sm:block">Master 5-Month Blueprint • 22 Weeks • 15 Projects</p>
+            </div>
+          </a>
 
-        <!-- NAV LINKS -->
-        <nav class="flex items-center gap-2 flex-wrap justify-center">
-          <a href="index.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn active text-emerald-600 font-bold">⚡ Dashboard</a>
-<a href="roadmap.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
-<a href="projects.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">🛠️ Resume Lab (15 Projects)</a>
-<a href="tracker.html" class="px-4 py-2 rounded-xl text-xs font-semibold transition neu-btn text-slate-600 hover:text-slate-900">⏱️ Adaptive Rolling Engine</a>
+          <!-- MOBILE ACTIONS (INLINE WITH LOGO SO NO EXTRA HEIGHT IS ADDED) -->
+          <div class="flex md:hidden items-center gap-1.5 shrink-0">
+            <button onclick="exportBackupJSON()" title="Export JSON backup" class="neu-btn px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 flex items-center gap-1">
+              💾
+            </button>
+            <label class="neu-btn px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 flex items-center gap-1 cursor-pointer" title="Import JSON backup">
+              📥
+              <input type="file" onchange="importBackupJSON(event)" class="hidden" accept=".json">
+            </label>
+            <a href="AI_ML_Engineer_Full_5_Month_Master_Plan.pdf" download class="neu-btn-primary px-2.5 py-1.5 text-[11px] font-bold flex items-center gap-1">
+              📄 <span>PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- NAV LINKS: SWIPEABLE HORIZONTAL PILL BAR ON MOBILE, CENTERED ON DESKTOP -->
+        <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar w-full md:w-auto py-1 px-0.5 justify-start md:justify-center">
+          <a href="index.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn active text-emerald-600 font-bold">⚡ Dashboard</a>
+<a href="roadmap.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">📚 22-Week Curriculum</a>
+<a href="projects.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">🛠️ Resume Lab (15 Projects)</a>
+<a href="tracker.html" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-slate-600 hover:text-slate-900">⏱️ Adaptive Rolling Engine</a>
 
         </nav>
 
-        <!-- BACKUP & EXPORT CONTROLS -->
-        <div class="flex items-center gap-2">
+        <!-- DESKTOP BACKUP & EXPORT CONTROLS -->
+        <div class="hidden md:flex items-center gap-2 shrink-0">
           <button onclick="exportBackupJSON()" title="Export JSON backup to never lose progress" class="neu-btn px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5">
             💾 <span>Backup</span>
           </button>
@@ -181,39 +211,39 @@
     </header>
     
 
-  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 space-y-10">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-8 flex-1 space-y-6 sm:space-y-10">
 
     <!-- HERO SECTION WITH NEUMORPHIC PIE/DONUT CHART -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center neu-card p-6 sm:p-10 relative overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center neu-card p-5 sm:p-8 lg:p-10 relative overflow-hidden">
       
       <!-- LEFT COLUMN: TITLE & SPECS -->
-      <div class="lg:col-span-7 space-y-5">
+      <div class="lg:col-span-7 space-y-4 sm:space-y-5">
         <div class="inline-flex items-center gap-2 neu-pill px-3.5 py-1 text-xs font-bold text-emerald-700">
           <span>🚀 Production AI Blueprint</span>
           <span class="text-slate-400">•</span>
           <span>Nov 2, 2026 – Apr 4, 2027</span>
         </div>
 
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-800 tracking-tight leading-tight">
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-800 tracking-tight leading-tight">
           Master Full-Stack AI <br class="hidden sm:inline"/>
           <span class="text-emerald-600">With Tactile Focus & Clarity.</span>
         </h1>
 
-        <p class="text-sm text-slate-600 leading-relaxed max-w-xl">
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
           Curated with CampusX, CodeWithHarry, Harvard CS50, and 3Blue1Brown. 
           Step smoothly from Python foundations to low-latency serving, vector RAG, and LangGraph multi-agent systems.
         </p>
 
         <!-- QUICK ACTION PILLS -->
-        <div class="flex flex-wrap gap-3 pt-2">
-          <a href="roadmap.html" class="neu-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2">
+        <div class="flex flex-wrap gap-2.5 pt-1 sm:pt-2">
+          <a href="roadmap.html" class="neu-btn-primary px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold flex items-center gap-2">
             <span>📚 Browse Curriculum</span>
             <span>→</span>
           </a>
-          <a href="projects.html" class="neu-btn px-5 py-2.5 text-xs font-bold flex items-center gap-2">
+          <a href="projects.html" class="neu-btn px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold flex items-center gap-2">
             <span>🛠️ 15 Resume Projects</span>
           </a>
-          <a href="tracker.html" class="neu-btn px-5 py-2.5 text-xs font-bold flex items-center gap-2">
+          <a href="tracker.html" class="neu-btn px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold flex items-center gap-2">
             <span>⏱️ Postpone Engine</span>
           </a>
         </div>
@@ -221,14 +251,14 @@
 
       <!-- RIGHT COLUMN: INTERACTIVE NEUMORPHIC PHASE DONUT / PIE CHART -->
       <div class="lg:col-span-5 flex flex-col items-center">
-        <div class="neu-card p-6 sm:p-8 w-full max-w-sm flex flex-col items-center space-y-4">
+        <div class="neu-card p-5 sm:p-8 w-full max-w-sm flex flex-col items-center space-y-4">
           <div class="flex justify-between items-center w-full">
             <span class="text-xs font-black uppercase text-slate-700 tracking-wider">Phase Completion Gauge</span>
             <span class="neu-pill px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 font-mono">Live Sync</span>
           </div>
 
           <!-- SVG DONUT / PIE CHART -->
-          <div class="relative w-48 h-48 flex items-center justify-center">
+          <div class="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center">
             <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="38" fill="transparent" stroke="#d5deec" stroke-width="10" />
               <circle id="donut-phase-1" cx="50" cy="50" r="38" fill="transparent" stroke="#10b981" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
@@ -238,9 +268,9 @@
               <circle id="donut-phase-5" cx="50" cy="50" r="38" fill="transparent" stroke="#f59e0b" stroke-width="10" stroke-dasharray="0 238.7" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-700" />
             </svg>
             
-            <div class="absolute w-28 h-28 rounded-full neu-card flex flex-col items-center justify-center select-none">
-              <span id="global-progress-pct" class="text-2xl font-black text-slate-800">0%</span>
-              <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Overall</span>
+            <div class="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full neu-card flex flex-col items-center justify-center select-none">
+              <span id="global-progress-pct" class="text-xl sm:text-2xl font-black text-slate-800">0%</span>
+              <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider">Overall</span>
             </div>
           </div>
 
@@ -259,40 +289,40 @@
     </div>
 
     <!-- DEDICATED BOX: THAT DAY'S STUDY TOPICS & SYLLABUS BREAKDOWN (WITH UNDO TICK & LIVE SYNC) -->
-    <div class="neu-card p-6 sm:p-8 space-y-6">
+    <div class="neu-card p-5 sm:p-8 space-y-5 sm:space-y-6">
       
       <!-- CARD HEADER & RESCHEDULE CONTROLS -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-300/80 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
         <div>
           <span class="text-[10px] font-black uppercase text-emerald-700 tracking-wider">Active Day Command Box</span>
-          <h2 class="text-2xl font-black text-slate-800">Today's Study Topics & Practice Breakdown</h2>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-800">Today's Study Topics & Practice Breakdown</h2>
           <p class="text-xs text-slate-500">Full topics syllabus for the active day. Tick or undo tick with instant live sync.</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="postponeTask('tomorrow')" class="neu-btn px-3.5 py-2 text-xs font-bold text-amber-700 flex items-center gap-1">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <button onclick="postponeTask('tomorrow')" class="neu-btn px-3.5 py-2 text-xs font-bold text-amber-700 flex items-center justify-center gap-1 text-center">
             <span>⏩ Postpone to Tomorrow (+1 Day)</span>
           </button>
-          <button onclick="postponeTask('buffer')" class="neu-btn px-3.5 py-2 text-xs font-bold text-emerald-700 flex items-center gap-1">
+          <button onclick="postponeTask('buffer')" class="neu-btn px-3.5 py-2 text-xs font-bold text-emerald-700 flex items-center justify-center gap-1 text-center">
             <span>🛡️ Absorb into Weekend Buffer</span>
           </button>
         </div>
       </div>
 
       <!-- INJECTED ACTIVE MISSION & TOPICS BOX -->
-      <div id="today-mission-box" class="neu-inset p-6 sm:p-7 rounded-3xl space-y-6">
+      <div id="today-mission-box" class="neu-inset p-4 sm:p-7 rounded-2xl sm:rounded-3xl space-y-5 sm:space-y-6">
         <!-- Injected via JavaScript -->
       </div>
     </div>
 
     <!-- WEAK SPOTS & REVISION RADAR -->
-    <div class="neu-card p-6 sm:p-8 space-y-4">
+    <div class="neu-card p-5 sm:p-8 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-300/80 pb-3">
         <div>
           <span class="text-[10px] font-black uppercase text-amber-700 tracking-wider">Revision Radar</span>
-          <h3 class="text-xl font-bold text-slate-800">Concepts Needing Care & Active Doubts</h3>
+          <h3 class="text-lg sm:text-xl font-bold text-slate-800">Concepts Needing Care & Active Doubts</h3>
           <p class="text-xs text-slate-500">All topics from previous days where you logged confusion or needed revision. Review these first on buffer days!</p>
         </div>
-        <span id="weak-spots-count" class="neu-pill px-3 py-1 text-xs font-mono font-bold text-amber-700">0 Logged</span>
+        <span id="weak-spots-count" class="neu-pill px-3 py-1 text-xs font-mono font-bold text-amber-700 self-start sm:self-auto">0 Logged</span>
       </div>
 
       <div id="weak-spots-list" class="space-y-3">
@@ -301,21 +331,21 @@
     </div>
 
     <!-- 15 RESUME PROJECTS OVERVIEW TEASER -->
-    <div class="neu-card p-6 sm:p-8 space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-300/80 pb-4">
+    <div class="neu-card p-5 sm:p-8 space-y-5 sm:space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-4">
         <div>
           <span class="text-[10px] font-black uppercase text-teal-700 tracking-wider">Hands-On Portfolio</span>
-          <h2 class="text-xl font-bold text-slate-800">15 Resume Projects (One for Every Piece)</h2>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-800">15 Resume Projects (One for Every Piece)</h2>
           <p class="text-xs text-slate-500">From CLI automation tools to production FastAPI microservices, vector RAG, and LangGraph multi-agent systems.</p>
         </div>
-        <a href="projects.html" class="neu-btn-primary px-4 py-2 text-xs font-bold">
+        <a href="projects.html" class="neu-btn-primary px-4 py-2 text-xs font-bold text-center self-start sm:self-auto">
           View 15-Project Lab →
         </a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
         
-        <div class="neu-card-sm p-5 space-y-3">
+        <div class="neu-card-sm p-4 sm:p-5 space-y-3">
           <div class="flex justify-between items-center">
             <span class="neu-pill text-[10px] font-mono text-emerald-700 px-2.5 py-0.5 font-bold">Phase 1 • Piece 1.3</span>
             <span class="text-[10px] text-slate-500">SQL Architecture</span>
@@ -325,7 +355,7 @@
           <div class="text-[11px] text-slate-500 font-mono">Streamlit Dashboard + PostgreSQL</div>
         </div>
 
-        <div class="neu-card-sm p-5 space-y-3">
+        <div class="neu-card-sm p-4 sm:p-5 space-y-3">
           <div class="flex justify-between items-center">
             <span class="neu-pill text-[10px] font-mono text-cyan-700 px-2.5 py-0.5 font-bold">Phase 3 • Piece 3.3</span>
             <span class="text-[10px] text-slate-500">FLAGSHIP 2</span>
@@ -335,7 +365,7 @@
           <div class="text-[11px] text-slate-500 font-mono">FastAPI + Redis + Docker Compose</div>
         </div>
 
-        <div class="neu-card-sm p-5 space-y-3">
+        <div class="neu-card-sm p-4 sm:p-5 space-y-3">
           <div class="flex justify-between items-center">
             <span class="neu-pill text-[10px] font-mono text-purple-700 px-2.5 py-0.5 font-bold">Phase 5 • Piece 5.2</span>
             <span class="text-[10px] text-slate-500">FLAGSHIP 4</span>
@@ -351,12 +381,12 @@
   </main>
 
   
-    <footer class="border-t border-slate-300/80 py-8 bg-[#e1e8f2] text-center text-xs text-slate-500 no-print mt-16">
-      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <footer class="border-t border-slate-300/80 py-8 bg-[#e1e8f2] text-center text-xs text-slate-500 no-print mt-12 sm:mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <span class="font-bold text-slate-700">Full-Stack AI & ML Engineer Master Hub</span> • Neumorphic Edition for Neeraj
         </div>
-        <div class="flex items-center gap-3 text-slate-600">
+        <div class="flex items-center gap-3 text-slate-600 flex-wrap justify-center">
           <span class="neu-pill px-3 py-1 font-semibold text-emerald-700 text-[10px]">Auto-saved in LocalStorage</span>
           <span>•</span>
           <span>15 Resume Projects</span>
@@ -378,7 +408,6 @@
     let rollingShifts = parseInt(localStorage.getItem('aiml_roadmap_shifts') || '0', 10);
     let activeLessonIndex = parseInt(localStorage.getItem('aiml_active_lesson_index') || '-1', 10);
 
-    // Build flat array of all 140 daily tasks for seamless previous/next navigation
     const allTasks = [];
     weeksData.forEach((w, wIdx) => {
       w.videos.forEach((v, vIdx) => {
@@ -507,34 +536,35 @@
       if (mode === 'tomorrow') {
         rollingShifts += 1;
         saveState();
-        alert("Active lesson postponed to tomorrow! The subsequent calendar has shifted forward by +1 day smoothly. No double-task stacking!");
+        alert(`Today's task postponed to tomorrow! All remaining deadlines shift forward by +1 day.`);
       } else if (mode === 'buffer') {
-        alert("Active lesson absorbed into an upcoming weekend buffer slot. Final target graduation date remains intact!");
+        const remainingBuffer = Math.max(0, 18 - rollingShifts);
+        if (remainingBuffer > 0) {
+          rollingShifts += 1;
+          saveState();
+          alert(`Absorbed into planned buffer! Remaining buffer days: ${remainingBuffer - 1} days. Graduation date remains protected!`);
+        } else {
+          rollingShifts += 1;
+          saveState();
+          alert("All 18 buffer days consumed. Calendar shifted by +1 day.");
+        }
       }
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();
       }
     }
 
-    function resetAllShifts() {
-      if (confirm("Reset calendar shifts back to the baseline schedule (Nov 2, 2026 - Apr 4, 2027)?")) {
-        rollingShifts = 0;
-        saveState();
-        if (typeof renderCurrentPage === 'function') {
-          renderCurrentPage();
-        }
-      }
-    }
-
     function exportBackupJSON() {
-      const backup = {
+      const backupData = {
+        version: "2.0-ai-engineer-neumorphic",
+        exportedAt: new Date().toISOString(),
         progress: state,
         notes: notes,
         dailyNotes: dailyNotes,
         shifts: rollingShifts,
-        exportedAt: new Date().toISOString()
+        activeLessonIndex: activeLessonIndex
       };
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -555,6 +585,7 @@
             notes = data.notes || {};
             dailyNotes = data.dailyNotes || {};
             rollingShifts = data.shifts || 0;
+            activeLessonIndex = data.activeLessonIndex !== undefined ? data.activeLessonIndex : -1;
             saveState();
             alert("Progress backup successfully restored! Welcome back.");
             if (typeof renderCurrentPage === 'function') {
@@ -639,7 +670,7 @@
 
       list.innerHTML = items.map(it => `
         <div class="neu-card-sm p-4 space-y-2">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
             <span class="text-xs font-bold text-slate-800">Week ${it.weekNum} • ${it.day}: ${it.title}</span>
             <a href="roadmap.html" class="text-[11px] text-emerald-700 hover:underline font-semibold font-mono">View in Curriculum →</a>
           </div>
@@ -728,9 +759,9 @@
           <div class="flex items-center justify-between p-2 rounded-xl neu-inset">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${p.color}"></span>
-              <span class="font-semibold text-slate-700">${p.name.split(':')[0]}</span>
+              <span class="font-semibold text-slate-700 text-xs">${p.name.split(':')[0]}</span>
             </div>
-            <div class="flex items-center gap-2 font-mono">
+            <div class="flex items-center gap-2 font-mono text-xs">
               <span class="text-slate-500">${p.done}/${p.total}</span>
               <span class="font-bold" style="color: ${p.color}">${p.pct}%</span>
             </div>
@@ -750,39 +781,37 @@
       const isDone = !!state[taskId];
       const dNote = dailyNotes[taskId] || { doubts: '', needsCare: '' };
 
-      // Split topics into pill tags
       const topicPills = video.topics.split(',').map(t => `
-        <span class="neu-pill text-xs font-medium text-slate-700 px-3 py-1 bg-white/40">${t.trim()}</span>
+        <span class="neu-pill text-xs font-medium text-slate-700 px-2.5 py-1 bg-white/40">${t.trim()}</span>
       `).join('');
 
-      // Fast jump dropdown
       const optionsHtml = allTasks.map((t, i) => `
         <option value="${i}" ${i === activeIdx ? 'selected' : ''}>
-          W${t.weekNum} • ${t.video.day}: ${t.video.title.slice(0, 34)}... ${state[t.taskId] ? '✓' : ''}
+          W${t.weekNum} • ${t.video.day}: ${t.video.title.slice(0, 30)}... ${state[t.taskId] ? '✓' : ''}
         </option>
       `).join('');
 
       container.innerHTML = `
-        <div class="space-y-6 w-full">
+        <div class="space-y-5 sm:space-y-6 w-full">
           
           <!-- NAVIGATION CONTROLLER (GO BACK / FORWARD / JUMP) -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/60 pb-3">
-            <div class="flex items-center gap-2">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-slate-300/60 pb-3">
+            <div class="flex items-center justify-between sm:justify-start gap-2">
               <button onclick="stepLesson(-1)" ${activeIdx === 0 ? 'disabled' : ''} 
-                      class="neu-btn px-3.5 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
+                      class="neu-btn px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
                 <span>⏮️ Go Back</span>
               </button>
               <button onclick="stepLesson(1)" ${activeIdx === allTasks.length - 1 ? 'disabled' : ''} 
-                      class="neu-btn px-3.5 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === allTasks.length - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
+                      class="neu-btn px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center gap-1 ${activeIdx === allTasks.length - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-700'}">
                 <span>Next Day ⏭️</span>
               </button>
-              <span class="text-xs font-mono text-slate-600 pl-1 font-semibold">Lesson ${activeIdx + 1} of ${allTasks.length}</span>
+              <span class="text-xs font-mono text-slate-600 font-semibold pl-1">Lesson ${activeIdx + 1} of ${allTasks.length}</span>
             </div>
 
             <!-- FAST JUMP SELECTOR -->
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-bold text-slate-500">Jump to Day:</span>
-              <select onchange="jumpToLesson(parseInt(this.value, 10))" class="neu-input px-3 py-1.5 text-xs text-slate-700 bg-transparent font-mono cursor-pointer max-w-[220px]">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <span class="text-[11px] font-bold text-slate-500 shrink-0">Jump:</span>
+              <select onchange="jumpToLesson(parseInt(this.value, 10))" class="neu-input px-3 py-1.5 text-xs text-slate-700 bg-transparent font-mono cursor-pointer w-full sm:w-auto sm:max-w-[240px]">
                 ${optionsHtml}
               </select>
             </div>
@@ -792,28 +821,28 @@
           <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="space-y-1.5 flex-1">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="neu-pill text-[10px] font-bold uppercase text-emerald-700 px-3 py-1 font-mono">Week ${taskObj.weekNum} • ${video.day}</span>
+                <span class="neu-pill text-[10px] font-bold uppercase text-emerald-700 px-2.5 py-0.5 font-mono">Week ${taskObj.weekNum} • ${video.day}</span>
                 <span class="text-xs font-semibold text-slate-600">${video.time_est} • ${video.difficulty}</span>
-                ${isDone ? '<span class="neu-pill text-[10px] font-bold text-emerald-700 bg-emerald-500/10 px-3 py-0.5 border border-emerald-600/30">✓ Completed</span>' : '<span class="neu-pill text-[10px] font-bold text-amber-700 bg-amber-500/10 px-3 py-0.5 border border-amber-600/30">⏳ In Progress</span>'}
+                ${isDone ? '<span class="neu-pill text-[10px] font-bold text-emerald-700 bg-emerald-500/10 px-2.5 py-0.5 border border-emerald-600/30">✓ Completed</span>' : '<span class="neu-pill text-[10px] font-bold text-amber-700 bg-amber-500/10 px-2.5 py-0.5 border border-amber-600/30">⏳ In Progress</span>'}
               </div>
-              <h3 class="text-xl font-black text-slate-800">${video.title}</h3>
-              <div class="text-[11px] font-mono text-emerald-700">
+              <h3 class="text-lg sm:text-xl font-black text-slate-800 leading-snug">${video.title}</h3>
+              <div class="text-[11px] font-mono text-emerald-700 break-all">
                 📂 Code Path: <span class="font-bold">${video.code_path}</span>
               </div>
             </div>
 
             <!-- INTERACTIVE BUTTONS WITH UNDO TICK & LIVE SYNC -->
-            <div class="flex flex-wrap items-center gap-3 shrink-0">
-              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2.5 text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto shrink-0">
+              <a href="${video.url}" target="_blank" class="neu-btn px-4 py-2 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 text-center">
                 ▶ <span>Watch Video</span>
               </a>
 
               ${isDone ? `
-                <button onclick="undoTickTask('${taskId}')" class="neu-btn-danger px-4 py-2.5 text-xs font-bold flex items-center gap-1.5" title="Click to undo tick. The live donut chart and stats immediately retract!">
+                <button onclick="undoTickTask('${taskId}')" class="neu-btn-danger px-4 py-2 text-xs font-bold flex items-center justify-center gap-1.5 text-center" title="Click to undo tick">
                   <span>↩️ Undo Tick (Mark Incomplete)</span>
                 </button>
               ` : `
-                <button onclick="markTaskDone('${taskId}', true)" class="neu-btn-primary px-5 py-2.5 text-xs font-bold flex items-center gap-1.5">
+                <button onclick="markTaskDone('${taskId}', true)" class="neu-btn-primary px-5 py-2 text-xs font-bold flex items-center justify-center gap-1.5 text-center">
                   <span>✓ Mark Done & Advance →</span>
                 </button>
               `}
@@ -844,11 +873,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label class="text-[10px] font-bold text-rose-700 block mb-1">🔴 What I didn't understand / Doubts:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop termination condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.doubts || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'doubts', this.value)" placeholder="e.g. Struggled with while loop condition..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.doubts || ''}</textarea>
               </div>
               <div>
                 <label class="text-[10px] font-bold text-amber-700 block mb-1">🟡 Needs the most care & revision in coming days:</label>
-                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Redo practice exercise 5 and 6 before moving to Week 2..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.needsCare || ''}</textarea>
+                <textarea onchange="saveDailyNote('${taskId}', 'needsCare', this.value)" placeholder="e.g. Revisit string slicing negative indexes..." rows="2" class="w-full neu-input p-2.5 text-xs text-slate-700 placeholder-slate-400 bg-transparent">${dNote.needsCare || ''}</textarea>
               </div>
             </div>
           </div>
@@ -858,13 +887,13 @@
     }
 
     function renderCurrentPage() {
-      renderTodayMission();
-      drawPhaseDonutChart();
-      renderWeakSpotsList();
       updateGlobalStats();
+      renderTodayMission();
     }
 
-    renderCurrentPage();
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentPage();
+    });
   </script>
 </body>
 </html>
