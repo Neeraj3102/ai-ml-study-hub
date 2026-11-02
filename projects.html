@@ -1011,6 +1011,26 @@
           saveState();
           alert("All 18 buffer days consumed. Calendar shifted by +1 day.");
         }
+      } else if (mode === 'undo') {
+        if (rollingShifts <= 0) {
+          alert("Calendar drift is already at 0 Days! No postponed days to undo.");
+          return;
+        }
+        rollingShifts = Math.max(0, rollingShifts - 1);
+        saveState();
+        const remainingBuffer = Math.max(0, 18 - rollingShifts);
+        alert(`Undone! Calendar drift reduced to ${rollingShifts} day(s). Buffer restored to ${remainingBuffer} days.`);
+      } else if (mode === 'reset') {
+        if (rollingShifts <= 0) {
+          alert("Calendar drift is already at 0 Days!");
+          return;
+        }
+        if (!confirm("Are you sure you want to reset all schedule drift back to 0 days? This restores your original graduation timeline of Apr 4, 2027 and resets all 18 buffer days.")) {
+          return;
+        }
+        rollingShifts = 0;
+        saveState();
+        alert("Schedule drift successfully reset to 0 Days! All original milestone dates restored.");
       }
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();

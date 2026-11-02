@@ -687,9 +687,9 @@
         <p class="text-xs text-slate-500">Choose how to handle missed study days:</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         
-        <div class="neu-inset p-5 sm:p-6 rounded-2xl space-y-3">
+        <div class="neu-inset p-5 sm:p-6 rounded-2xl space-y-3 flex flex-col justify-between">
           <div class="flex items-center gap-2">
             <span class="text-2xl">⏩</span>
             <div>
@@ -697,12 +697,12 @@
               <p class="text-xs text-slate-500">Pushes the calendar date of every incomplete task forward by 1 day.</p>
             </div>
           </div>
-          <button onclick="postponeTask('tomorrow')" class="neu-btn px-4 py-2.5 text-xs font-bold text-amber-700 w-full">
+          <button onclick="postponeTask('tomorrow')" class="neu-btn px-4 py-2.5 text-xs font-bold text-amber-700 w-full mt-2">
             Postpone to Tomorrow (+1 Day Calendar Shift)
           </button>
         </div>
 
-        <div class="neu-inset p-5 sm:p-6 rounded-2xl space-y-3">
+        <div class="neu-inset p-5 sm:p-6 rounded-2xl space-y-3 flex flex-col justify-between">
           <div class="flex items-center gap-2">
             <span class="text-2xl">🛡️</span>
             <div>
@@ -710,9 +710,27 @@
               <p class="text-xs text-slate-500">Uses 1 of your 18 buffer days so your Apr 4 finish date remains unaffected!</p>
             </div>
           </div>
-          <button onclick="postponeTask('buffer')" class="neu-btn px-4 py-2.5 text-xs font-bold text-emerald-700 w-full">
+          <button onclick="postponeTask('buffer')" class="neu-btn px-4 py-2.5 text-xs font-bold text-emerald-700 w-full mt-2">
             Absorb into Buffer (Protect Apr 4 Finish)
           </button>
+        </div>
+
+        <div class="neu-inset p-5 sm:p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">↩️</span>
+            <div>
+              <h3 class="font-bold text-sm text-slate-800">Undo & Revert Drift</h3>
+              <p class="text-xs text-slate-500">Accidentally postponed? Undo 1 day or reset all drift back to zero.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <button onclick="postponeTask('undo')" class="neu-btn px-3 py-2.5 text-xs font-bold text-cyan-700 flex-1 flex items-center justify-center gap-1.5" title="Undo 1 day of postponement">
+              <span>↩️</span> Undo (-1 Day)
+            </button>
+            <button onclick="postponeTask('reset')" class="neu-btn px-3 py-2.5 text-xs font-bold text-rose-700 shrink-0 flex items-center justify-center gap-1" title="Reset all calendar drift back to 0 days">
+              <span>↺</span> Reset (0)
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1086,6 +1104,26 @@
           saveState();
           alert("All 18 buffer days consumed. Calendar shifted by +1 day.");
         }
+      } else if (mode === 'undo') {
+        if (rollingShifts <= 0) {
+          alert("Calendar drift is already at 0 Days! No postponed days to undo.");
+          return;
+        }
+        rollingShifts = Math.max(0, rollingShifts - 1);
+        saveState();
+        const remainingBuffer = Math.max(0, 18 - rollingShifts);
+        alert(`Undone! Calendar drift reduced to ${rollingShifts} day(s). Buffer restored to ${remainingBuffer} days.`);
+      } else if (mode === 'reset') {
+        if (rollingShifts <= 0) {
+          alert("Calendar drift is already at 0 Days!");
+          return;
+        }
+        if (!confirm("Are you sure you want to reset all schedule drift back to 0 days? This restores your original graduation timeline of Apr 4, 2027 and resets all 18 buffer days.")) {
+          return;
+        }
+        rollingShifts = 0;
+        saveState();
+        alert("Schedule drift successfully reset to 0 Days! All original milestone dates restored.");
       }
       if (typeof renderCurrentPage === 'function') {
         renderCurrentPage();
