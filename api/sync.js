@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
   }
 
   // 1. Rate Limiting Check
-  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const clientIp = req.headers?.['x-forwarded-for'] || req.socket?.remoteAddress || req.connection?.remoteAddress || 'unknown';
   if (isRateLimited(clientIp)) {
     return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
   }

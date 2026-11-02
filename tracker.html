@@ -186,8 +186,7 @@
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), inset 3px 3px 6px var(--shadow-dark);
     }
 
-    .neu-pill {
-      background: var(--card-bg);
+    .neu-pill { color: var(--text-main); background: var(--card-bg);
       border-radius: 9999px;
       border: 1px solid var(--card-border);
       box-shadow: 0 4px 10px var(--shadow-dark);
@@ -397,6 +396,120 @@
       background: rgba(10, 15, 30, 0.7);
       backdrop-filter: blur(8px);
     }
+  
+    /* ========================================================================= */
+    /* MASTER THEME ENHANCEMENTS: CONTRAST, TYPOGRAPHY & FLUID TACTILE CLARITY   */
+    /* ========================================================================= */
+    
+    /* Header Theme Styling */
+    .site-header, header {
+      background-color: rgba(12, 18, 34, 0.90) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    body.theme-clay .site-header,
+    body.theme-clay header {
+      background-color: rgba(230, 236, 245, 0.96) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+    }
+
+    /* Header Nav Tabs: High Contrast & Tactile in both Cyber & Clay */
+    header nav a.neu-btn {
+      color: #94a3b8 !important;
+      font-weight: 600 !important;
+    }
+    header nav a.neu-btn:hover {
+      color: #f8fafc !important;
+    }
+    header nav a.neu-btn.active {
+      color: #34d399 !important;
+      font-weight: 700 !important;
+      border-color: rgba(16, 185, 129, 0.5) !important;
+    }
+    body.theme-clay header nav a.neu-btn {
+      color: #334155 !important;
+      font-weight: 600 !important;
+      background: #e6ecf5 !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    }
+    body.theme-clay header nav a.neu-btn:hover {
+      color: #0f172a !important;
+      background: #dbe2ee !important;
+    }
+    body.theme-clay header nav a.neu-btn.active {
+      color: #047857 !important;
+      font-weight: 800 !important;
+      background: #dde4f0 !important;
+      border-color: rgba(5, 150, 105, 0.45) !important;
+      box-shadow: inset 3px 3px 6px #c5cbd6, inset -3px -3px 6px #ffffff !important;
+    }
+
+    /* Cyber Mode: Luminous, high-contrast badges & labels */
+    body:not(.theme-clay) .text-emerald-700,
+    body:not(.theme-clay) .text-emerald-600 {
+      color: #34d399 !important;
+    }
+    body:not(.theme-clay) .text-amber-700,
+    body:not(.theme-clay) .text-amber-600 {
+      color: #fbbf24 !important;
+    }
+    body:not(.theme-clay) .text-teal-700,
+    body:not(.theme-clay) .text-teal-600 {
+      color: #2dd4bf !important;
+    }
+    body:not(.theme-clay) .text-cyan-700,
+    body:not(.theme-clay) .text-cyan-600 {
+      color: #38bdf8 !important;
+    }
+    body:not(.theme-clay) .text-purple-700,
+    body:not(.theme-clay) .text-purple-600 {
+      color: #c084fc !important;
+    }
+    body:not(.theme-clay) .text-rose-700,
+    body:not(.theme-clay) .text-rose-600 {
+      color: #fb7185 !important;
+    }
+    body:not(.theme-clay) .text-blue-900,
+    body:not(.theme-clay) .text-blue-800 {
+      color: #60a5fa !important;
+    }
+
+    /* Clay Mode: Deep, high-contrast jewel tones for badges & pills */
+    body.theme-clay .text-emerald-300,
+    body.theme-clay .text-emerald-400 {
+      color: #047857 !important;
+    }
+    body.theme-clay .text-cyan-400 {
+      color: #0284c7 !important;
+    }
+    body.theme-clay .text-amber-400 {
+      color: #d97706 !important;
+    }
+    body.theme-clay .text-purple-400 {
+      color: #7c3aed !important;
+    }
+    body.theme-clay .text-rose-400 {
+      color: #be123c !important;
+    }
+
+    /* Primary buttons MUST keep crisp white text in both themes */
+    body.theme-clay .neu-btn-primary,
+    body.theme-clay .neu-btn-primary *,
+    body.theme-clay .bg-emerald-500.text-white,
+    body.theme-clay .bg-emerald-600.text-white {
+      color: #ffffff !important;
+    }
+
+    /* VisionOS Glass Dock buttons in Clay */
+    body.theme-clay .glass-dock .neu-btn {
+      background: #e6ecf5 !important;
+      color: #1e293b !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    }
+    body.theme-clay .glass-dock .neu-btn:hover {
+      background: #dbe2ee !important;
+      color: #0f172a !important;
+    }
+
   </style>
 </head>
 <body class="min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-white">
@@ -470,7 +583,7 @@
     </div>
 
     <!-- MAIN NAVBAR: 2-TIER RESPONSIVE (ZERO OVERLAP ON ANY SCREEN) -->
-    <header class="relative md:sticky md:top-0 z-40 px-3 sm:px-6 py-2 sm:py-2.5 backdrop-blur-md bg-[#e6ecf5]/95 border-b border-white/60 no-print shadow-sm">
+    <header class="site-header relative md:sticky md:top-0 z-40 px-3 sm:px-6 py-2 sm:py-2.5 backdrop-blur-md no-print shadow-sm">
       <div class="max-w-7xl mx-auto flex flex-col gap-2 relative z-10">
         
         <!-- TIER 1: BRAND LOGO + CONTROLS & UTILITIES (ROOM TO BREATHE, NEVER CLIPPED) -->
@@ -1231,7 +1344,7 @@
       });
     }
 
-    if (window.matchMedia('(hover: hover)').matches) {
+    if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
       document.addEventListener('mousemove', e => {
         const cards = document.querySelectorAll('.neu-card, .neu-card-sm');
         cards.forEach(card => {
