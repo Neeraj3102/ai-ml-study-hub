@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Design Styles — Interactive Visual Reference</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Style 1: Dark Luxury Minimal (Linear/Raycast) */
+    .style-dark-luxury {
+      background: #0d0e12;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+      border-radius: 1rem;
+    }
+    .style-dark-luxury:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 30px -10px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Style 2: Glassmorphism */
+    .style-glass {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 1.25rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+    .style-glass:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+    }
+
+    /* Style 3: Swiss Editorial */
+    .style-swiss {
+      background: #fbfbf9;
+      color: #111111;
+      border: 2px solid #111111;
+      border-radius: 0px;
+    }
+
+    /* Style 4: Claymorphism (Soft 3D) */
+    .style-clay {
+      background: #f3e8ff;
+      color: #3b0764;
+      border-radius: 2rem;
+      border: none;
+      box-shadow: 
+        16px 16px 32px rgba(168, 85, 247, 0.2),
+        -8px -8px 24px rgba(255, 255, 255, 0.9),
+        inset 6px 6px 12px rgba(255, 255, 255, 0.9),
+        inset -6px -6px 14px rgba(147, 51, 234, 0.25);
+    }
+
+    /* Style 5: Neo-Brutalism */
+    .style-neobrutal {
+      background: #ffea00;
+      color: #000000;
+      border: 3px solid #000000;
+      box-shadow: 5px 5px 0px 0px #000000;
+      border-radius: 12px;
+      transition: all 0.15s ease;
+    }
+    .style-neobrutal:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0px 0px #000000;
+    }
+
+    /* Style 6: Tactile Skeuomorphic (Hardware) */
+    .style-skeuo {
+      background: linear-gradient(180deg, #2a2c33 0%, #17181c 100%);
+      border: 1px solid #3d404d;
+      border-radius: 1.25rem;
+      box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Style 7: Retro-Futurism / CRT Terminal */
+    .style-retro-cyber {
+      background: #050b07;
+      color: #00ff66;
+      border: 1px solid #005522;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 15px -3px rgba(0, 255, 102, 0.25);
+      border-radius: 6px;
+      font-family: monospace;
+    }
+
+    /* Style 8: Bento Grid (Apple Asymmetric) */
+    .style-bento {
+      background: #15161b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+    }
+    .style-bento:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8 lg:p-12 pb-20">
+
+  <!-- HEADER -->
+  <header class="max-w-6xl mx-auto mb-12 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-gray-400 mb-3">
+      <span>🎨 Web Design Visual Encyclopedia</span>
+    </div>
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+      Design Styles <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">In Action</span>
+    </h1>
+    <p class="text-sm sm:text-base text-gray-400 mt-2 max-w-2xl mx-auto">
+      Explore live interactive component replicas of the 8 major design movements dominating modern web and product design.
+    </p>
+  </header>
+
+  <!-- GALLERY GRID -->
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+
+    <!-- ==========================================
+         CARD 1: DARK LUXURY MINIMALISM
+         ========================================== -->
+    <div class="style-dark-luxury p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono tracking-wider text-indigo-400 font-semibold">01 // DEV TOOLS & B2B SAAS</span>
+          <span class="text-xs text-gray-500 font-mono">Linear • Raycast • Vercel</span>
+        </div>
+        <h3 class="text-xl font-bold text-white tracking-tight">Dark Luxury Minimalism</h3>
+        <p class="text-xs text-gray-400 mt-1 leading-relaxed">
+          High precision, obsidian deep blacks, 1px micro-borders, and keyboard shortcut pills.
+        </p>
+
+        <!-- Live Component Simulation -->
+        <div class="my-5 p-4 rounded-xl bg-[#121318] border border-white/10 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+              <span class="text-xs font-mono text-gray-200">deploy-production-v2.1</span>
+            </div>
+            <span class="text-[11px] font-mono bg-white/5 px-2 py-0.5 rounded text-gray-400 border border-white/10">⌘K</span>
+          </div>
+          <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-indigo-500 h-full rounded-full" style="width: 82%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-white/10">
+        <span class="text-gray-400">Best For: <strong>Developer Tools, APIs, SaaS</strong></span>
+        <button onclick="triggerToast('Linear / Raycast aesthetic demonstrated')" class="text-indigo-400 font-semibold hover:underline">
+          Test Interaction →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 2: GLASSMORPHISM
+         ========================================== -->
+    <div class="style-glass p-7 flex flex-col justify-between relative overflow-hidden">
+      <!-- Background colored glow for glass refraction -->
+      <div class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-pink-500/20 blur-2xl -z-10"></div>
+      <div class="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-cyan-500/20 blur-2xl -z-10"></div>
+
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono tracking-wider text-pink-300 font-semibold">02 // CRYPTO, VISIONOS & MEDIA</span>
+          <span class="text-xs text-gray-400 font-mono">Apple VisionOS • macOS</span>
+        </div>
+        <h3 class="text-xl font-bold text-white tracking-tight">Glassmorphism (Frosted Glass)</h3>
+        <p class="text-xs text-gray-300 mt-1 leading-relaxed">
+          Hardware-accelerated backdrop blur, translucent light refraction, and luminous edge highlights.
+        </p>
+
+        <!-- Live Glass Component -->
+        <div class="my-5 p-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-xl flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-lg">
+              🎵
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-white">Spatial Sound Horizon</div>
+              <div class="text-[11px] text-gray-300">Lossless Audio • 24-bit</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-white/20 border border-white/30 text-white">
+            Playing
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-white/15">
+        <span class="text-gray-300">Best For: <strong>Fintech, Crypto, Media Apps</strong></span>
+        <button onclick="triggerToast('Glassmorphism frosted refraction simulated')" class="text-pink-300 font-semibold hover:underline">
+          Test Interaction →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 3: SWISS / INTERNATIONAL TYPOGRAPHIC
+         ========================================== -->
+    <div class="style-swiss p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-2">
+          <span class="text-xs font-mono uppercase tracking-widest font-black">03 // EDITORIAL & ARCHITECTURE</span>
+          <span class="text-xs font-mono font-bold">Pentagram • Studio Freight</span>
+        </div>
+        <h3 class="text-2xl font-black uppercase tracking-tighter text-black">Swiss International Style</h3>
+        <p class="text-xs font-bold text-gray-800 mt-1 leading-snug">
+          Zero decoration. Rigid asymmetric grid dividers, raw grotesque typography, and maximum objective clarity.
+        </p>
+
+        <!-- Live Swiss Component -->
+        <div class="my-5 p-4 border-2 border-black bg-white space-y-2">
+          <div class="flex justify-between items-baseline border-b border-black pb-1">
+            <span class="text-xs font-black uppercase">EXHIBITION NO. 04</span>
+            <span class="font-mono text-xs">BERLIN / 2026</span>
+          </div>
+          <p class="text-xs font-bold text-gray-900 leading-tight">
+            Structure precedes ornament. The grid is the primary carrier of meaning.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t-2 border-black font-bold">
+        <span>Best For: <strong>Fashion, Art, Studios</strong></span>
+        <button onclick="triggerToast('Swiss typography layout activated')" class="underline uppercase font-black hover:text-red-600">
+          Inspect Grid →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 4: CLAYMORPHISM (SOFT 3D)
+         ========================================== -->
+    <div class="style-clay p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono tracking-wider font-extrabold uppercase text-purple-900">04 // ED-TECH & PLAYFUL</span>
+          <span class="text-xs font-mono font-bold text-purple-800">Duolingo • Kids Apps</span>
+        </div>
+        <h3 class="text-2xl font-black text-purple-950 tracking-tight">Claymorphism (Soft 3D)</h3>
+        <p class="text-xs font-semibold text-purple-900 mt-1 leading-relaxed">
+          Triple inset shadows creating spherical inflation, volumetric touchability, and joyful curvature.
+        </p>
+
+        <!-- Live Clay Component -->
+        <div class="my-5 p-4 rounded-3xl bg-[#e9d5ff] flex items-center justify-between shadow-[inset_4px_4px_8px_rgba(255,255,255,0.9),inset_-4px_-4px_8px_rgba(147,51,234,0.3)]">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-[#a855f7] text-white flex items-center justify-center text-xl shadow-[inset_2px_2px_4px_rgba(255,255,255,0.6)]">
+              ⭐
+            </div>
+            <div>
+              <div class="text-xs font-black text-purple-950">Daily Streak: 14 Days</div>
+              <div class="text-[11px] font-bold text-purple-800">+250 XP Boosted</div>
+            </div>
+          </div>
+          <button class="px-3 py-1.5 rounded-full bg-[#9333ea] text-white text-xs font-black shadow-[2px_2px_6px_rgba(147,51,234,0.4)]">
+            Claim
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-purple-300 font-bold text-purple-900">
+        <span>Best For: <strong>Education, Gamification, Kids</strong></span>
+        <button onclick="triggerToast('Tactile clay button compressed')" class="text-purple-800 font-extrabold hover:underline">
+          Compress Clay →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 5: NEO-BRUTALISM
+         ========================================== -->
+    <div class="style-neobrutal p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-1">
+          <span class="text-xs font-mono font-black uppercase">05 // CREATOR & GEN-Z SAAS</span>
+          <span class="text-xs font-mono font-bold">Gumroad • Figma • Retool</span>
+        </div>
+        <h3 class="text-2xl font-black uppercase tracking-tight text-black">Neo-Brutalism</h3>
+        <p class="text-xs font-bold text-black mt-1 leading-snug">
+          Zero blur. 4px hard black drop shadows, 3px solid black strokes, and electric pop saturation.
+        </p>
+
+        <!-- Live Neo-Brutal Component -->
+        <div class="my-5 p-4 rounded-lg bg-white border-3 border-black shadow-[4px_4px_0px_#000] flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-black bg-[#ff66c4] text-white px-1.5 py-0.5 rounded border border-black uppercase">
+              ★ FEATURED
+            </span>
+            <div class="text-xs font-black text-black mt-1">Creator Payout: $4,850</div>
+          </div>
+          <button class="px-3 py-1.5 text-xs font-black uppercase bg-[#b4f82c] border-2 border-black rounded shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+            Withdraw
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t-2 border-black font-black">
+        <span>Best For: <strong>Creator Tools, FinTech, Portfolios</strong></span>
+        <button onclick="triggerToast('Mechanical Neo-Brutal button depressed')" class="underline uppercase hover:text-[#ff66c4]">
+          Press Arcade Switch →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 6: TACTILE SKEUOMORPHIC (HARDWARE)
+         ========================================== -->
+    <div class="style-skeuo p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+          <span class="text-xs font-mono tracking-wider text-orange-400 font-semibold">06 // HARDWARE & PRO AUDIO</span>
+          <span class="text-xs text-gray-400 font-mono">Teenage Engineering • Moog</span>
+        </div>
+        <h3 class="text-xl font-bold text-white tracking-tight">Tactile Skeuomorphism</h3>
+        <p class="text-xs text-gray-400 mt-1 leading-relaxed">
+          Physical knurled knobs, anodized aluminum bezels, and mechanical tactile switches.
+        </p>
+
+        <!-- Live Skeuomorphic Component -->
+        <div class="my-5 p-4 rounded-xl bg-[#1f2127] border border-white/10 shadow-inner flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-b from-neutral-600 to-neutral-900 border-2 border-neutral-500 shadow-md flex items-center justify-center">
+              <div class="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_6px_#ff4500]"></div>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-gray-200">Analog Stepped Pot</div>
+              <div class="text-[11px] font-mono text-gray-400">Gain: +6.5 dB Output</div>
+            </div>
+          </div>
+          <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-white/10">
+        <span class="text-gray-400">Best For: <strong>Synthesizers, Hardware, Audio</strong></span>
+        <button onclick="triggerToast('Hardware potentiometer rotated')" class="text-orange-400 font-semibold hover:underline">
+          Turn Knob →
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 7: RETRO-FUTURISM / CYBER-TEXTUAL
+         ========================================== -->
+    <div class="style-retro-cyber p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3 border-b border-[#005522] pb-1">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[#00ff66]">07 // SCI-FI & TELEMETRY</span>
+          <span class="text-[11px] font-mono text-white/50">Alien (Nostromo) • Cyberpunk</span>
+        </div>
+        <h3 class="text-xl font-bold uppercase tracking-wider text-[#00ff66]">Retro-Futurism</h3>
+        <p class="text-xs text-white/70 mt-1 leading-relaxed">
+          CRT green/amber phosphor, ASCII system schematics, scanlines, and raw diagnostic feeds.
+        </p>
+
+        <!-- Live Retro Cyber Component -->
+        <div class="my-5 p-3 rounded bg-black border border-[#00ff66]/40 font-mono text-xs space-y-1">
+          <div class="flex justify-between text-[11px]">
+            <span>&gt; SENSOR_RADAR:</span>
+            <span class="text-emerald-400">ACTIVE [360°]</span>
+          </div>
+          <div class="text-[11px] text-white/50">&gt; FREQ_LOCK: 96kHz LDAC</div>
+          <div class="text-[11px] text-[#00ff66] animate-pulse">&gt; BUFFER_STREAM: NOMINAL_</div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-[#005522]">
+        <span class="text-white/60">Best For: <strong>Telemetry, Sci-Fi, Diagnostics</strong></span>
+        <button onclick="triggerToast('Telemetry buffer dumped to terminal')" class="text-[#00ff66] font-bold hover:underline">
+          [QUERY FEED]
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         CARD 8: BENTO GRID
+         ========================================== -->
+    <div class="style-bento p-7 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+          <span class="text-xs font-mono tracking-wider text-sky-400 font-semibold">08 // MODERN STANDARD</span>
+          <span class="text-xs text-gray-400 font-mono">Apple • Linear • Vercel</span>
+        </div>
+        <h3 class="text-xl font-bold text-white tracking-tight">Bento Grid (Modular Asymmetry)</h3>
+        <p class="text-xs text-gray-400 mt-1 leading-relaxed">
+          Tight 16–24px gaps, rounded cards, and variable col/row spans organizing high density beautifully.
+        </p>
+
+        <!-- Live Bento Preview Layout -->
+        <div class="my-5 grid grid-cols-3 gap-2">
+          <div class="col-span-2 p-3 rounded-xl bg-white/5 border border-white/10 text-xs">
+            <span class="text-[10px] text-gray-400 font-mono block">HERO (2x1)</span>
+            <span class="font-bold text-white">43h Total Battery</span>
+          </div>
+          <div class="col-span-1 p-3 rounded-xl bg-sky-500/10 border border-sky-500/20 text-xs text-center flex flex-col justify-center">
+            <span class="text-[10px] text-sky-300 font-mono">STAT (1x1)</span>
+            <span class="font-bold text-sky-400">50dB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-white/10">
+        <span class="text-gray-400">Best For: <strong>Hardware, Feature Boards, Portfolios</strong></span>
+        <button onclick="triggerToast('Bento grid layout inspected')" class="text-sky-400 font-semibold hover:underline">
+          View Grid →
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-200 ease-out p-4 rounded-xl bg-white text-black font-semibold text-xs shadow-2xl flex items-center gap-2">
+    <span>💡</span>
+    <span id="toastMsg">Design style inspected</span>
+  </div>
+
+  <script>
+    function triggerToast(text) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = text;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2400);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neo-Brutalism UI — Mentor Edition</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcf8e3;
+      --card-bg: #ffffff;
+      --main-black: #000000;
+      --shadow-offset: 5px;
+      --pop-yellow: #ffea00;
+      --pop-pink: #ff66c4;
+      --pop-lime: #b4f82c;
+      --pop-cyan: #38bdf8;
+      --pop-purple: #c084fc;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: #000000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* Neo-Brutalist Card and Button Shadow Foundations */
+    .nb-box {
+      background-color: var(--card-bg);
+      border: 3px solid var(--main-black);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--main-black);
+      border-radius: 14px;
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nb-box-sharp {
+      background-color: var(--card-bg);
+      border: 3px solid var(--main-black);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--main-black);
+      border-radius: 0px;
+    }
+
+    .nb-btn {
+      background-color: var(--pop-yellow);
+      border: 3px solid var(--main-black);
+      box-shadow: 4px 4px 0px 0px var(--main-black);
+      border-radius: 10px;
+      font-weight: 800;
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+
+    .nb-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px var(--main-black);
+    }
+
+    .nb-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px 0px var(--main-black);
+    }
+
+    .nb-badge {
+      border: 2px solid var(--main-black);
+      box-shadow: 2px 2px 0px 0px var(--main-black);
+      font-weight: 800;
+      font-size: 0.75rem;
+    }
+
+    .sticker-rotate-left {
+      transform: rotate(-3deg);
+    }
+    .sticker-rotate-right {
+      transform: rotate(2.5deg);
+    }
+
+    /* Marquee Animation */
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: 200%;
+      animation: marquee-scroll 18s linear infinite;
+    }
+
+    /* Hazard Stripe Header */
+    .hazard-stripes {
+      background: repeating-linear-gradient(
+        -45deg,
+        #000,
+        #000 12px,
+        #ffea00 12px,
+        #ffea00 24px
+      );
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16 selection:bg-black selection:text-[#ffea00]">
+
+  <!-- TOP RUNNING MARQUEE TICKER -->
+  <div class="bg-black text-[#ffea00] py-2 border-b-4 border-black font-mono font-black text-xs sm:text-sm tracking-wider uppercase overflow-hidden whitespace-nowrap">
+    <div class="marquee-track flex gap-8">
+      <span>⚡ ZERO CORPORATE JARGON • HIGH-VOLTAGE ARCHITECTURE ADVISORY • 100% UNFILTERED CODE REVIEWS • 94% PROMOTION RATE • ⚡</span>
+      <span>⚡ ZERO CORPORATE JARGON • HIGH-VOLTAGE ARCHITECTURE ADVISORY • 100% UNFILTERED CODE REVIEWS • 94% PROMOTION RATE • ⚡</span>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+
+    <!-- HEADER & CONTROLS -->
+    <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b-4 border-black">
+      <div>
+        <div class="inline-block px-3 py-1 bg-black text-[#b4f82c] border-2 border-black font-mono font-black text-xs uppercase mb-3 sticker-rotate-left">
+          UI Aesthetic Deep Dive
+        </div>
+        <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-black uppercase">
+          Neo-Brutalism <br>
+          <span class="bg-[#ffea00] px-2 border-3 border-black inline-block mt-1">Mentor Edition</span>
+        </h1>
+        <p class="text-base font-bold text-gray-800 mt-3 max-w-xl">
+          High-contrast pitch-black drop shadows, 3px solid borders, vibrant pop saturation, and unapologetic tactile physics.
+        </p>
+      </div>
+
+      <!-- Interactive Controls -->
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Shadow Offset Controls -->
+        <div class="nb-box bg-white p-2 flex items-center gap-2">
+          <span class="text-xs font-black uppercase font-mono">Shadow:</span>
+          <button id="shadowLightBtn" class="px-2 py-1 text-xs font-bold border-2 border-black bg-gray-100 hover:bg-[#ffea00] rounded">
+            3px
+          </button>
+          <button id="shadowMegaBtn" class="px-2 py-1 text-xs font-bold border-2 border-black bg-[#ffea00] rounded">
+            5px
+          </button>
+          <button id="shadowUltraBtn" class="px-2 py-1 text-xs font-bold border-2 border-black bg-gray-100 hover:bg-[#ffea00] rounded">
+            9px
+          </button>
+        </div>
+
+        <!-- Color Palette Switcher -->
+        <button id="paletteBtn" class="nb-btn px-4 py-2 bg-[#ff66c4] text-black text-xs uppercase flex items-center gap-1.5">
+          <span>🎨 Swap Palette</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- NEO-BRUTALIST GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      <!-- ==========================================
+           1. HERO MENTOR CARD (Col Span 2)
+           ========================================== -->
+      <div class="nb-box md:col-span-2 lg:col-span-2 p-6 sm:p-8 bg-[#ffffff] relative flex flex-col justify-between">
+        <!-- Floating sticker -->
+        <div class="absolute -top-4 -right-2 px-3 py-1 bg-[#ff66c4] text-white font-black text-xs uppercase border-2 border-black rounded-lg sticker-rotate-right shadow-[3px_3px_0px_#000]">
+          ★ Top 1% Mentor
+        </div>
+
+        <div>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-5">
+            <div class="w-20 h-20 bg-[#38bdf8] border-4 border-black rounded-2xl flex items-center justify-center font-black text-3xl text-black shadow-[4px_4px_0px_#000]">
+              SK
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl sm:text-3xl font-black text-black uppercase">Dr. Sarah K. Chen</h2>
+              </div>
+              <p class="text-sm font-bold text-gray-700 font-mono mt-0.5">Staff AI Systems Architect • Ex-Google</p>
+              <div class="mt-2 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#b4f82c] border-2 border-black text-black font-extrabold text-xs rounded-full">
+                  <span class="w-2 h-2 rounded-full bg-black animate-ping"></span>
+                  OPEN FOR 1:1 CALLS
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-sm font-bold text-gray-900 leading-relaxed bg-[#f8f7f2] p-4 border-2 border-black rounded-xl">
+            "I don't do motivational fluff. We tear down your distributed systems design, review your RFC line-by-line, and bulletproof your Staff/Principal promotion packet."
+          </p>
+
+          <!-- Chunky Skill Badges -->
+          <div class="flex flex-wrap gap-2 mt-4">
+            <span class="nb-badge px-3 py-1 bg-[#ffea00] text-black rounded-lg">#SystemDesign</span>
+            <span class="nb-badge px-3 py-1 bg-[#ff66c4] text-white rounded-lg">#StaffLoop</span>
+            <span class="nb-badge px-3 py-1 bg-[#38bdf8] text-black rounded-lg">#DistributedRFC</span>
+            <span class="nb-badge px-3 py-1 bg-[#b4f82c] text-black rounded-lg">#InferenceScaling</span>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t-3 border-black flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="font-mono text-xs font-black">
+            🔥 48 MENTEES PROMOTED TO STAFF+ IN 2026
+          </div>
+          <button id="bookModalBtn" class="nb-btn px-6 py-3 bg-[#ffea00] text-black text-sm uppercase tracking-wide">
+            Book 30-Min Drill →
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           2. RATING & REVIEWS BOX (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-[#ffea00] flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="font-mono font-black text-xs uppercase bg-black text-white px-2 py-0.5 rounded">
+            Scorecard
+          </span>
+          <span class="font-black text-lg">★★★★★</span>
+        </div>
+
+        <div class="my-4">
+          <div class="text-6xl font-black text-black tracking-tighter">
+            4.98
+          </div>
+          <div class="text-xs font-mono font-black uppercase text-gray-900 mt-1">
+            Based on 184 Verified Loops
+          </div>
+          <div class="w-full bg-white border-2 border-black h-4 rounded-full mt-3 p-[2px] shadow-[2px_2px_0px_#000]">
+            <div class="bg-black h-full rounded-full" style="width: 98%"></div>
+          </div>
+        </div>
+
+        <div class="font-mono text-xs font-bold pt-3 border-t-2 border-black flex justify-between">
+          <span>Speed: 10/10</span>
+          <span>Critique: Raw</span>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           3. LIVE NEXT SLOT CALLOUT (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-[#b4f82c] flex flex-col justify-between">
+        <div>
+          <div class="inline-block px-2 py-0.5 bg-black text-[#b4f82c] font-mono text-xs font-black uppercase rounded mb-2">
+            Urgent Slot
+          </div>
+          <h3 class="text-xl font-black text-black uppercase leading-tight">
+            System RFC Mock Drill
+          </h3>
+          <p class="font-mono text-xs font-bold text-gray-900 mt-2">
+            Today • 19:30 IST (45m)<br>
+            Format: Video + Live Whiteboard
+          </p>
+        </div>
+
+        <button id="roomEnterBtn" class="nb-btn w-full mt-6 py-2.5 bg-white text-black text-xs uppercase">
+          Enter Room Simulation
+        </button>
+      </div>
+
+      <!-- ==========================================
+           4. CASSETTE TAPE / AUDIO MEMO (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-[#ffffff] flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="nb-badge px-2 py-0.5 bg-[#ff66c4] text-white rounded">
+            AUDIO SNIPPET
+          </span>
+          <span class="font-mono text-xs font-bold">01:42</span>
+        </div>
+
+        <div class="my-3">
+          <p class="text-xs font-black uppercase text-black">
+            "The 1 Fatal Mistake in Staff RFCs"
+          </p>
+          
+          <div class="bg-black p-3 rounded-xl border-2 border-black mt-3 shadow-[2px_2px_0px_#ff66c4]">
+            <div class="flex items-center justify-center gap-2">
+              <div class="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-[#ffea00] rounded-full"></div>
+              </div>
+              <div class="h-1 bg-gray-700 flex-1 rounded"></div>
+              <div class="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-[#ffea00] rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="cassettePlayBtn" class="nb-btn w-full py-2 bg-[#ff66c4] text-white text-xs uppercase">
+          ▶ Play Audio Advice
+        </button>
+      </div>
+
+      <!-- ==========================================
+           5. INTERACTIVE AVAILABILITY GRID (Col Span 2)
+           ========================================== -->
+      <div class="nb-box md:col-span-2 p-6 bg-white flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h3 class="text-lg font-black text-black uppercase">Weekly Slot Selector</h3>
+            <p class="font-mono text-xs font-bold text-gray-600">Pick an unbooked 1:1 slot</p>
+          </div>
+          <span class="nb-badge px-2 py-1 bg-black text-white font-mono text-xs rounded">
+            Timezone: IST (UTC+5:30)
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
+          <button class="slot-pick p-3 border-3 border-black rounded-xl bg-white hover:bg-[#ffea00] text-left transition-all shadow-[3px_3px_0px_#000]" data-time="Wed @ 18:00 IST">
+            <div class="font-mono text-xs text-gray-500 font-bold">WED</div>
+            <div class="font-black text-sm">18:00</div>
+            <span class="font-mono text-xs font-bold text-green-700">● Open</span>
+          </button>
+          <button class="slot-pick p-3 border-3 border-black rounded-xl bg-white hover:bg-[#ffea00] text-left transition-all shadow-[3px_3px_0px_#000]" data-time="Thu @ 20:30 IST">
+            <div class="font-mono text-xs text-gray-500 font-bold">THU</div>
+            <div class="font-black text-sm">20:30</div>
+            <span class="font-mono text-xs font-bold text-green-700">● Open</span>
+          </button>
+          <button class="slot-pick p-3 border-3 border-black rounded-xl bg-[#ffea00] text-left transition-all shadow-[3px_3px_0px_#000]" data-time="Sat @ 11:00 IST">
+            <div class="font-mono text-xs text-black font-bold">SAT</div>
+            <div class="font-black text-sm">11:00</div>
+            <span class="font-mono text-xs font-bold text-black">✔ Selected</span>
+          </button>
+          <button class="p-3 border-3 border-black rounded-xl bg-gray-200 opacity-60 cursor-not-allowed text-left">
+            <div class="font-mono text-xs text-gray-400 font-bold">SUN</div>
+            <div class="font-black text-sm text-gray-500">16:00</div>
+            <span class="font-mono text-xs font-bold text-red-600">✕ Taken</span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t-2 border-black">
+          <span id="slotStatus" class="font-mono text-xs font-black">
+            Selected: <span class="bg-[#ffea00] px-1 border border-black">Sat @ 11:00 IST (30m)</span>
+          </span>
+          <button onclick="triggerToast('Slot locked in! Fill in your brief.')" class="font-mono text-xs font-black underline uppercase hover:text-[#ff66c4]">
+            Lock Slot →
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           6. RAW CHECKLIST / TOOLKIT (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-[#38bdf8] flex flex-col justify-between">
+        <div>
+          <span class="nb-badge px-2 py-0.5 bg-black text-[#38bdf8] rounded">
+            PREREQUISITES
+          </span>
+          <h3 class="text-lg font-black text-black uppercase mt-1 mb-3">
+            Bring to the Call
+          </h3>
+          <div class="space-y-2.5 text-xs font-bold font-mono">
+            <label class="flex items-center gap-2 cursor-pointer bg-white p-2 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+              <input type="checkbox" checked class="w-4 h-4 accent-black">
+              <span>Your Draft RFC Document</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-white p-2 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+              <input type="checkbox" checked class="w-4 h-4 accent-black">
+              <span>Latency / Cost Numbers</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-white p-2 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+              <input type="checkbox" class="w-4 h-4 accent-black">
+              <span>Past Reviewer Objections</span>
+            </label>
+          </div>
+        </div>
+
+        <button onclick="triggerToast('Pre-call drill kit downloaded (.zip)')" class="nb-btn w-full mt-4 py-2 bg-white text-black text-xs uppercase">
+          Download Kit (.zip)
+        </button>
+      </div>
+
+      <!-- ==========================================
+           7. MENTEE PROOF / SPEECH BUBBLE (Col Span 2)
+           ========================================== -->
+      <div class="nb-box md:col-span-2 p-6 bg-white flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#c084fc] border-3 border-black flex items-center justify-center font-black text-sm shadow-[2px_2px_0px_#000]">
+              VK
+            </div>
+            <div>
+              <h4 id="quoteAuthor" class="text-sm font-black uppercase text-black">Vikram K.</h4>
+              <p id="quoteRole" class="font-mono text-xs font-bold text-gray-600">Promoted to Staff Eng @ Datadog</p>
+            </div>
+          </div>
+          <span class="nb-badge px-2 py-0.5 bg-[#b4f82c] text-black rounded">
+            VERIFIED OUTCOME
+          </span>
+        </div>
+
+        <blockquote id="quoteText" class="my-4 text-sm font-black text-black bg-[#f4f0ea] p-4 border-2 border-black rounded-xl shadow-[3px_3px_0px_#000] leading-snug">
+          "Sarah dismantled my consensus protocol proposal in 12 minutes. She showed me where the real cross-datacenter partition bottlenecks were. Without her, my Staff loop would have failed."
+        </blockquote>
+
+        <div class="flex items-center justify-between pt-2 border-t-2 border-black font-mono text-xs">
+          <span class="font-bold text-gray-600">Real feedback from real loops</span>
+          <button id="nextReviewBtn" class="font-black text-black hover:text-[#ff66c4] uppercase underline">
+            Next Testimonial →
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           8. NUMBERS / MEGA STAT (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-[#c084fc] text-center flex flex-col justify-between">
+        <span class="nb-badge inline-block mx-auto px-2 py-0.5 bg-black text-[#c084fc] rounded">
+          FIELD STATS
+        </span>
+        <div class="my-3">
+          <div class="text-6xl font-black text-black tracking-tighter">
+            520+
+          </div>
+          <p class="font-mono text-xs font-black uppercase text-black mt-1">
+            Total Coaching Hours
+          </p>
+        </div>
+        <div class="bg-black text-[#b4f82c] font-mono text-xs font-black py-1.5 border-2 border-black rounded-lg">
+          94% Promotion Hit Rate
+        </div>
+      </div>
+
+      <!-- ==========================================
+           9. CONNECT / CHANNELS (Col Span 1)
+           ========================================== -->
+      <div class="nb-box p-6 bg-white flex flex-col justify-between">
+        <span class="font-mono font-black text-xs uppercase text-gray-700">Channels</span>
+        <div class="grid grid-cols-2 gap-2.5 my-3">
+          <button onclick="triggerToast('GitHub profile clicked')" class="nb-btn py-2 bg-gray-100 text-xs font-black uppercase">
+            GitHub
+          </button>
+          <button onclick="triggerToast('LinkedIn clicked')" class="nb-btn py-2 bg-gray-100 text-xs font-black uppercase">
+            LinkedIn
+          </button>
+          <button onclick="triggerToast('Substack clicked')" class="nb-btn py-2 bg-gray-100 text-xs font-black uppercase">
+            Substack
+          </button>
+          <button onclick="triggerToast('Discord clicked')" class="nb-btn py-2 bg-gray-100 text-xs font-black uppercase">
+            Discord
+          </button>
+        </div>
+        <div class="font-mono text-[12px] font-black text-center text-gray-800">
+          4,200+ Engineers in Network
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ANATOMY BREAKDOWN SECTION -->
+    <section class="nb-box mt-12 p-8 bg-white">
+      <div class="flex items-center gap-3 border-b-3 border-black pb-4 mb-6">
+        <div class="w-8 h-8 bg-black text-[#ffea00] flex items-center justify-center font-black text-lg border-2 border-black rounded">
+          ?
+        </div>
+        <div>
+          <h2 class="text-xl font-black uppercase text-black">What Makes This "Neo-Brutalism"?</h2>
+          <p class="font-mono text-xs font-bold text-gray-600">The 4 core engineering rules of this design movement</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs font-bold">
+        <div class="p-4 border-2 border-black rounded-xl bg-[#ffea00]/30 shadow-[3px_3px_0px_#000]">
+          <span class="block font-black text-sm uppercase text-black mb-1">1. Hard Offset Shadows</span>
+          No blurry, soft Gaussian shadows. Everything uses high-contrast unblurred black offsets: <code class="bg-black text-[#ffea00] px-1 font-mono">4px 4px 0px #000</code>.
+        </div>
+        <div class="p-4 border-2 border-black rounded-xl bg-[#ff66c4]/30 shadow-[3px_3px_0px_#000]">
+          <span class="block font-black text-sm uppercase text-black mb-1">2. Chunky 3px Borders</span>
+          Every card, button, tag, and modal is bounded by bold, unapologetic solid black lines that enforce absolute visual separation.
+        </div>
+        <div class="p-4 border-2 border-black rounded-xl bg-[#b4f82c]/30 shadow-[3px_3px_0px_#000]">
+          <span class="block font-black text-sm uppercase text-black mb-1">3. High-Voltage Colors</span>
+          Vibrant neon pop highlights (electric yellow, hot magenta, acid lime, cyan) set against warm off-white or cream paper backgrounds.
+        </div>
+        <div class="p-4 border-2 border-black rounded-xl bg-[#38bdf8]/30 shadow-[3px_3px_0px_#000]">
+          <span class="block font-black text-sm uppercase text-black mb-1">4. Mechanical Feedback</span>
+          Buttons translate down and right when pressed (`active:translate(3px, 3px)`), physically collapsing their drop shadow like a real arcade switch.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-200 ease-out nb-box bg-[#ffea00] text-black px-5 py-3 shadow-[5px_5px_0px_#000] flex items-center gap-3 font-mono font-black text-xs uppercase">
+    <span>⚡</span>
+    <span id="toastMsg">Action Triggered!</span>
+  </div>
+
+  <!-- BRUTALIST BOOKING MODAL -->
+  <div id="modalBackdrop" class="fixed inset-0 bg-black/60 backdrop-blur-none z-50 hidden flex items-center justify-center p-4">
+    <div class="nb-box bg-white w-full max-w-md p-0 overflow-hidden shadow-[10px_10px_0px_#000] relative">
+      <!-- Hazard Header -->
+      <div class="hazard-stripes h-4 border-b-3 border-black"></div>
+
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-black uppercase text-black">Lock In 1:1 Advisory</h3>
+          <button id="modalCloseBtn" class="w-8 h-8 font-black text-base border-2 border-black bg-[#ff66c4] text-white rounded hover:bg-black">
+            ✕
+          </button>
+        </div>
+
+        <div class="space-y-4 text-xs font-black font-mono">
+          <div>
+            <label class="block uppercase mb-1">Your Objective / Bottleneck</label>
+            <input type="text" placeholder="e.g. Distributed caching failure modes" class="w-full p-2.5 border-3 border-black rounded-lg focus:bg-[#ffea00]/10 focus:outline-none font-bold">
+          </div>
+          <div>
+            <label class="block uppercase mb-1">Current Seniority</label>
+            <select class="w-full p-2.5 border-3 border-black rounded-lg font-bold bg-white focus:outline-none">
+              <option>Senior Software Engineer (L5)</option>
+              <option>Staff Engineer (L6)</option>
+              <option>Principal / Architect (L7+)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+          <button id="modalSubmitBtn" class="nb-btn flex-1 py-3 bg-[#b4f82c] text-black text-xs uppercase">
+            Confirm & Send Packet
+          </button>
+          <button id="modalCancelBtn" class="nb-btn px-4 py-3 bg-gray-200 text-black text-xs uppercase">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toast Helper
+    function triggerToast(text) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = text;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2400);
+    }
+
+    // Modal Handlers
+    const modal = document.getElementById('modalBackdrop');
+    document.getElementById('bookModalBtn').addEventListener('click', () => modal.classList.remove('hidden'));
+    document.getElementById('modalCloseBtn').addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('modalCancelBtn').addEventListener('click', () => modal.classList.add('hidden'));
+    document.getElementById('modalSubmitBtn').addEventListener('click', () => {
+      modal.classList.add('hidden');
+      triggerToast('🎉 Session Locked In! Prep dossier on its way.');
+    });
+
+    // Shadow offset switcher
+    const root = document.documentElement;
+    document.getElementById('shadowLightBtn').addEventListener('click', () => {
+      root.style.setProperty('--shadow-offset', '3px');
+      triggerToast('Shadow Depth set to 3px');
+    });
+    document.getElementById('shadowMegaBtn').addEventListener('click', () => {
+      root.style.setProperty('--shadow-offset', '5px');
+      triggerToast('Shadow Depth set to 5px (Standard Neo-Brutal)');
+    });
+    document.getElementById('shadowUltraBtn').addEventListener('click', () => {
+      root.style.setProperty('--shadow-offset', '9px');
+      triggerToast('Shadow Depth set to 9px (ULTRA BRUTAL)');
+    });
+
+    // Color Palette Swapper
+    const palettes = [
+      { bg: '#fcf8e3', yellow: '#ffea00', pink: '#ff66c4', lime: '#b4f82c' },
+      { bg: '#faf5f0', yellow: '#fb923c', pink: '#f43f5e', lime: '#10b981' },
+      { bg: '#f3e8ff', yellow: '#a855f7', pink: '#ec4899', lime: '#06b6d4' }
+    ];
+    let palIdx = 0;
+    document.getElementById('paletteBtn').addEventListener('click', () => {
+      palIdx = (palIdx + 1) % palettes.length;
+      root.style.setProperty('--bg-color', palettes[palIdx].bg);
+      root.style.setProperty('--pop-yellow', palettes[palIdx].yellow);
+      root.style.setProperty('--pop-pink', palettes[palIdx].pink);
+      root.style.setProperty('--pop-lime', palettes[palIdx].lime);
+      triggerToast(`Swapped to Neo-Brutal Theme #${palIdx + 1}`);
+    });
+
+    // Audio button
+    let isPlaying = false;
+    const cassetteBtn = document.getElementById('cassettePlayBtn');
+    cassetteBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        cassetteBtn.innerText = '⏸ Pause Memo (00:44)';
+        cassetteBtn.style.backgroundColor = '#000000';
+        cassetteBtn.style.color = '#ffea00';
+        triggerToast('▶ Playing mentor voice tape');
+      } else {
+        cassetteBtn.innerText = '▶ Play Audio Advice';
+        cassetteBtn.style.backgroundColor = 'var(--pop-pink)';
+        cassetteBtn.style.color = '#ffffff';
+      }
+    });
+
+    // Slot picking
+    const slotBtns = document.querySelectorAll('.slot-pick');
+    const slotStatus = document.getElementById('slotStatus');
+    slotBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        slotBtns.forEach(x => {
+          x.classList.remove('bg-[#ffea00]');
+          x.classList.add('bg-white');
+        });
+        b.classList.remove('bg-white');
+        b.classList.add('bg-[#ffea00]');
+        const time = b.getAttribute('data-time');
+        slotStatus.innerHTML = `Selected: <span class="bg-[#ffea00] px-1 border border-black">${time} (30m)</span>`;
+        triggerToast(`Slot set to ${time}`);
+      });
+    });
+
+    // Room simulation
+    document.getElementById('roomEnterBtn').addEventListener('click', function() {
+      this.innerText = 'Connecting...';
+      triggerToast('Connecting to encrypted mock room...');
+      setTimeout(() => {
+        this.innerText = 'Enter Room Simulation';
+      }, 2000);
+    });
+
+    // Testimonial Cycler
+    const reviews = [
+      { author: "Vikram K.", role: "Staff Eng @ Datadog", text: "Sarah dismantled my consensus protocol proposal in 12 minutes. She showed me where the real cross-datacenter partition bottlenecks were. Without her, my Staff loop would have failed." },
+      { author: "Maya S.", role: "Principal Eng @ Snowflake", text: "Zero sugarcoating. She grilled me on GPU interconnect bandwidth and showed me exactly what principal committees look for in RFC tradeoffs." },
+      { author: "Jordan T.", role: "Senior Eng @ Stripe", text: "3 mock drills with Sarah gave me 10x more leverage than 6 months of reading blog posts. Passed L6 loop on the first attempt." }
+    ];
+    let rIdx = 0;
+    document.getElementById('nextReviewBtn').addEventListener('click', () => {
+      rIdx = (rIdx + 1) % reviews.length;
+      document.getElementById('quoteAuthor').innerText = reviews[rIdx].author;
+      document.getElementById('quoteRole').innerText = reviews[rIdx].role;
+      document.getElementById('quoteText').innerText = `"${reviews[rIdx].text}"`;
+      triggerToast(`Showing review from ${reviews[rIdx].author}`);
+    });
+  </script>
+</body>
+</html>

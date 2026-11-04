@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curriculum Analytics & AI Study Chats &bull; AI/ML Engineer Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  
+  <style>
+    body.theme-cyber {
+      --bg-color: #050811;
+      --card-bg: rgba(13, 20, 36, 0.75);
+      --shadow-light: rgba(255, 255, 255, 0.04);
+      --shadow-dark: rgba(0, 0, 0, 0.7);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-dark: #34d399;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --inset-bg: rgba(9, 14, 26, 0.85);
+    }
+
+    body.theme-clay {
+      --bg-color: #e6ecf5;
+      --card-bg: #e6ecf5;
+      --shadow-light: #ffffff;
+      --shadow-dark: #b8c4d9;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      --accent: #10b981;
+      --accent-dark: #059669;
+      --card-border: rgba(255, 255, 255, 0.6);
+      --inset-bg: #e6ecf5;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .neu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    body.theme-clay .neu-card {
+      box-shadow: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+    }
+    body.theme-cyber .neu-card {
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .neu-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .neu-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .chat-bubble-user {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-bubble-bot {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      border-bottom-left-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="theme-cyber">
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-[var(--card-border)] bg-[var(--bg-color)]/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <span class="text-2xl">⚡</span>
+          <span class="font-extrabold text-base tracking-tight text-[var(--text-main)]">AI/ML Engineer Hub</span>
+        </a>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-semibold border border-emerald-500/20">
+          Analytics & AI Chats
+        </span>
+      </div>
+
+      <!-- Links & Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <nav class="flex items-center gap-1.5 overflow-x-auto py-1">
+          <a href="index.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">🏠 Home</a>
+          <a href="roadmap.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">📚 22-Week Curriculum</a>
+          <a href="projects.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">🛠️ Resume Lab (15)</a>
+          <a href="tracker.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">⏱️ Drift Engine</a>
+          <a href="analytics_and_chat.html" class="px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-400 border border-emerald-500/40 bg-emerald-500/10">📊 Analytics & Chats</a>
+        </nav>
+
+        <button onclick="toggleTheme()" id="theme-btn" class="p-2 rounded-xl neu-btn text-xs font-bold flex items-center gap-1.5" title="Switch Theme">
+          <span id="theme-icon">☀️</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+    <!-- PAGE HERO -->
+    <div class="neu-card p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400">
+          <span>🚀 Production Curriculum Intelligence</span>
+          <span>•</span>
+          <span>Nov 2, 2026 – Apr 4, 2027</span>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black text-[var(--text-main)] tracking-tight">
+          Visual Analytics & Interactive Phase AI Chats
+        </h1>
+        <p class="text-xs sm:text-sm text-[var(--text-muted)] max-w-2xl">
+          Deep-dive into your 22-week curriculum metrics, study velocity, and lesson difficulty distribution — or launch an interactive Socratic chat session with 5 specialized Phase Mentors.
+        </p>
+      </div>
+
+      <!-- View Switcher -->
+      <div class="flex items-center bg-black/30 p-1.5 rounded-2xl border border-[var(--card-border)] text-xs font-bold self-stretch md:self-auto">
+        <button id="view-charts-btn" onclick="setView('charts')" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl bg-emerald-500 text-slate-950 transition-all shadow-md">
+          📊 Visual Charts
+        </button>
+        <button id="view-chats-btn" onclick="setView('chats')" class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[var(--text-muted)] hover:text-white transition-all">
+          💬 Phase AI Chats
+        </button>
+      </div>
+    </div>
+
+    <!-- STATS SUMMARY TILES -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="neu-card p-4">
+        <span class="text-xs font-semibold text-[var(--text-muted)]">Curriculum Scope</span>
+        <div class="text-2xl font-black text-emerald-400 mt-1">22 Weeks</div>
+        <span class="text-xs text-[var(--text-muted)]">143 Daily Lessons</span>
+      </div>
+      <div class="neu-card p-4">
+        <span class="text-xs font-semibold text-[var(--text-muted)]">Total Study Time</span>
+        <div class="text-2xl font-black text-cyan-400 mt-1">222.0 Hours</div>
+        <span class="text-xs text-[var(--text-muted)]">~10.1 hrs/week average</span>
+      </div>
+      <div class="neu-card p-4">
+        <span class="text-xs font-semibold text-[var(--text-muted)]">Portfolio Projects</span>
+        <div class="text-2xl font-black text-purple-400 mt-1">15 Projects</div>
+        <span class="text-xs text-[var(--text-muted)]">5 Flagship Capstones</span>
+      </div>
+      <div class="neu-card p-4">
+        <span class="text-xs font-semibold text-[var(--text-muted)]">Drift Protection</span>
+        <div class="text-2xl font-black text-amber-400 mt-1">18 Buffer Days</div>
+        <span class="text-xs text-[var(--text-muted)]">Diwali & Wedding safety</span>
+      </div>
+    </div>
+
+    <!-- VIEW 1: CHARTS -->
+    <div id="view-charts" class="space-y-6">
+
+      <!-- Row 1: Hours by Phase & Difficulty Donut -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Phase Hours Bar Chart -->
+        <div class="lg:col-span-7 neu-card p-6 space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-base font-bold text-[var(--text-main)]">Study Hours by Curriculum Phase</h2>
+              <p class="text-xs text-[var(--text-muted)]">Granular breakdown of structured lecture and coding time</p>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 font-mono font-bold">222.0 hrs</span>
+          </div>
+
+          <div class="space-y-3.5 pt-2">
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-emerald-400">Phase 1: Software Engineering Core (W1–5)</span>
+                <span>59.3 hrs (41 lessons)</span>
+              </div>
+              <div class="w-full h-3.5 bg-black/20 rounded-full p-0.5 border border-[var(--card-border)] overflow-hidden">
+                <div class="h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-cyan-400">Phase 2: Math, Data & Classical ML (W6–10)</span>
+                <span>48.0 hrs (30 lessons)</span>
+              </div>
+              <div class="w-full h-3.5 bg-black/20 rounded-full p-0.5 border border-[var(--card-border)] overflow-hidden">
+                <div class="h-full bg-cyan-500 rounded-full" style="width: 81%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-blue-400">Phase 3: Deep Learning & Vision (W11–14)</span>
+                <span>37.0 hrs (24 lessons)</span>
+              </div>
+              <div class="w-full h-3.5 bg-black/20 rounded-full p-0.5 border border-[var(--card-border)] overflow-hidden">
+                <div class="h-full bg-blue-500 rounded-full" style="width: 62.4%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-purple-400">Phase 4: LLMs, Vector RAG & Systems (W15–18)</span>
+                <span>38.0 hrs (24 lessons)</span>
+              </div>
+              <div class="w-full h-3.5 bg-black/20 rounded-full p-0.5 border border-[var(--card-border)] overflow-hidden">
+                <div class="h-full bg-purple-500 rounded-full" style="width: 64.1%;"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-amber-400">Phase 5: Autonomous Agents & Capstone (W19–22)</span>
+                <span>39.8 hrs (24 lessons)</span>
+              </div>
+              <div class="w-full h-3.5 bg-black/20 rounded-full p-0.5 border border-[var(--card-border)] overflow-hidden">
+                <div class="h-full bg-amber-500 rounded-full" style="width: 67.1%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 text-xs text-[var(--text-muted)] border-t border-[var(--card-border)] flex items-center gap-2">
+            <span class="text-emerald-400 font-bold">💡 Curriculum Fact:</span>
+            <span>Phase 1 invests heavy volume early to build pure coding fluency so subsequent ML & Deep Learning phases proceed smoothly without language friction.</span>
+          </div>
+        </div>
+
+        <!-- Difficulty Gauge Donut -->
+        <div class="lg:col-span-5 neu-card p-6 flex flex-col justify-between space-y-4">
+          <div>
+            <h2 class="text-base font-bold text-[var(--text-main)]">Lesson Cognitive Intensity</h2>
+            <p class="text-xs text-[var(--text-muted)]">Difficulty breakdown across all 143 structured sessions</p>
+          </div>
+
+          <div class="flex items-center justify-center gap-6 py-2">
+            <div class="relative w-40 h-40">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="12" />
+                <circle cx="50" cy="50" r="38" fill="transparent" stroke="#10b981" stroke-width="12" stroke-dasharray="197 238.7" stroke-dashoffset="0" />
+                <circle cx="50" cy="50" r="38" fill="transparent" stroke="#ef4444" stroke-width="12" stroke-dasharray="35 238.7" stroke-dashoffset="-197" />
+                <circle cx="50" cy="50" r="38" fill="transparent" stroke="#38bdf8" stroke-width="12" stroke-dasharray="6.7 238.7" stroke-dashoffset="-232" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-2xl font-black text-[var(--text-main)]">143</span>
+                <span class="text-xs text-[var(--text-muted)] font-semibold uppercase tracking-wider">Lessons</span>
+              </div>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span><strong>Medium (90 min):</strong> 118 (82.5%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                <span><strong>Heavy (120 min):</strong> 21 (14.7%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-sky-400"></span>
+                <span><strong>Light (45 min):</strong> 4 (2.8%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-xs text-[var(--text-muted)]">
+            <span class="text-red-400 font-bold">21 Heavy Sessions:</span> Deep dives into Autograd, Attention Matrix multiplication, Vector indexing algorithms, and LangGraph Cyclical Graphs.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 2: 22-Week Workload Timeline -->
+      <div class="neu-card p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h2 class="text-base font-bold text-[var(--text-main)]">22-Week Workload Timeline & Milestones</h2>
+            <p class="text-xs text-[var(--text-muted)]">Study hours per week with 5 Flagship Milestones marked (★)</p>
+          </div>
+          <div class="flex items-center gap-3 text-xs">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Phase 1</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-cyan-500"></span> Phase 2</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-blue-500"></span> Phase 3</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-purple-500"></span> Phase 4</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> Phase 5</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar pb-2">
+          <div class="min-w-[760px] h-48 flex items-end gap-2 border-b border-[var(--card-border)] pt-6 px-2">
+            <!-- W1 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">12.5h</span>
+              <div class="w-full bg-emerald-500/80 rounded-t group-hover:bg-emerald-400 transition" style="height: 100px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W1</span>
+            </div>
+            <!-- W2 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">12.0h</span>
+              <div class="w-full bg-emerald-500/80 rounded-t group-hover:bg-emerald-400 transition" style="height: 96px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W2</span>
+            </div>
+            <!-- W3 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">11.5h</span>
+              <div class="w-full bg-emerald-500/80 rounded-t group-hover:bg-emerald-400 transition" style="height: 92px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W3</span>
+            </div>
+            <!-- W4 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">12.5h</span>
+              <div class="w-full bg-emerald-500/80 rounded-t group-hover:bg-emerald-400 transition" style="height: 100px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W4</span>
+            </div>
+            <!-- W5 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-emerald-400 font-bold font-mono">★</span>
+              <div class="w-full bg-emerald-500 rounded-t" style="height: 84px;"></div>
+              <span class="text-xs font-bold text-emerald-400">W5</span>
+            </div>
+            <!-- W6 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.0h</span>
+              <div class="w-full bg-cyan-500/80 rounded-t group-hover:bg-cyan-400 transition" style="height: 72px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W6</span>
+            </div>
+            <!-- W7 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.0h</span>
+              <div class="w-full bg-cyan-500/80 rounded-t group-hover:bg-cyan-400 transition" style="height: 72px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W7</span>
+            </div>
+            <!-- W8 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">10.5h</span>
+              <div class="w-full bg-cyan-500/80 rounded-t group-hover:bg-cyan-400 transition" style="height: 84px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W8</span>
+            </div>
+            <!-- W9 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">10.5h</span>
+              <div class="w-full bg-cyan-500/80 rounded-t group-hover:bg-cyan-400 transition" style="height: 84px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W9</span>
+            </div>
+            <!-- W10 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-cyan-400 font-bold font-mono">★ F1</span>
+              <div class="w-full bg-cyan-500 rounded-t" style="height: 72px;"></div>
+              <span class="text-xs font-bold text-cyan-400">W10</span>
+            </div>
+            <!-- W11 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.0h</span>
+              <div class="w-full bg-blue-500/80 rounded-t group-hover:bg-blue-400 transition" style="height: 72px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W11</span>
+            </div>
+            <!-- W12 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.0h</span>
+              <div class="w-full bg-blue-500/80 rounded-t group-hover:bg-blue-400 transition" style="height: 72px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W12</span>
+            </div>
+            <!-- W13 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.5h</span>
+              <div class="w-full bg-blue-500/80 rounded-t group-hover:bg-blue-400 transition" style="height: 76px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W13</span>
+            </div>
+            <!-- W14 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-blue-400 font-bold font-mono">★ F2</span>
+              <div class="w-full bg-blue-500 rounded-t" style="height: 76px;"></div>
+              <span class="text-xs font-bold text-blue-400">W14</span>
+            </div>
+            <!-- W15 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.5h</span>
+              <div class="w-full bg-purple-500/80 rounded-t group-hover:bg-purple-400 transition" style="height: 76px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W15</span>
+            </div>
+            <!-- W16 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.5h</span>
+              <div class="w-full bg-purple-500/80 rounded-t group-hover:bg-purple-400 transition" style="height: 76px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W16</span>
+            </div>
+            <!-- W17 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.5h</span>
+              <div class="w-full bg-purple-500/80 rounded-t group-hover:bg-purple-400 transition" style="height: 76px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W17</span>
+            </div>
+            <!-- W18 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-purple-400 font-bold font-mono">★ F3</span>
+              <div class="w-full bg-purple-500 rounded-t" style="height: 76px;"></div>
+              <span class="text-xs font-bold text-purple-400">W18</span>
+            </div>
+            <!-- W19 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">9.5h</span>
+              <div class="w-full bg-amber-500/80 rounded-t group-hover:bg-amber-400 transition" style="height: 76px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W19</span>
+            </div>
+            <!-- W20 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-[var(--text-muted)] font-mono">10.0h</span>
+              <div class="w-full bg-amber-500/80 rounded-t group-hover:bg-amber-400 transition" style="height: 80px;"></div>
+              <span class="text-xs font-semibold text-[var(--text-muted)]">W20</span>
+            </div>
+            <!-- W21 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-amber-400 font-bold font-mono">★ CAP</span>
+              <div class="w-full bg-amber-500 rounded-t" style="height: 84px;"></div>
+              <span class="text-xs font-bold text-amber-400">W21</span>
+            </div>
+            <!-- W22 -->
+            <div class="flex-1 flex flex-col items-center gap-1 group">
+              <span class="text-[10px] text-emerald-400 font-mono">9.7h</span>
+              <div class="w-full bg-emerald-500/80 rounded-t group-hover:bg-emerald-400 transition" style="height: 78px;"></div>
+              <span class="text-xs font-bold text-emerald-400">W22</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: AI STUDY CHATS -->
+    <div id="view-chats" class="space-y-6 hidden">
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Mentors Left Panel -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="neu-card p-4 space-y-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Choose Phase AI Mentor</span>
+            
+            <div class="space-y-2">
+              <button onclick="selectMentor('p1')" id="m-btn-p1" class="mentor-btn w-full text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 flex items-start gap-3 transition">
+                <span class="text-xl">🐍</span>
+                <div>
+                  <div class="text-xs font-bold text-[var(--text-main)]">Phase 1: Python & Systems Mentor</div>
+                  <div class="text-[11px] text-[var(--text-muted)]">OOP, Memory, Linux CLI, FastAPI</div>
+                </div>
+              </button>
+
+              <button onclick="selectMentor('p2')" id="m-btn-p2" class="mentor-btn w-full text-left p-3 rounded-xl border border-transparent bg-black/20 flex items-start gap-3 transition">
+                <span class="text-xl">📐</span>
+                <div>
+                  <div class="text-xs font-bold text-[var(--text-main)]">Phase 2: Math & Classical ML Coach</div>
+                  <div class="text-[11px] text-[var(--text-muted)]">NumPy Vectorization, Loss, XGBoost</div>
+                </div>
+              </button>
+
+              <button onclick="selectMentor('p3')" id="m-btn-p3" class="mentor-btn w-full text-left p-3 rounded-xl border border-transparent bg-black/20 flex items-start gap-3 transition">
+                <span class="text-xl">🧠</span>
+                <div>
+                  <div class="text-xs font-bold text-[var(--text-main)]">Phase 3: Deep Learning & Vision Guide</div>
+                  <div class="text-[11px] text-[var(--text-muted)]">Autograd, PyTorch Tensors, CNNs</div>
+                </div>
+              </button>
+
+              <button onclick="selectMentor('p4')" id="m-btn-p4" class="mentor-btn w-full text-left p-3 rounded-xl border border-transparent bg-black/20 flex items-start gap-3 transition">
+                <span class="text-xl">📚</span>
+                <div>
+                  <div class="text-xs font-bold text-[var(--text-main)]">Phase 4: LLMs, RAG & Vector Specialist</div>
+                  <div class="text-[11px] text-[var(--text-muted)]">Embeddings, ChromaDB, Streaming</div>
+                </div>
+              </button>
+
+              <button onclick="selectMentor('p5')" id="m-btn-p5" class="mentor-btn w-full text-left p-3 rounded-xl border border-transparent bg-black/20 flex items-start gap-3 transition">
+                <span class="text-xl">🤖</span>
+                <div>
+                  <div class="text-xs font-bold text-[var(--text-main)]">Phase 5: Agentic Systems & Capstone Lead</div>
+                  <div class="text-[11px] text-[var(--text-muted)]">LangGraph, MCP Servers, System Design</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Doubt Starters -->
+          <div class="neu-card p-4 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Quick Topic Accelerators</span>
+            <div id="mentor-starters" class="space-y-1.5 pt-1"></div>
+          </div>
+        </div>
+
+        <!-- Chat Stream Panel -->
+        <div class="lg:col-span-8 neu-card flex flex-col h-[600px] overflow-hidden">
+          
+          <div class="p-4 border-b border-[var(--card-border)] bg-black/20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+              <span id="chat-avatar" class="text-2xl">🐍</span>
+              <div>
+                <h3 id="chat-title" class="text-sm font-bold text-[var(--text-main)]">Phase 1: Python & Systems Mentor</h3>
+                <p id="chat-desc" class="text-xs text-[var(--text-muted)]">Socratic problem-solving & clean code guidance</p>
+              </div>
+            </div>
+            <button onclick="clearCurrentChat()" class="text-xs px-3 py-1 rounded-lg border border-[var(--card-border)] text-[var(--text-muted)] hover:text-white transition">
+              ↺ Clear History
+            </button>
+          </div>
+
+          <div id="messages-stream" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar text-xs"></div>
+
+          <div class="p-3 border-t border-[var(--card-border)] bg-black/20">
+            <form onsubmit="postMessage(event)" class="flex gap-2">
+              <input 
+                id="chat-input" 
+                type="text" 
+                placeholder="Ask about today's concepts, coding bugs, or project implementation..." 
+                class="flex-1 bg-black/30 border border-[var(--card-border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text-main)] placeholder-[var(--text-muted)] focus:outline-none focus:border-emerald-500 transition"
+              />
+              <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-1">
+                <span>Send</span>
+                <span>→</span>
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Theme Management
+    function initTheme() {
+      const saved = localStorage.getItem('ai_hub_theme') || 'cyber';
+      document.body.className = saved === 'clay' ? 'theme-clay' : 'theme-cyber';
+      document.getElementById('theme-icon').textContent = saved === 'clay' ? '🌙' : '☀️';
+    }
+
+    function toggleTheme() {
+      const isCyber = document.body.classList.contains('theme-cyber');
+      const next = isCyber ? 'clay' : 'cyber';
+      document.body.className = next === 'clay' ? 'theme-clay' : 'theme-cyber';
+      document.getElementById('theme-icon').textContent = next === 'clay' ? '🌙' : '☀️';
+      localStorage.setItem('ai_hub_theme', next);
+    }
+
+    // View Switching
+    function setView(view) {
+      const chartsBtn = document.getElementById('view-charts-btn');
+      const chatsBtn = document.getElementById('view-chats-btn');
+      const chartsSec = document.getElementById('view-charts');
+      const chatsSec = document.getElementById('view-chats');
+
+      if (view === 'charts') {
+        chartsBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl bg-emerald-500 text-slate-950 transition-all shadow-md font-bold";
+        chatsBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[var(--text-muted)] hover:text-white transition-all font-bold";
+        chartsSec.classList.remove('hidden');
+        chatsSec.classList.add('hidden');
+      } else {
+        chatsBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl bg-emerald-500 text-slate-950 transition-all shadow-md font-bold";
+        chartsBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[var(--text-muted)] hover:text-white transition-all font-bold";
+        chatsSec.classList.remove('hidden');
+        chatsSec.classList.add('hidden');
+      }
+    }
+
+    // Mentors Data & Chat state
+    const mentorData = {
+      p1: {
+        avatar: "🐍",
+        title: "Phase 1: Python & Systems Mentor",
+        desc: "Covers Weeks 1–5: Python 3.13, Data Structures, OOP, SQL schemas & Linux CLI.",
+        color: "emerald",
+        welcome: "Hello Neeraj! I am your Phase 1 Engineering Mentor. We build foundational engineering rigor — pure Python, OOP state machines, and relational schemas without shortcuts. What topic or bug can we solve right now?",
+        starters: [
+          "Explain shallow copy vs deep copy in Python lists and dicts.",
+          "How do I structure custom exceptions for my Piece 1.2 OOP State Machine?",
+          "How do I write an SQL window query to calculate Month-over-Month MRR growth?",
+          "Review my approach for the Number Guessing Game CLI verification."
+        ],
+        knowledge: {
+          "copy": "In Python, a shallow copy (`copy.copy()` or slicing `[:]`) creates a new container object, but inserts references to the elements found in the original. If those elements are mutable, modifying them in the copy changes the original! A deep copy (`copy.deepcopy()`) recursively duplicates all nested objects, guaranteeing complete isolation.",
+          "exception": "For Piece 1.2, start with a domain base exception: `class StateMachineError(Exception): pass`. Then derive specific types like `class InvalidTransitionError(StateMachineError): pass` and `class TaskNotFoundError(StateMachineError): pass`. Always pass the offending task ID and attempted state in `__init__`.",
+          "sql": "For Month-over-Month MRR growth: Use `LAG()` over an ordered partition:\n`SELECT month, mrr, LAG(mrr, 1) OVER (ORDER BY month) as prev_mrr, ROUND(((mrr - LAG(mrr, 1) OVER (ORDER BY month)) / LAG(mrr, 1) OVER (ORDER BY month)) * 100, 2) AS mom_growth_pct FROM monthly_revenue;`",
+          "default": "In Phase 1, ensure all code includes type hints (`from typing import Optional, List`), clean exception hierarchies, and automated unit tests with `pytest`."
+        }
+      },
+      p2: {
+        avatar: "📐",
+        title: "Phase 2: Math & Classical ML Coach",
+        desc: "Covers Weeks 6–10: Linear Algebra, Loss Surfaces, Scikit-Learn Pipelines & XGBoost.",
+        color: "cyan",
+        welcome: "Greetings! I'm your Math & Classical ML Coach. We bridge calculus and linear algebra with vectorized NumPy code and leak-free Scikit-Learn pipelines. What formula or model are we inspecting?",
+        starters: [
+          "Why is matrix dot product preferred over nested Python loops for Gradient Descent?",
+          "How do I prevent data leakage when scaling and imputing features in Scikit-Learn?",
+          "Explain the geometric intuition behind the L1 (Lasso) vs L2 (Ridge) penalty.",
+          "How should I structure the Optuna hyperparameter search for the Churn Engine?"
+        ],
+        knowledge: {
+          "matrix": "Nested Python loops run with dynamic type checking at every step. In contrast, NumPy's matrix operations (`np.dot` or `@`) dispatch to optimized C/Fortran BLAS/LAPACK libraries using hardware SIMD vectorization, executing 50x–100x faster.",
+          "leakage": "Data leakage occurs when test set statistics contaminate training. If you run `scaler.fit_transform(X)` before splitting, the test set's mean is leaked! Solution: strictly fit transformers inside `sklearn.pipeline.Pipeline` on `X_train` only.",
+          "l1": "L2 constrains weights within a smooth sphere ($w_1^2 + w_2^2 \\le C$), shrinking weights uniformly. L1 constrains weights within a diamond polytope ($|w_1| + |w_2| \\le C$). The loss contours hit diamond corners on axes, driving unneeded weights exactly to 0.",
+          "default": "For Classical ML, always evaluate with Precision-Recall curves and ROC-AUC rather than raw accuracy when working with imbalanced datasets like churn or fraud."
+        }
+      },
+      p3: {
+        avatar: "🧠",
+        title: "Phase 3: Deep Learning & Vision Guide",
+        desc: "Covers Weeks 11–14: PyTorch Tensors, Autograd, CNN architectures & Inference serving.",
+        color: "blue",
+        welcome: "Welcome to Deep Learning! I'm your PyTorch and Computer Vision guide. Let's conquer autograd backpropagation, convolution geometry, and FastAPI inference microservices.",
+        starters: [
+          "How does PyTorch's `loss.backward()` compute gradients under the hood?",
+          "How do I calculate the output dimensions of a 2D Convolution layer?",
+          "Why must we call `model.eval()` and `torch.no_grad()` during inference?",
+          "How should I architect the FastAPI serving microservice for sub-50ms latency?"
+        ],
+        knowledge: {
+          "backward": "PyTorch records tensor operations having `requires_grad=True` in a Directed Acyclic Graph (DAG) during the forward pass. `loss.backward()` traverses the DAG in reverse topological order, applying the chain rule to accumulate gradients in `.grad`.",
+          "conv": "The formula for output dimension after Conv2D is:\n`O = floor((W - K + 2*P) / S) + 1`\nwhere `W`=input size, `K`=kernel size, `P`=padding, and `S`=stride.",
+          "eval": "`model.eval()` switches layers like `Dropout` and `BatchNorm` to evaluation mode. `torch.no_grad()` turns off the autograd graph, dramatically reducing memory overhead and accelerating forward passes.",
+          "default": "In production inference, compile models with TorchScript or ONNX Runtime, and warm up weights during container startup."
+        }
+      },
+      p4: {
+        avatar: "📚",
+        title: "Phase 4: LLMs, RAG & Vector Specialist",
+        desc: "Covers Weeks 15–18: Tokenization, Embeddings, ChromaDB, Hybrid Search & Citations.",
+        color: "purple",
+        welcome: "Welcome to Phase 4! I am your LLM & Retrieval-Augmented Generation specialist. We build production RAG systems with dense vectors, hybrid BM25 search, and strict citation streaming.",
+        starters: [
+          "Why is Byte Pair Encoding (BPE) preferred over raw word or character tokenization?",
+          "How does Reciprocal Rank Fusion (RRF) combine dense vector and BM25 sparse search?",
+          "How can I enforce strict citation grounding to prevent LLM hallucinations?",
+          "What chunk size and overlap strategy should I use for technical documentation PDFs?"
+        ],
+        knowledge: {
+          "bpe": "Word tokenization creates huge vocabularies and OOV issues. Character tokenization leads to sequences too long for context limits. BPE iteratively merges frequent character pairs, representing frequent words as single tokens and unknown words as subword units.",
+          "rrf": "Reciprocal Rank Fusion combines rankings from different retrieval algorithms without score calibration:\n`RRF_Score(d) = sum(1 / (60 + rank(d)))`. Passages appearing near the top of both keyword and semantic searches receive top priority.",
+          "citation": "To ground LLMs: 1) Inject retrieved chunks with explicit identifiers `[doc_1, p.4]`, 2) Instruct the model that every claim must cite `[doc_id, p.#]`, and 3) Fallback to 'I do not have sufficient information in the provided context to answer.'",
+          "default": "Retrieval quality determines answer quality. Always run a reranking model (cross-encoder) on the top 25 candidates before passing the top 5 to the LLM."
+        }
+      },
+      p5: {
+        avatar: "🤖",
+        title: "Phase 5: Agentic Systems & Capstone Lead",
+        desc: "Covers Weeks 19–22: LangGraph State Machines, Model Context Protocol (MCP) & Career Sprint.",
+        color: "amber",
+        welcome: "Hello! I am your Capstone Architect & Career Sprint Lead. We build stateful multi-agent systems with LangGraph, deploy Python MCP servers, and prepare for high-impact AI/ML engineering interviews.",
+        starters: [
+          "How does LangGraph's cyclical state graph differ from linear DAG agent frameworks?",
+          "How do I structure a compliant Model Context Protocol (MCP) server in Python?",
+          "How can I implement self-correcting error loops between Researcher and Coder agents?",
+          "What are the top 3 ML system design tradeoffs asked in engineering interviews?"
+        ],
+        knowledge: {
+          "langgraph": "Linear DAGs cannot self-correct when an action fails. LangGraph treats agent systems as state machines with cyclical edges: `Agent -> Tool -> Tester -> if error -> Agent`. State is preserved across loop iterations.",
+          "mcp": "The Model Context Protocol connects LLMs to tools via JSON-RPC 2.0 over stdio/SSE. In Python, use the `mcp` SDK to register tools with `@server.call_tool()`, enforcing strict Pydantic schemas so LLMs call them deterministically.",
+          "tradeoffs": "Key ML System Design tradeoffs: 1) Latency vs Accuracy (Quantized models vs large frontier models), 2) Batch vs Online Real-Time Inference, and 3) In-Memory Vector Search vs Disk-backed HNSW partitioning.",
+          "default": "For your final capstone, ensure your multi-agent architecture has observable state checkpoints and a clean web demo interface."
+        }
+      }
+    };
+
+    let activeMentor = 'p1';
+    let conversations = { p1: [], p2: [], p3: [], p4: [], p5: [] };
+
+    function selectMentor(key) {
+      activeMentor = key;
+      const m = mentorData[key];
+
+      document.querySelectorAll('.mentor-btn').forEach(b => {
+        b.className = "mentor-btn w-full text-left p-3 rounded-xl border border-transparent bg-black/20 flex items-start gap-3 transition";
+      });
+
+      const activeBtn = document.getElementById(`m-btn-${key}`);
+      activeBtn.className = `mentor-btn w-full text-left p-3 rounded-xl border border-${m.color}-500 bg-${m.color}-500/10 flex items-start gap-3 transition`;
+
+      document.getElementById('chat-avatar').textContent = m.avatar;
+      document.getElementById('chat-title').textContent = m.title;
+      document.getElementById('chat-desc').textContent = m.desc;
+
+      const startersBox = document.getElementById('mentor-starters');
+      startersBox.innerHTML = m.starters.map(s => `
+        <button onclick="quickPrompt('${s.replace(/'/g, "\\'")}')" class="w-full text-left p-2 rounded-lg bg-black/20 hover:bg-black/40 border border-[var(--card-border)] text-[11px] text-[var(--text-muted)] hover:text-[var(--text-main)] transition">
+          &bull; ${s}
+        </button>
+      `).join('');
+
+      renderChat();
+    }
+
+    function renderChat() {
+      const stream = document.getElementById('messages-stream');
+      const m = mentorData[activeMentor];
+      const history = conversations[activeMentor];
+
+      if (history.length === 0) {
+        stream.innerHTML = `
+          <div class="flex items-start gap-3">
+            <span class="text-xl p-2 rounded-xl bg-black/20 border border-[var(--card-border)]">${m.avatar}</span>
+            <div class="chat-bubble-bot p-3.5 rounded-2xl max-w-xl text-xs leading-relaxed">
+              ${m.welcome}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      stream.innerHTML = history.map(msg => {
+        if (msg.role === 'user') {
+          return `
+            <div class="flex justify-end">
+              <div class="chat-bubble-user p-3.5 rounded-2xl max-w-xl text-xs leading-relaxed shadow-sm">
+                ${msg.text}
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="flex items-start gap-3">
+              <span class="text-xl p-2 rounded-xl bg-black/20 border border-[var(--card-border)]">${m.avatar}</span>
+              <div class="chat-bubble-bot p-3.5 rounded-2xl max-w-xl text-xs leading-relaxed shadow-sm whitespace-pre-line">
+                ${msg.text}
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function quickPrompt(text) {
+      document.getElementById('chat-input').value = text;
+      postMessage(new Event('submit'));
+    }
+
+    function postMessage(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const m = mentorData[activeMentor];
+      conversations[activeMentor].push({ role: 'user', text });
+      input.value = '';
+      renderChat();
+
+      setTimeout(() => {
+        let reply = "";
+        const lower = text.toLowerCase();
+        let matched = false;
+
+        for (const [k, v] of Object.entries(m.knowledge)) {
+          if (lower.includes(k)) {
+            reply = v;
+            matched = true;
+            break;
+          }
+        }
+
+        if (!matched) {
+          reply = `That is a fundamental question for ${m.title}.\n\n` +
+                  `1. **System Architecture**: Decompose this into clean, testable subcomponents.\n` +
+                  `2. **Production Principle**: In production AI/ML environments, prevent silent bugs by enforcing assertions and type boundaries.\n` +
+                  `3. **Verification**: Always validate against synthetic edge cases before integrating.\n\n` +
+                  `Would you like to examine an implementation code snippet for this?`;
+        }
+
+        conversations[activeMentor].push({ role: 'bot', text: reply });
+        renderChat();
+      }, 350);
+    }
+
+    function clearCurrentChat() {
+      conversations[activeMentor] = [];
+      renderChat();
+    }
+
+    // Init on load
+    initTheme();
+    selectMentor('p1');
+  </script>
+</body>
+</html>

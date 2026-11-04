@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMF Buds Plus 2 — Retro-Futurism / Cyber-Textual UI</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --crt-bg: #07090b;
+      --crt-glow: #ff4500;
+      --crt-dim: #7a2200;
+      --crt-text: #ff5500;
+      --crt-scanline: rgba(0, 0, 0, 0.45);
+      --font-mono: "Courier New", Courier, "Lucida Console", Monaco, monospace;
+    }
+
+    /* Phosphor Palette Presets */
+    html.amber-mode {
+      --crt-glow: #ffb000;
+      --crt-dim: #7a5400;
+      --crt-text: #ffb81c;
+    }
+    html.green-mode {
+      --crt-glow: #00ff66;
+      --crt-dim: #005522;
+      --crt-text: #33ff77;
+    }
+
+    body {
+      background-color: var(--crt-bg);
+      color: var(--crt-text);
+      font-family: var(--font-mono);
+      text-shadow: 0 0 6px var(--crt-glow);
+      overflow-x: hidden;
+      letter-spacing: 0.08em;
+    }
+
+    /* CRT Monitor Scanline Overlay */
+    .crt-overlay {
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.4) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 255, 0, 0.03)
+      );
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+    }
+
+    /* Cyber Terminal Card */
+    .cyber-panel {
+      background: rgba(14, 18, 22, 0.9);
+      border: 1px solid var(--crt-dim);
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9),
+                  0 0 20px -5px var(--crt-dim);
+      position: relative;
+    }
+
+    .cyber-panel:hover {
+      border-color: var(--crt-glow);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9),
+                  0 0 25px -2px var(--crt-dim);
+    }
+
+    /* Cyber Industrial Button */
+    .cyber-btn {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--crt-text);
+      color: var(--crt-text);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .cyber-btn:hover {
+      background: var(--crt-text);
+      color: #000000;
+      box-shadow: 0 0 14px var(--crt-glow);
+      text-shadow: none;
+    }
+
+    .cyber-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Blinking Cursor */
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .cursor-blink {
+      animation: blink 1s infinite;
+    }
+
+    /* Vintage Segment Display */
+    .segment-font {
+      font-family: "Courier New", monospace;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8 relative selection:bg-[var(--crt-glow)] selection:text-black">
+
+  <!-- OVERLAY CRT SCANLINES -->
+  <div class="fixed inset-0 crt-overlay z-50 pointer-events-none"></div>
+
+  <!-- TOP INDUSTRIAL TELEMETRY BAR -->
+  <header class="max-w-6xl mx-auto mb-6 p-4 cyber-panel border-b-2 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-mono">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 bg-[var(--crt-text)]"></span>
+        <span class="font-bold tracking-widest uppercase">NOTHING_OS // HARDWARE_SUBSYSTEM: CMF-BUDS-PLUS-2</span>
+        <span class="text-white/40">SYS_REV: 2.4.9A</span>
+      </div>
+      <div class="text-[11px] text-white/50 mt-1">
+        TELEMETRY: ONLINE • SAMPLING: 96.0kHz / 24-BIT LDAC • PARADIGM: CYBER-TEXTUAL RETRO-FUTURISM
+      </div>
+    </div>
+
+    <!-- Phosphor Spectrum Selector -->
+    <div class="flex items-center gap-2 self-start md:self-auto">
+      <span class="text-[11px] text-white/50 uppercase">PHOSPHOR:</span>
+      <button onclick="setTheme('orange')" class="px-2.5 py-1 text-[11px] border border-[#ff5500] text-[#ff5500] bg-black hover:bg-[#ff5500] hover:text-black transition-all">
+        ORANGE-01
+      </button>
+      <button onclick="setTheme('green')" class="px-2.5 py-1 text-[11px] border border-[#00ff66] text-[#00ff66] bg-black hover:bg-[#00ff66] hover:text-black transition-all">
+        GREEN-CRT
+      </button>
+      <button onclick="setTheme('amber')" class="px-2.5 py-1 text-[11px] border border-[#ffb000] text-[#ffb000] bg-black hover:bg-[#ffb000] hover:text-black transition-all">
+        AMBER-80
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN RETRO-FUTURIST TELEMETRY GRID -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 auto-rows-[minmax(160px,auto)]">
+
+    <!-- ==========================================
+         PANEL 1: OSCILLOSCOPE REAL-TIME FREQUENCY (Col Span 2, Row Span 2)
+         ========================================== -->
+    <div class="cyber-panel md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-between">
+      <div class="flex items-start justify-between border-b border-[var(--crt-dim)] pb-3 mb-4">
+        <div>
+          <div class="text-[11px] text-white/50 uppercase tracking-widest">[STAGE 01] LIVE WAVEFORM OSCILLOSCOPE</div>
+          <h2 class="text-lg font-bold tracking-wider uppercase mt-0.5">Dual-Driver Acoustic Waveform</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] px-2 py-0.5 border border-[var(--crt-text)] bg-black font-bold">SWEEP: 20Hz-40kHz</span>
+          <span class="w-2 h-2 rounded-full bg-[var(--crt-text)] animate-ping"></span>
+        </div>
+      </div>
+
+      <!-- Real-Time HTML5 Canvas Oscilloscope -->
+      <div class="relative w-full h-56 bg-black/90 border border-[var(--crt-dim)] p-2 my-2 overflow-hidden flex items-center justify-center">
+        <!-- Grid Reticle Overlay -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+        <canvas id="oscCanvas" width="560" height="200" class="w-full h-full relative z-10"></canvas>
+
+        <div class="absolute bottom-2 left-3 text-[10px] text-white/40 font-mono z-20">
+          V/DIV: 50mV • TIME/DIV: 2.0ms • ATT: 0dB
+        </div>
+        <div class="absolute top-2 right-3 text-[10px] text-[var(--crt-text)] font-mono z-20">
+          CH-1: 11mm TITANIUM BASS // CH-2: 6mm PLANAR TWEETER
+        </div>
+      </div>
+
+      <!-- Interactive Signal Generators -->
+      <div class="pt-4 border-t border-[var(--crt-dim)] flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-white/50 text-[11px]">WAVEFORM:</span>
+          <button onclick="setWave('sine')" class="cyber-btn px-2.5 py-1 text-[11px]">SINE (BALANCED)</button>
+          <button onclick="setWave('square')" class="cyber-btn px-2.5 py-1 text-[11px]">SQUARE (BASS BOOST)</button>
+          <button onclick="setWave('noise')" class="cyber-btn px-2.5 py-1 text-[11px]">NOISE (ANC TEST)</button>
+        </div>
+
+        <button onclick="triggerCyberToast('CALIBRATION PULSE DISPATCHED [FREQ: 1000Hz]')" class="cyber-btn px-4 py-1.5 text-xs font-bold">
+          [EXECUTE SELF-TEST]
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL 2: 50dB HYBRID ANC SUPPRESSION MATRIX (Col Span 1)
+         ========================================== -->
+    <div class="cyber-panel p-6 flex flex-col justify-between">
+      <div class="border-b border-[var(--crt-dim)] pb-2 mb-2">
+        <div class="text-[10px] text-white/50 uppercase">[SUBSYSTEM 02]</div>
+        <h3 class="text-base font-bold uppercase mt-0.5">50dB ANC Nullifier</h3>
+      </div>
+
+      <div class="my-3 space-y-3 font-mono text-xs">
+        <div>
+          <div class="flex justify-between text-[11px] mb-1">
+            <span>EXTERNAL NOISE:</span>
+            <span class="text-red-400">78.4 dB</span>
+          </div>
+          <div class="w-full bg-black border border-[var(--crt-dim)] h-3 p-[1px]">
+            <div class="bg-red-500 h-full" style="width: 78%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-[11px] mb-1">
+            <span>NULLING PHASE:</span>
+            <span class="text-emerald-400">-50.0 dB</span>
+          </div>
+          <div class="w-full bg-black border border-[var(--crt-dim)] h-3 p-[1px]">
+            <div class="bg-[var(--crt-text)] h-full" style="width: 95%"></div>
+          </div>
+        </div>
+
+        <div class="p-2 border border-[var(--crt-dim)] bg-black/60 text-[11px]">
+          <div>RESIDUAL NOISE: <strong class="text-white">28.4 dB (STUDIO QUIET)</strong></div>
+          <div class="text-white/40 mt-0.5">VORTEX WIND DUCT: ENGAGED</div>
+        </div>
+      </div>
+
+      <button id="ancToggleBtn" onclick="toggleAncMode()" class="cyber-btn w-full py-2 text-xs font-bold">
+        ANC MODE: [50dB HYBRID MAX]
+      </button>
+    </div>
+
+    <!-- ==========================================
+         PANEL 3: ROTARY SMART DIAL STEPPER (Col Span 1)
+         ========================================== -->
+    <div class="cyber-panel p-6 flex flex-col justify-between">
+      <div class="border-b border-[var(--crt-dim)] pb-2 mb-2">
+        <div class="text-[10px] text-white/50 uppercase">[TACTILE HARDWARE]</div>
+        <h3 class="text-base font-bold uppercase mt-0.5">Analog Case Pot</h3>
+      </div>
+
+      <!-- Retro ASCII Dial Visualizer -->
+      <div class="my-2 p-3 bg-black border border-[var(--crt-dim)] text-center">
+        <pre id="asciiDial" class="text-[11px] leading-tight font-mono text-[var(--crt-text)]">
+   .---[ 75% ]---.
+  /   |  |  |  |  \
+ |   -|- * -|-     |
+  \   |  |  |  |  /
+   '-------------'
+        </pre>
+        <div class="mt-1 text-xs">
+          STEP ANGLE: <span id="rotDeg" class="font-bold">225°</span> // GAIN: <span id="rotVol" class="font-bold">75%</span>
+        </div>
+      </div>
+
+      <!-- Dial Controls -->
+      <div class="grid grid-cols-2 gap-2 mt-2">
+        <button onclick="stepDial(-15)" class="cyber-btn py-1.5 text-xs font-bold">
+          [DEC -15°]
+        </button>
+        <button onclick="stepDial(15)" class="cyber-btn py-1.5 text-xs font-bold">
+          [INC +15°]
+        </button>
+      </div>
+
+      <div class="text-[10px] text-center text-white/40 pt-2 border-t border-[var(--crt-dim)] mt-2">
+        ROTARY ENCODER: OPTICAL 24-CLICK
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL 4: ASCII BLOCK SCHEMATIC (Col Span 2)
+         ========================================== -->
+    <div class="cyber-panel md:col-span-2 p-6 flex flex-col justify-between">
+      <div class="flex items-center justify-between border-b border-[var(--crt-dim)] pb-2 mb-3">
+        <div>
+          <span class="text-[10px] text-white/50 uppercase">[CIRCUIT ARCHITECTURE]</span>
+          <h3 class="text-base font-bold uppercase mt-0.5">Acoustic Signal Path Diagram</h3>
+        </div>
+        <span class="text-[11px] font-mono border border-[var(--crt-dim)] px-2 py-0.5 bg-black">
+          PATH: BI-AMP COHERENT
+        </span>
+      </div>
+
+      <!-- Cyber ASCII Circuit Diagram -->
+      <div class="bg-black/90 p-4 border border-[var(--crt-dim)] overflow-x-auto my-2">
+        <pre class="text-[11px] font-mono leading-relaxed text-[var(--crt-text)] whitespace-pre">
+[BT 5.3 LDAC] ──► [DSP / 24-BIT DAC] ──► [DIRAC CROSSOVER]
+                                               │
+                                 ┌─────────────┴─────────────┐
+                                 ▼                           ▼
+                        [AMP 01: LOW-FREQ]          [AMP 02: HIGH-FREQ]
+                                 │                           │
+                                 ▼                           ▼
+                        [11mm BASS TRANSDUCER]      [6mm PLANAR TWEETER]
+                        (20Hz - 2,500Hz)            (2,500Hz - 40,000Hz)
+        </pre>
+      </div>
+
+      <div class="flex items-center justify-between text-xs pt-3 border-t border-[var(--crt-dim)]">
+        <span class="text-white/50 text-[11px]">Ultra Bass 2.0 Dynamic Engine: ACTIVE</span>
+        <button onclick="triggerCyberToast('LDAC 990kbps lossless bitstream locked')" class="cyber-btn px-3 py-1 text-xs">
+          [QUERY CODEC TELEMETRY]
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL 5: POWER & DISCHARGE CELLS (Col Span 1)
+         ========================================== -->
+    <div class="cyber-panel p-6 flex flex-col justify-between text-center">
+      <div class="border-b border-[var(--crt-dim)] pb-2 mb-2">
+        <div class="text-[10px] text-white/50 uppercase">[POWER HORIZON]</div>
+        <h3 class="text-base font-bold uppercase mt-0.5">Cell Capacity</h3>
+      </div>
+
+      <div class="my-3">
+        <div class="segment-font text-5xl font-black text-[var(--crt-text)]">
+          43:00
+        </div>
+        <div class="text-[11px] text-white/50 uppercase mt-1">HOURS TOTAL RESERVE</div>
+        
+        <!-- Segment Battery Bars -->
+        <div class="flex justify-center gap-1.5 mt-3">
+          <div class="w-4 h-6 bg-[var(--crt-text)]"></div>
+          <div class="w-4 h-6 bg-[var(--crt-text)]"></div>
+          <div class="w-4 h-6 bg-[var(--crt-text)]"></div>
+          <div class="w-4 h-6 bg-[var(--crt-text)]"></div>
+          <div class="w-4 h-6 bg-[var(--crt-dim)]"></div>
+        </div>
+      </div>
+
+      <div class="text-[11px] p-2 bg-black border border-[var(--crt-dim)] text-[var(--crt-text)] font-bold">
+        FAST CHARGE: 10m = 07:00H
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL 6: RETRO CYBER LOG & COMMAND LINE (Col Span 1)
+         ========================================== -->
+    <div class="cyber-panel p-6 flex flex-col justify-between">
+      <div class="border-b border-[var(--crt-dim)] pb-2 mb-2">
+        <div class="text-[10px] text-white/50 uppercase">[TERMINAL I/O]</div>
+        <h3 class="text-base font-bold uppercase mt-0.5">Console Feed</h3>
+      </div>
+
+      <div id="terminalFeed" class="my-2 p-2.5 bg-black border border-[var(--crt-dim)] h-28 overflow-y-auto text-[10px] font-mono text-white/70 space-y-1">
+        <div>&gt; INIT SYS_KERNEL... OK</div>
+        <div>&gt; BT_ADDR: [5C:F9:38:A2:10]</div>
+        <div>&gt; 50dB_ANC: ARMED</div>
+        <div>&gt; DUAL_DRIVERS: SYNCED</div>
+        <div class="text-[var(--crt-text)]">&gt; READY FOR AUDIO_STREAM<span class="cursor-blink">_</span></div>
+      </div>
+
+      <button onclick="sendDiagnosticCommand()" class="cyber-btn w-full py-1.5 text-xs font-bold mt-2">
+        &gt; PING SUBSYSTEM
+      </button>
+    </div>
+
+  </main>
+
+  <!-- INDUSTRIAL FOOTER DUMP -->
+  <footer class="max-w-6xl mx-auto mt-10 p-6 cyber-panel border-t-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono">
+    <div>
+      <div class="text-white/60">CMF BUDS PLUS 2 // INDUSTRIAL SPECIFICATION ARCHIVE</div>
+      <div class="text-[11px] text-white/40 mt-0.5">AUTHENTIC RETRO-FUTURIST TELEMETRY PROTOCOL • ALL SENSORS NOMINAL</div>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="triggerCyberToast('Order transmission queued to CMF factory')" class="cyber-btn px-6 py-2.5 font-bold uppercase">
+        [ACQUIRE HARDWARE — $59]
+      </button>
+    </div>
+  </footer>
+
+  <!-- TELEMETRY TOAST -->
+  <div id="cyberToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-200 ease-out p-3.5 bg-black border-2 border-[var(--crt-text)] text-[var(--crt-text)] font-mono text-xs uppercase shadow-[0_0_20px_var(--crt-dim)] flex items-center gap-2">
+    <span>[SYS_ALERT]</span>
+    <span id="toastMsg">Command Executed</span>
+  </div>
+
+  <script>
+    // Theme Switcher (Orange / Green / Amber CRT)
+    function setTheme(color) {
+      document.documentElement.classList.remove('amber-mode', 'green-mode');
+      if (color === 'amber') document.documentElement.classList.add('amber-mode');
+      if (color === 'green') document.documentElement.classList.add('green-mode');
+      triggerCyberToast(`PHOSPHOR SHIFTED TO ${color.toUpperCase()}-CRT`);
+    }
+
+    // Toast
+    function triggerCyberToast(msg) {
+      const toast = document.getElementById('cyberToast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2400);
+    }
+
+    // Oscilloscope Real-Time Waveform Generator
+    const canvas = document.getElementById('oscCanvas');
+    const ctx = canvas.getContext('2d');
+    let waveType = 'sine';
+    let phase = 0;
+
+    function setWave(type) {
+      waveType = type;
+      triggerCyberToast(`SIGNAL MODULATION: ${type.toUpperCase()}`);
+    }
+
+    function renderOscilloscope() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const style = getComputedStyle(document.documentElement);
+      const strokeColor = style.getPropertyValue('--crt-text').trim() || '#ff5500';
+
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = strokeColor;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = strokeColor;
+
+      ctx.beginPath();
+      const mid = canvas.height / 2;
+      const width = canvas.width;
+
+      for (let x = 0; x < width; x++) {
+        let y = mid;
+        const freq = 0.035;
+
+        if (waveType === 'sine') {
+          y = mid + Math.sin(x * freq + phase) * 45 + Math.sin(x * 0.08 + phase * 1.5) * 15;
+        } else if (waveType === 'square') {
+          const raw = Math.sin(x * freq + phase);
+          y = mid + (raw >= 0 ? 50 : -50);
+        } else if (waveType === 'noise') {
+          y = mid + (Math.random() - 0.5) * 60;
+        }
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+      phase += 0.08;
+      requestAnimationFrame(renderOscilloscope);
+    }
+    renderOscilloscope();
+
+    // Dial Step
+    let dialDeg = 225;
+    let dialGain = 75;
+    function stepDial(d) {
+      dialDeg = Math.min(360, Math.max(0, dialDeg + d));
+      dialGain = Math.round((dialDeg / 360) * 100);
+      document.getElementById('rotDeg').innerText = `${dialDeg}°`;
+      document.getElementById('rotVol').innerText = `${dialGain}%`;
+      document.getElementById('asciiDial').innerText = `   .---[ ${dialGain}% ]---.\n  /   |  |  |  |  \\\n |   -|- * -|-     |\n  \\   |  |  |  |  /\n   '-------------'`;
+      triggerCyberToast(`POT ROTATED TO ${dialDeg}° [GAIN: ${dialGain}%]`);
+    }
+
+    // ANC Toggle
+    let ancActive = true;
+    function toggleAncMode() {
+      ancActive = !ancActive;
+      const btn = document.getElementById('ancToggleBtn');
+      btn.innerText = ancActive ? 'ANC MODE: [50dB HYBRID MAX]' : 'ANC MODE: [TRANSPARENT PASS]';
+      triggerCyberToast(ancActive ? '50dB NULLING FIELD ONLINE' : 'TRANSPARENCY PASSTHROUGH ARMED');
+    }
+
+    // Diagnostic console logger
+    const feed = document.getElementById('terminalFeed');
+    function sendDiagnosticCommand() {
+      const msgs = [
+        '&gt; PING LDAC BUFFER: 990kbps ACK',
+        '&gt; 6-MIC ARRAY PHASE COHERENCE: 99.8%',
+        '&gt; DRIVER IMPEDANCE CHECK: 16 OHM OK',
+        '&gt; HEURISTIC BASS 2.0: PUMP 4.2dB',
+        '&gt; SPATIAL GYRO POLLING: 1000Hz'
+      ];
+      const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+      const el = document.createElement('div');
+      el.innerHTML = randomMsg;
+      feed.appendChild(el);
+      feed.scrollTop = feed.scrollHeight;
+      triggerCyberToast('TELEMETRY PACKET LOGGED');
+    }
+  </script>
+</body>
+</html>
