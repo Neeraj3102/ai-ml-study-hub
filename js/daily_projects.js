@@ -293,14 +293,20 @@ function renderDailyProjectCardHTML(taskObj, week) {
         </div>
       </div>
 
-      <!-- WEEKLY OUTPUT GOAL CONNECTION -->
+      <!-- WEEKLY OUTPUT GOAL CONNECTION & PLAYGROUND ACTION -->
       <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex-wrap gap-2">
         <span class="flex items-center gap-1.5">
           <span>🎯</span> <strong>Weekly Deliverable:</strong> ${escapeHTML(proj.weeklyGoal)}
         </span>
-        <a href="projects.html" class="text-emerald-400 hover:underline font-mono text-[10px] font-bold">
-          View in 15 Resume Projects →
-        </a>
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <a href="playground.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[10px] transition shadow-sm">
+            <span>🐍 Run in Playground</span>
+            <span>→</span>
+          </a>
+          <a href="projects.html" class="text-emerald-400 hover:underline font-mono text-[10px] font-bold">
+            15 Resume Projects →
+          </a>
+        </div>
       </div>
     </div>
   `;

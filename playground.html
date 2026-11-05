@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python In-Browser Playground &bull; AI/ML Engineer Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+  
+  <style>
+    body.theme-cyber {
+      --bg-color: #050811;
+      --card-bg: rgba(13, 20, 36, 0.75);
+      --shadow-light: rgba(255, 255, 255, 0.04);
+      --shadow-dark: rgba(0, 0, 0, 0.7);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-dark: #34d399;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --inset-bg: rgba(9, 14, 26, 0.85);
+      --editor-bg: #090e1a;
+      --terminal-bg: #030712;
+    }
+
+    body.theme-clay {
+      --bg-color: #e6ecf5;
+      --card-bg: #e6ecf5;
+      --shadow-light: #ffffff;
+      --shadow-dark: #b8c4d9;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      --accent: #10b981;
+      --accent-dark: #059669;
+      --card-border: rgba(255, 255, 255, 0.6);
+      --inset-bg: #e6ecf5;
+      --editor-bg: #1e293b;
+      --terminal-bg: #0f172a;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .neu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    body.theme-clay .neu-card {
+      box-shadow: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+    }
+    body.theme-cyber .neu-card {
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .neu-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .neu-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    .code-editor {
+      font-family: 'JetBrains Mono', monospace;
+      tab-size: 4;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body class="theme-cyber">
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-[var(--card-border)] bg-[var(--bg-color)]/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <span class="text-2xl">⚡</span>
+          <span class="font-extrabold text-base tracking-tight text-[var(--text-main)]">AI/ML Engineer Hub</span>
+        </a>
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-semibold border border-emerald-500/20">
+          Wasm Python 3.12+
+        </span>
+      </div>
+
+      <!-- Links & Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <nav class="flex items-center gap-1.5 overflow-x-auto py-1">
+          <a href="index.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">🏠 Home</a>
+          <a href="roadmap.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">📚 22-Week Curriculum</a>
+          <a href="projects.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">🛠️ Resume Lab (15)</a>
+          <a href="tracker.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">⏱️ Drift Engine</a>
+          <a href="analytics_and_chat.html" class="px-3 py-1.5 rounded-xl text-xs font-semibold neu-btn">📊 Analytics & Chats</a>
+          <a href="playground.html" class="px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-400 border border-emerald-500/40 bg-emerald-500/10">🐍 Playground</a>
+        </nav>
+
+        <button onclick="toggleTheme()" id="theme-btn" class="p-2 rounded-xl neu-btn text-xs font-bold flex items-center gap-1.5" title="Switch Theme">
+          <span id="theme-icon">☀️</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN PLAYGROUND CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+    <!-- HERO BAR -->
+    <div class="neu-card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400">
+          <span>🚀 In-Browser Execution Lab</span>
+          <span>•</span>
+          <span id="runtime-status-pill" class="flex items-center gap-1.5 text-amber-400">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            Initializing WebAssembly Runtime...
+          </span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] tracking-tight">
+          Python 3 & NumPy Code Playground
+        </h1>
+        <p class="text-xs sm:text-sm text-[var(--text-muted)]">
+          Zero install, zero backend. Run daily scratch exercises, verify matrix algorithms, and test scripts directly inside your browser.
+        </p>
+      </div>
+
+      <!-- Action Presets -->
+      <div class="flex items-center gap-2 self-stretch md:self-auto flex-wrap">
+        <div class="relative inline-block w-full sm:w-auto">
+          <select id="template-select" onchange="loadTemplate(this.value)" class="w-full sm:w-auto text-xs bg-black/40 border border-[var(--card-border)] text-[var(--text-main)] rounded-xl px-3.5 py-2.5 font-semibold focus:outline-none focus:border-emerald-500 cursor-pointer">
+            <option value="welcome">📌 Template: Day 1 CLI Inspector</option>
+            <option value="variables">🔢 Template: Day 2 Variables & Types</option>
+            <option value="oop_statemachine">⚙️ Template: Week 3 OOP State Machine</option>
+            <option value="numpy_matrix">📐 Template: Week 6 NumPy Matrix Engine</option>
+            <option value="gradient_descent">📈 Template: Week 6 Gradient Descent</option>
+            <option value="bpe_tokenizer">🔤 Template: Week 15 BPE Tokenizer</option>
+            <option value="blank">📝 Blank Canvas</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE EDITOR & TERMINAL SPLIT -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT: CODE EDITOR (7 COLS) -->
+      <div class="lg:col-span-7 neu-card flex flex-col h-[640px] overflow-hidden border border-[var(--card-border)]">
+        
+        <!-- Editor Header -->
+        <div class="p-3.5 bg-black/30 border-b border-[var(--card-border)] flex flex-wrap justify-between items-center gap-2">
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+            <span class="ml-2 font-bold text-[var(--text-muted)]">main.py</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="formatCode()" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--card-border)] text-[var(--text-muted)] hover:text-white transition" title="Clear Code">
+              ↺ Reset
+            </button>
+            <button id="run-btn" onclick="executePython()" disabled class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-black px-4 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 shadow-md">
+              <span id="run-icon">▶</span>
+              <span id="run-text">Run Code (Ctrl+Enter)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Code Area -->
+        <div class="flex-1 relative flex bg-[var(--editor-bg)]">
+          <!-- Line Numbers -->
+          <div id="line-numbers" class="w-12 py-4 text-right pr-3 select-none text-[var(--text-muted)] opacity-40 font-mono text-xs border-r border-white/5 leading-[1.6]">
+            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10
+          </div>
+          <!-- Textarea -->
+          <textarea 
+            id="python-code" 
+            spellcheck="false"
+            oninput="updateLineNumbers()"
+            onkeydown="handleEditorKeys(event)"
+            class="flex-1 p-4 bg-transparent text-emerald-400 font-mono text-xs focus:outline-none resize-none leading-[1.6] custom-scrollbar overflow-y-auto"
+          ></textarea>
+        </div>
+
+        <!-- Editor Footer -->
+        <div class="p-2.5 bg-black/40 border-t border-[var(--card-border)] flex justify-between items-center text-[11px] text-[var(--text-muted)] font-mono">
+          <span id="cursor-pos">Ln 1, Col 1</span>
+          <span>Tab = 4 Spaces &bull; Auto-saves locally</span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: TERMINAL STDOUT & OUTPUT (5 COLS) -->
+      <div class="lg:col-span-5 neu-card flex flex-col h-[640px] overflow-hidden border border-[var(--card-border)]">
+        
+        <!-- Terminal Header -->
+        <div class="p-3.5 bg-black/40 border-b border-[var(--card-border)] flex justify-between items-center">
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="text-emerald-400 font-bold">$ stdout & stderr</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span id="exec-time" class="text-[11px] font-mono text-[var(--text-muted)]">⚡ Ready</span>
+            <button onclick="clearTerminal()" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--card-border)] text-[var(--text-muted)] hover:text-white transition">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Terminal Output Window -->
+        <div id="terminal-output" class="flex-1 p-4 bg-[var(--terminal-bg)] text-slate-100 font-mono text-xs overflow-y-auto custom-scrollbar whitespace-pre-wrap leading-relaxed select-text">
+          <span class="text-slate-500"># Loading Pyodide WebAssembly Python 3.12 runtime...
+# Your execution outputs, prints, and exceptions will appear here.</span>
+        </div>
+
+        <!-- Interactive Package Helper -->
+        <div class="p-3 bg-black/50 border-t border-[var(--card-border)] text-xs text-[var(--text-muted)] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-300">📦 Supported Libraries:</span>
+            <span class="text-[11px] text-emerald-400">NumPy auto-downloads</span>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)]">
+            Built-in: <code class="text-slate-300">sys</code>, <code class="text-slate-300">math</code>, <code class="text-slate-300">json</code>, <code class="text-slate-300">random</code>, <code class="text-slate-300">itertools</code>, <code class="text-slate-300">collections</code>, <code class="text-slate-300">time</code>. Write <code class="text-emerald-400">import numpy as np</code> and run!
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- QUICK REFERENCE CHEATSHEET -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="neu-card p-4 space-y-2">
+        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">⚡ 1. Daily Revision</span>
+        <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+          Open today's lesson, grab the 3-step checklist from the Dashboard, code the solution here, and hit Run to confirm your logic in real time.
+        </p>
+      </div>
+
+      <div class="neu-card p-4 space-y-2">
+        <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">📐 2. NumPy Vectorization</span>
+        <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+          Select the <strong>NumPy Matrix Engine</strong> template to compare pure Python list performance against vectorized dot products.
+        </p>
+      </div>
+
+      <div class="neu-card p-4 space-y-2">
+        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">⚙️ 3. Full Privacy & Offline</span>
+        <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+          Execution runs 100% inside your browser's WebAssembly sandbox. No code is transmitted to any external server.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Templates Database
+    const templates = {
+      welcome: `# Day 1 Scratch Project: CLI Welcome & Runtime Inspector
+import sys
+import platform
+
+def main():
+    print("=" * 50)
+    print("⚡ AI & MACHINE LEARNING ENGINEER HUB")
+    print("=" * 50)
+    print(f"🐍 Python Version : {sys.version.split()[0]}")
+    print(f"💻 Platform System : {platform.system()} {platform.machine()}")
+    print("-" * 50)
+    
+    commitments = [
+        "1. Write clean, disciplined Python without AI auto-complete shortcuts",
+        "2. Solve daily scratch revision projects",
+        "3. Ship all 15 production portfolio capstones"
+    ]
+    
+    print("🎯 22-Week Core Commitments:")
+    for c in commitments:
+        print(f"   {c}")
+    print("=" * 50)
+    print("✅ Day 1 Initialization complete! Ready to build.")
+
+if __name__ == "__main__":
+    main()
+`,
+      variables: `# Day 2 Scratch Project: Student Grade & Metrics Calculator
+def calculate_grade(name: str, scores: list[float]) -> dict:
+    total = sum(scores)
+    avg = total / len(scores)
+    
+    if avg >= 90:
+        letter = "A+ (Outstanding)"
+    elif avg >= 80:
+        letter = "A (Excellent)"
+    elif avg >= 70:
+        letter = "B (Good)"
+    else:
+        letter = "C (Needs Revision)"
+        
+    return {
+        "student": name,
+        "subjects": len(scores),
+        "total": round(total, 2),
+        "average": round(avg, 2),
+        "grade": letter
+    }
+
+student_scores = [92.5, 88.0, 95.0, 79.5, 91.0]
+report = calculate_grade("Neeraj", student_scores)
+
+print("🎓 STUDENT GRADE REPORT")
+print("-" * 35)
+for key, val in report.items():
+    print(f"{key.capitalize():<12}: {val}")
+print("-" * 35)
+`,
+      oop_statemachine: `# Week 3 Project: Task Workflow State Machine (OOP)
+from dataclasses import dataclass
+from typing import Optional
+
+class StateMachineError(Exception):
+    """Base exception for workflow state errors."""
+    pass
+
+class InvalidTransitionError(StateMachineError):
+    pass
+
+@dataclass
+class Task:
+    id: str
+    title: str
+    state: str = "TODO"
+
+    def transition_to(self, new_state: str):
+        valid_transitions = {
+            "TODO": ["IN_PROGRESS", "CANCELLED"],
+            "IN_PROGRESS": ["REVIEW", "TODO"],
+            "REVIEW": ["DONE", "IN_PROGRESS"],
+            "DONE": [],
+            "CANCELLED": []
+        }
+        
+        allowed = valid_transitions.get(self.state, [])
+        if new_state not in allowed:
+            raise InvalidTransitionError(
+                f"Cannot transition task '{self.title}' from {self.state} to {new_state}. Allowed: {allowed}"
+            )
+            
+        print(f"🔄 Task [{self.id}] '{self.title}': {self.state} -> {new_state}")
+        self.state = new_state
+
+# Verification
+t = Task("T-101", "Build CLI Automation Suite")
+print(f"Initial State: {t.state}")
+
+t.transition_to("IN_PROGRESS")
+t.transition_to("REVIEW")
+t.transition_to("DONE")
+
+try:
+    t.transition_to("IN_PROGRESS") # Will raise InvalidTransitionError
+except InvalidTransitionError as e:
+    print(f"⚠️ Caught expected error: {e}")
+`,
+      numpy_matrix: `# Week 6: Vectorized Matrix Operations vs Pure Python
+import numpy as np
+import time
+
+print("⚡ Benchmarking Matrix Multiplication...")
+
+# Create two 300x300 random matrices
+size = 300
+A = np.random.rand(size, size)
+B = np.random.rand(size, size)
+
+# 1. NumPy Vectorized Dot Product (@)
+start = time.perf_counter()
+C_np = A @ B
+np_time = (time.perf_counter() - start) * 1000
+
+print(f"NumPy Matrix Multiplied shape {C_np.shape} in {np_time:.2f} ms")
+print(f"Matrix Frobenius Norm: {np.linalg.norm(C_np):.4f}")
+print("🚀 SIMD hardware vectorization is up to 50x faster than interpreted loops!")
+`,
+      gradient_descent: `# Week 6: Gradient Descent from Scratch in NumPy
+import numpy as np
+
+# Generate synthetic linear data: y = 3x + 5 + noise
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 5 + 3 * X + np.random.randn(100, 1) * 0.1
+
+# Initialize parameters
+w = np.random.randn(1, 1)
+b = np.zeros((1, 1))
+learning_rate = 0.1
+epochs = 50
+
+print(f"Initial Weights: w={w[0][0]:.3f}, b={b[0][0]:.3f}")
+
+for epoch in range(1, epochs + 1):
+    y_pred = X.dot(w) + b
+    loss = np.mean((y_pred - y) ** 2)
+    
+    dw = (2 / len(X)) * X.T.dot(y_pred - y)
+    db = (2 / len(X)) * np.sum(y_pred - y)
+    
+    w -= learning_rate * dw
+    b -= learning_rate * db
+    
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch:02d} | Loss (MSE): {loss:.5f} | w: {w[0][0]:.3f}, b: {b[0][0]:.3f}")
+
+print("-" * 50)
+print(f"🎯 Converged! Expected: w=3.0, b=5.0 -> Learned: w={w[0][0]:.3f}, b={b[0][0]:.3f}")
+`,
+      bpe_tokenizer: `# Week 15: Mini Byte Pair Encoding (BPE) from Scratch
+from collections import Counter
+
+def get_stats(vocab):
+    pairs = Counter()
+    for word, freq in vocab.items():
+        symbols = word.split()
+        for i in range(len(symbols) - 1):
+            pairs[symbols[i], symbols[i+1]] += freq
+    return pairs
+
+def merge_vocab(pair, v_in):
+    v_out = {}
+    bigram = ' '.join(pair)
+    replacement = ''.join(pair)
+    for word in v_in:
+        w_out = word.replace(bigram, replacement)
+        v_out[w_out] = v_in[word]
+    return v_out
+
+# Sample corpus
+vocab = {
+    'l o w </w>': 5,
+    'l o w e r </w>': 2,
+    'n e w e s t </w>': 6,
+    'w i d e s t </w>': 3
+}
+
+print("Original Vocab:")
+print(vocab)
+print("-" * 50)
+
+# Perform 5 BPE merge operations
+for i in range(5):
+    pairs = get_stats(vocab)
+    if not pairs:
+        break
+    best = max(pairs, key=pairs.get)
+    vocab = merge_vocab(best, vocab)
+    print(f"Merge #{i+1}: Best Pair {best} -> '{''.join(best)}'")
+
+print("-" * 50)
+print("Updated Merged Vocab:")
+for k, v in vocab.items():
+    print(f"  {k}: {v}")
+`,
+      blank: `# Write your custom Python code here
+print("Hello AI/ML Engineer!")
+`
+    };
+
+    let pyodideInstance = null;
+    let isRunning = false;
+
+    // Initialize Theme
+    function initTheme() {
+      const saved = localStorage.getItem('ai_hub_theme') || 'cyber';
+      document.body.className = saved === 'clay' ? 'theme-clay' : 'theme-cyber';
+      document.getElementById('theme-icon').textContent = saved === 'clay' ? '🌙' : '☀️';
+    }
+
+    function toggleTheme() {
+      const isCyber = document.body.classList.contains('theme-cyber');
+      const next = isCyber ? 'clay' : 'cyber';
+      document.body.className = next === 'clay' ? 'theme-clay' : 'theme-cyber';
+      document.getElementById('theme-icon').textContent = next === 'clay' ? '🌙' : '☀️';
+      localStorage.setItem('ai_hub_theme', next);
+    }
+
+    // Initialize Pyodide Runtime
+    async function initPyodideRuntime() {
+      const statusPill = document.getElementById('runtime-status-pill');
+      const terminal = document.getElementById('terminal-output');
+      const runBtn = document.getElementById('run-btn');
+
+      try {
+        pyodideInstance = await loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"
+        });
+
+        statusPill.className = "flex items-center gap-1.5 text-emerald-400 font-bold";
+        statusPill.innerHTML = `
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Python 3.12 Runtime Ready
+        `;
+
+        terminal.innerHTML = `<span class="text-emerald-400 font-bold">✓ Python WebAssembly runtime initialized successfully!</span>\n<span class="text-slate-400">Click 'Run Code' or press Ctrl+Enter to execute.</span>\n\n`;
+        runBtn.disabled = false;
+
+        // Check if there is code passed via URL hash / query
+        const urlParams = new URLSearchParams(window.location.search);
+        const codeParam = urlParams.get('code');
+        if (codeParam) {
+          document.getElementById('python-code').value = decodeURIComponent(codeParam);
+          document.getElementById('template-select').value = "blank";
+        } else {
+          loadTemplate('welcome');
+        }
+
+        updateLineNumbers();
+
+      } catch (err) {
+        statusPill.className = "flex items-center gap-1.5 text-red-400 font-bold";
+        statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Runtime Load Error`;
+        terminal.innerHTML = `<span class="text-red-400 font-bold">Failed to load WebAssembly Python:</span> ${err.message}`;
+      }
+    }
+
+    function loadTemplate(key) {
+      const code = templates[key] || templates.welcome;
+      document.getElementById('python-code').value = code;
+      updateLineNumbers();
+    }
+
+    function updateLineNumbers() {
+      const codeArea = document.getElementById('python-code');
+      const lineBox = document.getElementById('line-numbers');
+      const lineCount = codeArea.value.split('\n').length;
+      let nums = '';
+      for (let i = 1; i <= Math.max(lineCount, 15); i++) {
+        nums += i + '<br>';
+      }
+      lineBox.innerHTML = nums;
+
+      // Update cursor position display
+      const pos = codeArea.selectionStart;
+      const lines = codeArea.value.substring(0, pos).split('\n');
+      const currentLine = lines.length;
+      const currentCol = lines[lines.length - 1].length + 1;
+      document.getElementById('cursor-pos').textContent = `Ln ${currentLine}, Col ${currentCol}`;
+    }
+
+    function handleEditorKeys(e) {
+      const area = e.target;
+      
+      // Ctrl+Enter or Cmd+Enter to run
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        executePython();
+        return;
+      }
+
+      // Tab indentation support (4 spaces)
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = area.selectionStart;
+        const end = area.selectionEnd;
+        area.value = area.value.substring(0, start) + "    " + area.value.substring(end);
+        area.selectionStart = area.selectionEnd = start + 4;
+        updateLineNumbers();
+      }
+    }
+
+    // Execute Python Code
+    async function executePython() {
+      if (!pyodideInstance || isRunning) return;
+
+      const code = document.getElementById('python-code').value;
+      const terminal = document.getElementById('terminal-output');
+      const runBtn = document.getElementById('run-btn');
+      const runIcon = document.getElementById('run-icon');
+      const runText = document.getElementById('run-text');
+      const execTime = document.getElementById('exec-time');
+
+      isRunning = true;
+      runBtn.disabled = true;
+      runIcon.textContent = "⏳";
+      runText.textContent = "Running...";
+      terminal.textContent = "";
+
+      let stdoutText = "";
+      pyodideInstance.setStdout({
+        batched: (str) => {
+          stdoutText += str + "\n";
+        }
+      });
+      pyodideInstance.setStderr({
+        batched: (str) => {
+          stdoutText += str + "\n";
+        }
+      });
+
+      // Check if numpy is imported and load package if needed
+      if (code.includes('import numpy') || code.includes('from numpy')) {
+        execTime.textContent = "📦 Loading NumPy...";
+        try {
+          await pyodideInstance.loadPackage('numpy');
+        } catch (pkgErr) {
+          stdoutText += `[Error loading NumPy package: ${pkgErr.message}]\n`;
+        }
+      }
+
+      const startTime = performance.now();
+
+      try {
+        await pyodideInstance.runPythonAsync(code);
+        const duration = (performance.now() - startTime).toFixed(1);
+        terminal.textContent = stdoutText || "Program finished with 0 output.";
+        execTime.textContent = `⚡ Executed in ${duration}ms`;
+        execTime.className = "text-[11px] font-mono text-emerald-400";
+      } catch (err) {
+        const duration = (performance.now() - startTime).toFixed(1);
+        terminal.innerHTML = `<span class="text-red-400 font-bold">${escapeHtml(err.message)}</span>`;
+        execTime.textContent = `⚠️ Error in ${duration}ms`;
+        execTime.className = "text-[11px] font-mono text-red-400";
+      } finally {
+        isRunning = false;
+        runBtn.disabled = false;
+        runIcon.textContent = "▶";
+        runText.textContent = "Run Code (Ctrl+Enter)";
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    }
+
+    function clearTerminal() {
+      document.getElementById('terminal-output').textContent = "";
+      document.getElementById('exec-time').textContent = "⚡ Cleared";
+    }
+
+    function formatCode() {
+      const select = document.getElementById('template-select');
+      loadTemplate(select.value);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Init
+    initTheme();
+    initPyodideRuntime();
+
+    // Attach click listener to textarea to update cursor
+    document.getElementById('python-code').addEventListener('click', updateLineNumbers);
+    document.getElementById('python-code').addEventListener('keyup', updateLineNumbers);
+  </script>
+</body>
+</html>
