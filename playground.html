@@ -251,10 +251,28 @@
           ></textarea>
         </div>
 
-        <!-- Editor Footer -->
-        <div class="p-2.5 bg-black/40 border-t border-[var(--card-border)] flex justify-between items-center text-[11px] text-[var(--text-muted)] font-mono">
-          <span id="cursor-pos">Ln 1, Col 1</span>
-          <span>Tab = 4 Spaces &bull; Auto-saves locally</span>
+        <!-- Editor Footer with Bottom Quick Action Bar -->
+        <div class="p-2.5 bg-black/40 border-t border-[var(--card-border)] flex flex-wrap justify-between items-center gap-2 text-[11px] text-[var(--text-muted)] font-mono">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="cursor-pos">Ln 1, Col 1</span>
+            <button onclick="scrollToTop()" class="px-2 py-0.5 rounded border border-[var(--card-border)] hover:border-emerald-500/40 text-slate-300 hover:text-emerald-400 transition flex items-center gap-1 font-bold" title="Scroll to top of code">
+              <span>⬆ Top</span>
+            </button>
+            <button onclick="scrollToBottom()" class="px-2 py-0.5 rounded border border-[var(--card-border)] hover:border-emerald-500/40 text-slate-300 hover:text-emerald-400 transition flex items-center gap-1 font-bold" title="Scroll to bottom of code">
+              <span>⬇ Bottom</span>
+            </button>
+          </div>
+
+          <!-- Bottom Run & Stop Buttons (No Need to Scroll Up!) -->
+          <div class="flex items-center gap-2">
+            <button id="run-btn-bottom" onclick="executePython()" disabled class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-black px-3.5 py-1 rounded-lg text-xs transition flex items-center gap-1 shadow-sm">
+              <span>▶ Run</span>
+            </button>
+            <button id="stop-btn-bottom" onclick="stopExecution()" disabled class="bg-red-500 hover:bg-red-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-3 py-1 rounded-lg text-xs transition flex items-center gap-1 shadow-sm" title="Stop execution">
+              <span>⏹ Stop</span>
+            </button>
+            <span class="hidden md:inline text-slate-400 text-[10px]">Ctrl+Enter runs from any line</span>
+          </div>
         </div>
 
       </div>
@@ -580,6 +598,8 @@ print("Hello AI/ML Engineer!")
           statusPill.className = "flex items-center gap-1.5 text-emerald-400 font-bold";
           statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Python 3.12 Isolated Sandbox (Timeout: 6s)`;
           runBtn.disabled = false;
+          const runBtnBottom = document.getElementById('run-btn-bottom');
+          if (runBtnBottom) runBtnBottom.disabled = false;
           document.getElementById('exec-time').textContent = "⚡ Sandbox Ready";
 
           if (!terminal.textContent.includes('✓')) {
@@ -635,7 +655,14 @@ print("Hello AI/ML Engineer!")
 
       isExecuting = true;
       runBtn.disabled = true;
-      document.getElementById('stop-btn').disabled = false;
+      const runBtnBottom = document.getElementById('run-btn-bottom');
+      if (runBtnBottom) runBtnBottom.disabled = true;
+      
+      const stopBtn = document.getElementById('stop-btn');
+      if (stopBtn) stopBtn.disabled = false;
+      const stopBtnBottom = document.getElementById('stop-btn-bottom');
+      if (stopBtnBottom) stopBtnBottom.disabled = false;
+
       runIcon.textContent = "⏳";
       runText.textContent = "Running...";
       execTime.textContent = "⏱️ Running (Max 6s)...";
@@ -681,19 +708,38 @@ print("Hello AI/ML Engineer!")
     function finishExecution(statusText, statusClass) {
       isExecuting = false;
       const runBtn = document.getElementById('run-btn');
+      const runBtnBottom = document.getElementById('run-btn-bottom');
       const stopBtn = document.getElementById('stop-btn');
+      const stopBtnBottom = document.getElementById('stop-btn-bottom');
       const runIcon = document.getElementById('run-icon');
       const runText = document.getElementById('run-text');
       const execTime = document.getElementById('exec-time');
       const terminal = document.getElementById('terminal-output');
 
       runBtn.disabled = false;
+      if (runBtnBottom) runBtnBottom.disabled = false;
       if (stopBtn) stopBtn.disabled = true;
+      if (stopBtnBottom) stopBtnBottom.disabled = true;
+
       runIcon.textContent = "▶";
       runText.textContent = "Run (Ctrl+Enter)";
       execTime.textContent = statusText;
       execTime.className = statusClass;
       terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function scrollToTop() {
+      const codeArea = document.getElementById('python-code');
+      if (codeArea) {
+        codeArea.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function scrollToBottom() {
+      const codeArea = document.getElementById('python-code');
+      if (codeArea) {
+        codeArea.scrollTo({ top: codeArea.scrollHeight, behavior: 'smooth' });
+      }
     }
 
     function loadTemplate(key) {
