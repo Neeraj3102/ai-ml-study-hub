@@ -561,6 +561,13 @@ print("Hello AI/ML Engineer!")
           indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"
         });
 
+        // SECURITY HARDENING: Disallow 'js' and 'pyodide_js' modules to prevent DOM/localStorage access
+        await pyodideInstance.runPythonAsync(`
+import sys
+sys.modules['js'] = None
+sys.modules['pyodide_js'] = None
+`);
+
         statusPill.className = "flex items-center gap-1.5 text-emerald-400 font-bold";
         statusPill.innerHTML = `
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
@@ -721,7 +728,12 @@ print("Hello AI/ML Engineer!")
     }
 
     function escapeHtml(str) {
-      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     // Init
