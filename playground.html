@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
   
   <style>
     body.theme-cyber {
@@ -550,50 +549,130 @@ print("Hello AI/ML Engineer!")
       localStorage.setItem('ai_hub_theme', next);
     }
 
-    // Initialize Pyodide Runtime
-    async function initPyodideRuntime() {
+    let pythonWorker = null;
+    let watchdogTimer = null;
+    let isExecuting = false;
+    const TIMEOUT_MS = 6000; // 6 seconds timeout threshold
+
+    // Initialize Pyodide Background Web Worker
+    function initWorker() {
       const statusPill = document.getElementById('runtime-status-pill');
       const terminal = document.getElementById('terminal-output');
       const runBtn = document.getElementById('run-btn');
 
-      try {
-        pyodideInstance = await loadPyodide({
-          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"
-        });
-
-        // SECURITY HARDENING: Disallow 'js' and 'pyodide_js' modules to prevent DOM/localStorage access
-        await pyodideInstance.runPythonAsync(`
-import sys
-sys.modules['js'] = None
-sys.modules['pyodide_js'] = None
-`);
-
-        statusPill.className = "flex items-center gap-1.5 text-emerald-400 font-bold";
-        statusPill.innerHTML = `
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          Python 3.12 Runtime Ready
-        `;
-
-        terminal.innerHTML = `<span class="text-emerald-400 font-bold">✓ Python WebAssembly runtime initialized successfully!</span>\n<span class="text-slate-400">Click 'Run Code' or press Ctrl+Enter to execute.</span>\n\n`;
-        runBtn.disabled = false;
-
-        // Check if there is code passed via URL hash / query
-        const urlParams = new URLSearchParams(window.location.search);
-        const codeParam = urlParams.get('code');
-        if (codeParam) {
-          document.getElementById('python-code').value = decodeURIComponent(codeParam);
-          document.getElementById('template-select').value = "blank";
-        } else {
-          loadTemplate('welcome');
-        }
-
-        updateLineNumbers();
-
-      } catch (err) {
-        statusPill.className = "flex items-center gap-1.5 text-red-400 font-bold";
-        statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Runtime Load Error`;
-        terminal.innerHTML = `<span class="text-red-400 font-bold">Failed to load WebAssembly Python:</span> ${err.message}`;
+      if (pythonWorker) {
+        try { pythonWorker.terminate(); } catch (e) {}
       }
+
+      statusPill.className = "flex items-center gap-1.5 text-amber-400 font-bold";
+      statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Initializing WebAssembly Sandbox...`;
+
+      pythonWorker = new Worker('js/pyodide_worker.js');
+
+      pythonWorker.onmessage = (e) => {
+        const { type, text, error, duration } = e.data;
+
+        if (type === 'ready') {
+          statusPill.className = "flex items-center gap-1.5 text-emerald-400 font-bold";
+          statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Python 3.12 Isolated Sandbox (Timeout: 6s)`;
+          runBtn.disabled = false;
+          document.getElementById('exec-time').textContent = "⚡ Sandbox Ready";
+
+          if (!terminal.textContent.includes('✓')) {
+            terminal.innerHTML = `<span class="text-emerald-400 font-bold">✓ Python WebAssembly sandbox initialized with infinite loop protection!</span>\n<span class="text-slate-400">Click 'Run Code' or press Ctrl+Enter to execute. Scripts exceeding 6s are safely killed.</span>\n\n`;
+          }
+
+          // Check if there is code passed via URL query
+          const urlParams = new URLSearchParams(window.location.search);
+          const codeParam = urlParams.get('code');
+          if (codeParam) {
+            document.getElementById('python-code').value = decodeURIComponent(codeParam);
+            document.getElementById('template-select').value = "blank";
+          } else if (!document.getElementById('python-code').value.trim()) {
+            loadTemplate('welcome');
+          }
+          updateLineNumbers();
+
+        } else if (type === 'stdout' || type === 'stderr') {
+          terminal.textContent += text;
+          terminal.scrollTop = terminal.scrollHeight;
+        } else if (type === 'status') {
+          document.getElementById('exec-time').textContent = text;
+        } else if (type === 'done') {
+          clearTimeout(watchdogTimer);
+          finishExecution(`⚡ Executed in ${duration}ms`, "text-emerald-400 font-mono text-[11px]");
+        } else if (type === 'error') {
+          clearTimeout(watchdogTimer);
+          terminal.innerHTML += `\n<span class="text-red-400 font-bold">${escapeHtml(error)}</span>\n`;
+          finishExecution("⚠️ Execution Error", "text-red-400 font-mono text-[11px]");
+        } else if (type === 'init_error') {
+          statusPill.className = "flex items-center gap-1.5 text-red-400 font-bold";
+          statusPill.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Worker Init Failed`;
+          terminal.innerHTML = `<span class="text-red-400 font-bold">Failed to initialize WebAssembly sandbox:</span> ${escapeHtml(error)}`;
+        }
+      };
+
+      pythonWorker.onerror = (err) => {
+        clearTimeout(watchdogTimer);
+        terminal.innerHTML += `\n<span class="text-red-400 font-bold">WebAssembly Worker thread error: ${escapeHtml(err.message)}</span>\n`;
+        finishExecution("⚠️ Thread Error", "text-red-400 font-mono text-[11px]");
+      };
+    }
+
+    function executePython() {
+      if (isExecuting || !pythonWorker) return;
+
+      const code = document.getElementById('python-code').value;
+      const terminal = document.getElementById('terminal-output');
+      const runBtn = document.getElementById('run-btn');
+      const runIcon = document.getElementById('run-icon');
+      const runText = document.getElementById('run-text');
+      const execTime = document.getElementById('exec-time');
+
+      isExecuting = true;
+      runBtn.disabled = true;
+      runIcon.textContent = "⏳";
+      runText.textContent = "Running...";
+      execTime.textContent = "⏱️ Running (Max 6s)...";
+      execTime.className = "text-[11px] font-mono text-amber-400";
+      terminal.textContent = "";
+
+      // 1. Arm watchdog timer (Forceful kill on infinite loops)
+      watchdogTimer = setTimeout(() => {
+        if (isExecuting) {
+          terminal.innerHTML += `\n<span class="text-red-400 font-bold">⚠️ Execution Timeout (6.0s Limit Exceeded)</span>\n` +
+                                `<span class="text-slate-300">Infinite loop detected! The script was forcefully terminated to keep your browser responsive.\n` +
+                                `Resetting isolated WebAssembly worker...</span>\n`;
+          
+          finishExecution("⛔ Terminated (Timeout)", "text-red-400 font-mono text-[11px]");
+          
+          // Terminate the stuck thread instantly
+          try { pythonWorker.terminate(); } catch (e) {}
+          pythonWorker = null;
+
+          // Re-spawn fresh worker
+          initWorker();
+        }
+      }, TIMEOUT_MS);
+
+      // 2. Dispatch code to background Web Worker
+      pythonWorker.postMessage({ type: 'run', code: code });
+    }
+
+    function finishExecution(statusText, statusClass) {
+      isExecuting = false;
+      const runBtn = document.getElementById('run-btn');
+      const runIcon = document.getElementById('run-icon');
+      const runText = document.getElementById('run-text');
+      const execTime = document.getElementById('exec-time');
+      const terminal = document.getElementById('terminal-output');
+
+      runBtn.disabled = false;
+      runIcon.textContent = "▶";
+      runText.textContent = "Run Code (Ctrl+Enter)";
+      execTime.textContent = statusText;
+      execTime.className = statusClass;
+      terminal.scrollTop = terminal.scrollHeight;
     }
 
     function loadTemplate(key) {
@@ -641,67 +720,6 @@ sys.modules['pyodide_js'] = None
       }
     }
 
-    // Execute Python Code
-    async function executePython() {
-      if (!pyodideInstance || isRunning) return;
-
-      const code = document.getElementById('python-code').value;
-      const terminal = document.getElementById('terminal-output');
-      const runBtn = document.getElementById('run-btn');
-      const runIcon = document.getElementById('run-icon');
-      const runText = document.getElementById('run-text');
-      const execTime = document.getElementById('exec-time');
-
-      isRunning = true;
-      runBtn.disabled = true;
-      runIcon.textContent = "⏳";
-      runText.textContent = "Running...";
-      terminal.textContent = "";
-
-      let stdoutText = "";
-      pyodideInstance.setStdout({
-        batched: (str) => {
-          stdoutText += str + "\n";
-        }
-      });
-      pyodideInstance.setStderr({
-        batched: (str) => {
-          stdoutText += str + "\n";
-        }
-      });
-
-      // Check if numpy is imported and load package if needed
-      if (code.includes('import numpy') || code.includes('from numpy')) {
-        execTime.textContent = "📦 Loading NumPy...";
-        try {
-          await pyodideInstance.loadPackage('numpy');
-        } catch (pkgErr) {
-          stdoutText += `[Error loading NumPy package: ${pkgErr.message}]\n`;
-        }
-      }
-
-      const startTime = performance.now();
-
-      try {
-        await pyodideInstance.runPythonAsync(code);
-        const duration = (performance.now() - startTime).toFixed(1);
-        terminal.textContent = stdoutText || "Program finished with 0 output.";
-        execTime.textContent = `⚡ Executed in ${duration}ms`;
-        execTime.className = "text-[11px] font-mono text-emerald-400";
-      } catch (err) {
-        const duration = (performance.now() - startTime).toFixed(1);
-        terminal.innerHTML = `<span class="text-red-400 font-bold">${escapeHtml(err.message)}</span>`;
-        execTime.textContent = `⚠️ Error in ${duration}ms`;
-        execTime.className = "text-[11px] font-mono text-red-400";
-      } finally {
-        isRunning = false;
-        runBtn.disabled = false;
-        runIcon.textContent = "▶";
-        runText.textContent = "Run Code (Ctrl+Enter)";
-        terminal.scrollTop = terminal.scrollHeight;
-      }
-    }
-
     function toggleCheatsheet() {
       const drawer = document.getElementById('syntax-drawer');
       drawer.classList.toggle('hidden');
@@ -738,7 +756,7 @@ sys.modules['pyodide_js'] = None
 
     // Init
     initTheme();
-    initPyodideRuntime();
+    initWorker();
 
     // Attach click listener to textarea to update cursor
     document.getElementById('python-code').addEventListener('click', updateLineNumbers);
