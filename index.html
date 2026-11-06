@@ -632,6 +632,7 @@
           <a href="tracker.html" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn">⏱️ Adaptive Rolling Engine</a>
           <a href="analytics_and_chat.html" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-emerald-400 border border-emerald-500/30">📊 Analytics & AI Chats</a>
           <a href="playground.html" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-cyan-400 border border-cyan-500/30">🐍 Python Playground</a>
+          <a href="flashcards.html" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition shrink-0 whitespace-nowrap neu-btn text-purple-400 border border-purple-500/30">🧠 Flashcards</a>
         </nav>
 
       </div>
@@ -713,6 +714,72 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- BEGINNER HABIT MOMENTUM & UNLOCKABLE MILESTONE BADGES (100% LOCALSTORAGE) -->
+    <div class="neu-card p-5 sm:p-7 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">🏆</span>
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-slate-800">Beginner Mastery & Habit Badges</h3>
+            <p class="text-xs text-slate-500">Track daily consistency and unlock milestones as you complete lessons & micro-drills.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold font-mono">
+            <span>🔥 Streak:</span>
+            <span id="badge-streak-val">1 Day</span>
+          </div>
+          <span id="badge-unlocked-count" class="neu-pill px-3 py-1 text-xs font-mono font-bold text-emerald-700">1 / 6 Unlocked</span>
+        </div>
+      </div>
+
+      <!-- BADGES GRID -->
+      <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-1">
+        <!-- 1. Day 1 Explorer -->
+        <div class="p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1">
+          <span class="text-2xl block">🌱</span>
+          <span class="text-xs font-bold text-emerald-400 block">Day 1 Started</span>
+          <span class="text-[10px] text-slate-400 block">Began curriculum</span>
+          <span class="inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded">Unlocked ✓</span>
+        </div>
+        <!-- 2. Code Runner -->
+        <div id="badge-runner" class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-center space-y-1 opacity-70">
+          <span class="text-2xl block">🐍</span>
+          <span class="text-xs font-bold text-slate-300 block">Code Runner</span>
+          <span class="text-[10px] text-slate-400 block">Run in Playground</span>
+          <span class="inline-block text-[9px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">Try Playground</span>
+        </div>
+        <!-- 3. Active Streak -->
+        <div id="badge-streak-card" class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-center space-y-1 opacity-70">
+          <span class="text-2xl block">⚡</span>
+          <span class="text-xs font-bold text-slate-300 block">3-Day Habit</span>
+          <span class="text-[10px] text-slate-400 block">3 consecutive days</span>
+          <span class="inline-block text-[9px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">In Progress</span>
+        </div>
+        <!-- 4. Flashcard Reviewer -->
+        <div id="badge-flashcards" class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-center space-y-1 opacity-70">
+          <span class="text-2xl block">🧠</span>
+          <span class="text-xs font-bold text-slate-300 block">Recall Master</span>
+          <span class="text-[10px] text-slate-400 block">Review 5 flashcards</span>
+          <span class="inline-block text-[9px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">Go to Cards</span>
+        </div>
+        <!-- 5. First Micro-Drill -->
+        <div id="badge-drill" class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-center space-y-1 opacity-70">
+          <span class="text-2xl block">🎯</span>
+          <span class="text-xs font-bold text-slate-300 block">Drill Solver</span>
+          <span class="text-[10px] text-slate-400 block">Solve daily drill</span>
+          <span class="inline-block text-[9px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">Pending</span>
+        </div>
+        <!-- 6. Phase 1 Finisher -->
+        <div id="badge-phase1" class="p-3 bg-black/20 rounded-xl border border-[var(--card-border)] text-center space-y-1 opacity-70">
+          <span class="text-2xl block">🏆</span>
+          <span class="text-xs font-bold text-slate-300 block">Software Core</span>
+          <span class="text-[10px] text-slate-400 block">Complete Phase 1</span>
+          <span class="inline-block text-[9px] font-mono text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">W1-5 Milestone</span>
+        </div>
+      </div>
     </div>
 
     <!-- DEDICATED BOX: THAT DAY'S STUDY TOPICS & SYLLABUS BREAKDOWN (WITH UNDO TICK & LIVE SYNC) -->
@@ -1363,6 +1430,81 @@
       if (typeof renderWeakSpotsList === 'function') {
         renderWeakSpotsList();
       }
+      updateBadgesUI(completed);
+    }
+
+    function updateBadgesUI(completed) {
+      const flashData = JSON.parse(localStorage.getItem('srs_flashcards_progress') || '{"reviewed": 0, "streak": 1}');
+      const streak = flashData.streak || 1;
+      const reviewed = flashData.reviewed || 0;
+
+      const streakEl = document.getElementById('badge-streak-val');
+      if (streakEl) streakEl.innerText = `${streak} Day${streak > 1 ? 's' : ''}`;
+
+      let unlocked = 1;
+
+      // Badge 2: Runner
+      const runnerBadge = document.getElementById('badge-runner');
+      if (runnerBadge && (completed >= 1 || localStorage.getItem('playground_used'))) {
+        unlocked++;
+        runnerBadge.className = "p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1";
+        const lastSpan = runnerBadge.querySelector('span:last-child');
+        if (lastSpan) {
+          lastSpan.className = "inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded";
+          lastSpan.innerText = "Unlocked ✓";
+        }
+      }
+
+      // Badge 3: Streak 3+
+      const streakBadge = document.getElementById('badge-streak-card');
+      if (streakBadge && streak >= 3) {
+        unlocked++;
+        streakBadge.className = "p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1";
+        const lastSpan = streakBadge.querySelector('span:last-child');
+        if (lastSpan) {
+          lastSpan.className = "inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded";
+          lastSpan.innerText = "Unlocked ✓";
+        }
+      }
+
+      // Badge 4: Flashcards 5+
+      const flashBadge = document.getElementById('badge-flashcards');
+      if (flashBadge && reviewed >= 5) {
+        unlocked++;
+        flashBadge.className = "p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1";
+        const lastSpan = flashBadge.querySelector('span:last-child');
+        if (lastSpan) {
+          lastSpan.className = "inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded";
+          lastSpan.innerText = "Unlocked ✓";
+        }
+      }
+
+      // Badge 5: Drill Solver
+      const drillBadge = document.getElementById('badge-drill');
+      if (drillBadge && completed >= 3) {
+        unlocked++;
+        drillBadge.className = "p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1";
+        const lastSpan = drillBadge.querySelector('span:last-child');
+        if (lastSpan) {
+          lastSpan.className = "inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded";
+          lastSpan.innerText = "Unlocked ✓";
+        }
+      }
+
+      // Badge 6: Phase 1 (41 lessons)
+      const phase1Badge = document.getElementById('badge-phase1');
+      if (phase1Badge && completed >= 41) {
+        unlocked++;
+        phase1Badge.className = "p-3 bg-black/20 rounded-xl border border-emerald-500/40 text-center space-y-1";
+        const lastSpan = phase1Badge.querySelector('span:last-child');
+        if (lastSpan) {
+          lastSpan.className = "inline-block text-[9px] font-mono text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded";
+          lastSpan.innerText = "Unlocked ✓";
+        }
+      }
+
+      const countEl = document.getElementById('badge-unlocked-count');
+      if (countEl) countEl.innerText = `${unlocked} / 6 Unlocked`;
     }
 
 

@@ -181,12 +181,52 @@
           </div>
 
           <div class="flex items-center gap-2">
+            <button onclick="toggleCheatsheet()" class="text-xs px-2.5 py-1 rounded-lg border border-cyan-500/30 text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 transition flex items-center gap-1 font-bold">
+              <span>📋 1-Click Syntax Helper</span>
+            </button>
             <button onclick="formatCode()" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--card-border)] text-[var(--text-muted)] hover:text-white transition" title="Clear Code">
               ↺ Reset
             </button>
             <button id="run-btn" onclick="executePython()" disabled class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-black px-4 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 shadow-md">
               <span id="run-icon">▶</span>
               <span id="run-text">Run Code (Ctrl+Enter)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1-CLICK BEGINNER SYNTAX DRAWER -->
+        <div id="syntax-drawer" class="bg-black/40 border-b border-[var(--card-border)] p-3 space-y-2 hidden">
+          <div class="flex items-center justify-between text-xs text-slate-300">
+            <span class="font-bold text-cyan-400">💡 Click any syntax snippet to paste it directly into your code:</span>
+            <button onclick="toggleCheatsheet()" class="text-[11px] text-slate-400 hover:text-white">✕ Close</button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+            <button onclick="insertSnippet('age = int(input(\"Enter age: \"))\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-emerald-500/20 border border-[var(--card-border)] hover:border-emerald-500/40 text-emerald-400 transition" title="Integer user input">
+              + int(input())
+            </button>
+            <button onclick="insertSnippet('print(f\"Value is: {val}\")\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-emerald-500/20 border border-[var(--card-border)] hover:border-emerald-500/40 text-emerald-400 transition" title="Formatted f-string">
+              + f-string print
+            </button>
+            <button onclick="insertSnippet('for i in range(1, 11):\n    print(i)\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-cyan-500/20 border border-[var(--card-border)] hover:border-cyan-500/40 text-cyan-400 transition" title="For loop 1 to 10">
+              + for range(1, 11)
+            </button>
+            <button onclick="insertSnippet('for item in items:\n    print(item)\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-cyan-500/20 border border-[var(--card-border)] hover:border-cyan-500/40 text-cyan-400 transition" title="Iterate list">
+              + for item in list
+            </button>
+            <button onclick="insertSnippet('reversed_text = text[::-1]\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-purple-500/20 border border-[var(--card-border)] hover:border-purple-500/40 text-purple-400 transition" title="String reverse">
+              + text[::-1]
+            </button>
+            <button onclick="insertSnippet('my_dict.get(key, \"default_val\")\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-purple-500/20 border border-[var(--card-border)] hover:border-purple-500/40 text-purple-400 transition" title="Safe dictionary get">
+              + dict.get()
+            </button>
+            <button onclick="insertSnippet('def calculate_metric(x: float, y: float) -> float:\n    return (x + y) / 2\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-amber-500/20 border border-[var(--card-border)] hover:border-amber-500/40 text-amber-400 transition" title="Function with types">
+              + def function()
+            </button>
+            <button onclick="insertSnippet('try:\n    # Risky code here\n    pass\nexcept ValueError as e:\n    print(f\"Caught error: {e}\")\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-red-500/20 border border-[var(--card-border)] hover:border-red-500/40 text-red-400 transition" title="Try-Except">
+              + try / except
+            </button>
+            <button onclick="insertSnippet('import numpy as np\nA = np.array([[1, 2], [3, 4]])\nprint(A.shape)\n')" class="px-2.5 py-1 rounded-md bg-black/50 hover:bg-blue-500/20 border border-[var(--card-border)] hover:border-blue-500/40 text-blue-400 transition" title="NumPy array">
+              + NumPy Array
             </button>
           </div>
         </div>
@@ -652,6 +692,21 @@ print("Hello AI/ML Engineer!")
         runText.textContent = "Run Code (Ctrl+Enter)";
         terminal.scrollTop = terminal.scrollHeight;
       }
+    }
+
+    function toggleCheatsheet() {
+      const drawer = document.getElementById('syntax-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function insertSnippet(snippet) {
+      const area = document.getElementById('python-code');
+      const start = area.selectionStart;
+      const end = area.selectionEnd;
+      area.value = area.value.substring(0, start) + snippet + area.value.substring(end);
+      area.selectionStart = area.selectionEnd = start + snippet.length;
+      updateLineNumbers();
+      area.focus();
     }
 
     function clearTerminal() {

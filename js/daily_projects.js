@@ -249,12 +249,86 @@ function getDailyScratchProject(video, weekNum, weekGoal) {
   return p;
 }
 
+// Beginner Trap & Gotchas Database
+function getBeginnerTrap(video, weekNum) {
+  const t = (video.topics || '').toLowerCase();
+  
+  if (t.includes('input') || t.includes('typecasting') || t.includes('variable')) {
+    return {
+      title: "Mixing Strings & Integers (TypeError)",
+      gotcha: "Writing `age = input('Age: ')` followed by `age + 1` crashes! Python's `input()` always returns a string (`str`), never an integer.",
+      fix: "Always wrap input with `int()` or `float()` immediately: `age = int(input('Age: '))`."
+    };
+  } else if (t.includes('loop') || t.includes('for') || t.includes('range')) {
+    return {
+      title: "Off-By-One Range Pitfall (Exclusive Stop)",
+      gotcha: "`range(1, 10)` stops at 9, NOT 10! The second parameter in Python ranges is always strictly exclusive.",
+      fix: "If you need numbers 1 through 10 inclusive, write `range(1, 11)`."
+    };
+  } else if (t.includes('if') || t.includes('conditional') || t.includes('comparison')) {
+    return {
+      title: "Assignment `=` vs Equality `==`",
+      gotcha: "Writing `if x = 5:` triggers a `SyntaxError: invalid syntax. Maybe you meant '=='?`.",
+      fix: "Remember: Single `=` stores a value; double `==` checks equality."
+    };
+  } else if (t.includes('string') || t.includes('slice')) {
+    return {
+      title: "Strings are Immutable in Python",
+      gotcha: "Attempting `text[0] = 'H'` triggers `TypeError: 'str' object does not support item assignment`.",
+      fix: "Strings cannot be modified in place. Create a new string with slicing: `new_text = 'H' + text[1:]`."
+    };
+  } else if (t.includes('numpy') || t.includes('matrix')) {
+    return {
+      title: "Element-wise `*` vs Matrix `@` in NumPy",
+      gotcha: "Writing `A * B` multiplies elements individually. To perform true linear algebra matrix dot products, you must use `@` or `np.dot(A, B)`.",
+      fix: "Use `A @ B` for matrix multiplication; ensure inner dimensions match (e.g. `(m, k) @ (k, n)`)."
+    };
+  } else {
+    return {
+      title: "Indentation & Code Block Boundaries",
+      gotcha: "Mixing tabs and spaces or inconsistent spacing causes `IndentationError: unindent does not match any outer indentation level`.",
+      fix: "Always use standard 4 spaces per indentation level. Avoid mixing tabs and spaces."
+    };
+  }
+}
+
+// Daily Micro-Drill for Active Muscle Memory
+function getDailyBeginnerDrill(video, weekNum) {
+  const t = (video.topics || '').toLowerCase();
+  
+  if (t.includes('input') || t.includes('typecasting')) {
+    return {
+      challenge: "Cast string '25' to an integer, add 75, and print the resulting sum.",
+      starter: `# Quick Micro-Drill: Typecasting\nval_str = "25"\n# Your code here:\n`
+    };
+  } else if (t.includes('loop') || t.includes('for')) {
+    return {
+      challenge: "Write a for loop that calculates the sum of numbers from 1 to 10 inclusive.",
+      starter: `# Quick Micro-Drill: Loop Sum\ntotal = 0\nfor i in range(1, 11):\n    total += i\nprint(f"Sum is: {total}")\n`
+    };
+  } else if (t.includes('string') || t.includes('slice')) {
+    return {
+      challenge: "Reverse the string 'artificial_intelligence' using slice notation [::-1].",
+      starter: `# Quick Micro-Drill: Slicing\ntext = "artificial_intelligence"\nreversed_text = text[::-1]\nprint(reversed_text)\n`
+    };
+  } else {
+    return {
+      challenge: "Define a function `greet(name)` that returns `Hello, <name>!` and test with your name.",
+      starter: `# Quick Micro-Drill: First Function\ndef greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nprint(greet("Neeraj"))\n`
+    };
+  }
+}
+
 function renderDailyProjectCardHTML(taskObj, week) {
   const video = taskObj.video || {};
   const weekNum = taskObj.weekNum || (week ? parseInt((week.week || '1').replace(/[^0-9]/g, ''), 10) : 1);
   const weekGoal = (week && week.output_goal) ? week.output_goal : (taskObj.weekGoal || 'Complete weekly curriculum milestone');
   
   const proj = getDailyScratchProject(video, weekNum, weekGoal);
+  const trap = getBeginnerTrap(video, weekNum);
+  const drill = getDailyBeginnerDrill(video, weekNum);
+
+  const encodedDrill = encodeURIComponent(drill.starter);
 
   return `
     <!-- DAILY SCRATCH REVISION PROJECT (BUILT FROM SCRATCH) -->
@@ -291,6 +365,43 @@ function renderDailyProjectCardHTML(taskObj, week) {
           <span class="text-[10px] font-mono font-bold text-emerald-400 block mb-1">Step 3: Verification</span>
           <span class="text-slate-700 text-[11px] leading-snug block">${escapeHTML(proj.step3)}</span>
         </div>
+      </div>
+
+      <!-- FEATURE 1 & 2: BEGINNER TRAP & DAILY MICRO-DRILL -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+        
+        <!-- Beginner Trap Card -->
+        <div class="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1.5">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold font-mono">
+            <span>⚠️ Beginner Trap:</span>
+            <span>${escapeHTML(trap.title)}</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed font-medium">
+            ${escapeHTML(trap.gotcha)}
+          </p>
+          <div class="text-[11px] text-amber-300 font-mono pt-0.5">
+            <strong>Fix:</strong> ${escapeHTML(trap.fix)}
+          </div>
+        </div>
+
+        <!-- Micro-Drill Card -->
+        <div class="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex flex-col justify-between space-y-2">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-emerald-400 text-xs font-bold font-mono">🎯 2-Min Micro-Drill</span>
+              <span class="text-[10px] text-slate-400 font-mono">Active Recall</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-snug">
+              ${escapeHTML(drill.challenge)}
+            </p>
+          </div>
+          
+          <a href="playground.html?code=${encodedDrill}" class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-sm self-start">
+            <span>▶ Code & Verify in Playground</span>
+            <span>→</span>
+          </a>
+        </div>
+
       </div>
 
       <!-- WEEKLY OUTPUT GOAL CONNECTION & PLAYGROUND ACTION -->
