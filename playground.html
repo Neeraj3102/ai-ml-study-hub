@@ -187,9 +187,13 @@
             <button onclick="formatCode()" class="text-xs px-2.5 py-1 rounded-lg border border-[var(--card-border)] text-[var(--text-muted)] hover:text-white transition" title="Clear Code">
               ↺ Reset
             </button>
-            <button id="run-btn" onclick="executePython()" disabled class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-black px-4 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 shadow-md">
+            <button id="run-btn" onclick="executePython()" disabled class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 font-black px-3.5 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5 shadow-md">
               <span id="run-icon">▶</span>
-              <span id="run-text">Run Code (Ctrl+Enter)</span>
+              <span id="run-text">Run (Ctrl+Enter)</span>
+            </button>
+            <button id="stop-btn" onclick="stopExecution()" disabled class="bg-red-500 hover:bg-red-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1 shadow-md" title="Forcefully stop running script">
+              <span>⏹</span>
+              <span>Stop</span>
             </button>
           </div>
         </div>
@@ -631,6 +635,7 @@ print("Hello AI/ML Engineer!")
 
       isExecuting = true;
       runBtn.disabled = true;
+      document.getElementById('stop-btn').disabled = false;
       runIcon.textContent = "⏳";
       runText.textContent = "Running...";
       execTime.textContent = "⏱️ Running (Max 6s)...";
@@ -659,17 +664,33 @@ print("Hello AI/ML Engineer!")
       pythonWorker.postMessage({ type: 'run', code: code });
     }
 
+    function stopExecution() {
+      if (!isExecuting || !pythonWorker) return;
+      clearTimeout(watchdogTimer);
+
+      const terminal = document.getElementById('terminal-output');
+      terminal.innerHTML += `\n<span class="text-amber-400 font-bold">⏹ Execution stopped by user.</span>\n<span class="text-slate-400">Terminated running script & resetting sandbox...</span>\n`;
+
+      finishExecution("⏹ Stopped by User", "text-amber-400 font-mono text-[11px]");
+
+      try { pythonWorker.terminate(); } catch (e) {}
+      pythonWorker = null;
+      initWorker();
+    }
+
     function finishExecution(statusText, statusClass) {
       isExecuting = false;
       const runBtn = document.getElementById('run-btn');
+      const stopBtn = document.getElementById('stop-btn');
       const runIcon = document.getElementById('run-icon');
       const runText = document.getElementById('run-text');
       const execTime = document.getElementById('exec-time');
       const terminal = document.getElementById('terminal-output');
 
       runBtn.disabled = false;
+      if (stopBtn) stopBtn.disabled = true;
       runIcon.textContent = "▶";
-      runText.textContent = "Run Code (Ctrl+Enter)";
+      runText.textContent = "Run (Ctrl+Enter)";
       execTime.textContent = statusText;
       execTime.className = statusClass;
       terminal.scrollTop = terminal.scrollHeight;
